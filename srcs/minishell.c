@@ -6,11 +6,11 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/24 15:40:07 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/03/24 15:47:19 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h" 
+#include "minishell.h"
 
 void	parser(char *input)
 {
