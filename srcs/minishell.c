@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/24 10:51:03 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/03/24 14:42:03 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,18 @@
 
 void	parser(char *input)
 {
-	printf("%s\n", input);
-}
+	char	**strings;
+	int		i;
 
+	strings = ft_split(input, ' ');
+	i = 0;
+	while (strings[i] != 0)
+	{
+		printf("%s\n", strings[i]);
+		free(strings[i]);
+		i++;
+	}
+}
 
 int main(int ac, char *av[], char *envp[])
 {
@@ -26,6 +35,10 @@ int main(int ac, char *av[], char *envp[])
 	{
 		line = readline("prompt: ");
 		add_history(line);
+		parser(line);
 	}
+	// char	string[20] = "hello world";
+	// printf("%s", ft_split(string, ' ')[0]);
+	// printf("%s", ft_split(string, ' ')[1]);
 	return (0);
 }
