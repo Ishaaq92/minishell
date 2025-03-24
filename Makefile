@@ -6,7 +6,7 @@
 #    By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:52:30 by isahmed           #+#    #+#              #
-#    Updated: 2025/03/24 14:19:07 by isahmed          ###   ########.fr        #
+#    Updated: 2025/03/24 15:12:06 by isahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,10 @@ DIRS = $(ODIR)
 $(DIRS):
 	@mkdir -p $@
 
-$(LIBFT):
+$(SUBMODULE):
+	@git submodule update --init --remote --recursive
+
+$(LIBFT): $(SUBMODULE)
 	@make --no-print-directory -C Libft
 
 $(BINARY): $(OBJECTS) 
