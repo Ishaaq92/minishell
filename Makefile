@@ -6,7 +6,7 @@
 #    By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:52:30 by isahmed           #+#    #+#              #
-#    Updated: 2025/03/24 10:31:56 by isahmed          ###   ########.fr        #
+#    Updated: 2025/03/24 11:07:44 by isahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,9 @@ BINARY = minishell
 CFILES = minishell.c
 OBJECTS = $(CFILES:$(SDIR)/%.c=$(ODIR)/%.o)
 all: $(BINARY)
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./minishell
 
+v valgrind: $(BINARY)
+	valgrind --suppressions=debugging/rl.supp --leak-check=full --show-leak-kinds=all --log-file=debugging/valgrind.txt ./minishell
 DIRS = $(ODIR)
 
 $(DIRS):
