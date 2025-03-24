@@ -6,7 +6,7 @@
 #    By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:52:30 by isahmed           #+#    #+#              #
-#    Updated: 2025/03/24 15:12:06 by isahmed          ###   ########.fr        #
+#    Updated: 2025/03/24 15:25:03 by isahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CFILES = minishell.c
 VPATH = $(SDIR)
 OBJECTS = $(CFILES:$(SDIR)/%.c=$(ODIR)/%.o)
 
-all: $(BINARY)
+all: $(BINARY) 
 
 v valgrind: $(BINARY)
 	valgrind --suppressions=debugging/rl.supp --leak-check=full --show-leak-kinds=all --log-file=debugging/valgrind.txt ./minishell
@@ -31,7 +31,7 @@ DIRS = $(ODIR)
 $(DIRS):
 	@mkdir -p $@
 
-$(SUBMODULE):
+i init:
 	@git submodule update --init --remote --recursive
 
 $(LIBFT): $(SUBMODULE)
