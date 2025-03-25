@@ -6,26 +6,11 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/25 14:57:51 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/03/25 16:14:41 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	parser(char *input)
-{
-	char	**strings;
-	int		i;
-
-	i = 0;
-	strings = ft_split(input, ' ');
-	while (strings[i] != 0)
-	{
-		printf("%s\n", strings[i]);
-		free(strings[i]);
-		i++;
-	}
-}
 
 int main(int ac, char *av[], char *envp[])
 {
@@ -33,11 +18,10 @@ int main(int ac, char *av[], char *envp[])
 
 	while (1)
 	{
-		signal(SIGINT, handle_ctrl_c);
-		signal(SIGTSTP, handle_ctrl_z);
+		handle_signals();
 		line = readline("prompt: ");
 		add_history(line);
-		parser(line);
+		parser(line, envp);
 	}
 	return (0);
 }

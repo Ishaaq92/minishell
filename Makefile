@@ -6,17 +6,17 @@
 #    By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:52:30 by isahmed           #+#    #+#              #
-#    Updated: 2025/03/25 15:02:31 by isahmed          ###   ########.fr        #
+#    Updated: 2025/03/25 16:14:35 by isahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -Iinc -ILibft/
+CFLAGS = -Iinc -ILibft/ -g
 CC = gcc
 ODIR = objs
 SDIR = srcs
 LIBFT = Libft/libft.a
 BINARY = minishell 
-CFILES = minishell.c signals.c utils.c
+CFILES = minishell.c signals.c utils.c parser.c
 
 VPATH = $(SDIR)
 OBJECTS = $(CFILES:$(SDIR)/%.c=$(ODIR)/%.o)

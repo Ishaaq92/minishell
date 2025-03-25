@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/25 15:01:53 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/03/25 16:15:56 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,13 @@ enum e_commands
 // Handling Signals
 void	handle_ctrl_c(int sig);
 void	handle_ctrl_z(int sig);
+void	handle_signals(void);
 
 // utils.c
 void    exit_cleanup(void);
 
 
-
+// parser.c
+void	parser(char *input, char *envp[]);
 
 #endif
