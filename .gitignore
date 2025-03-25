@@ -3,3 +3,5 @@ minishell
 .vscode/
 
 objs/
+
+README.md
