@@ -1,44 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/25 15:01:53 by isahmed          ###   ########.fr       */
+/*   Created: 2025/03/25 15:00:15 by isahmed           #+#    #+#             */
+/*   Updated: 2025/03/25 15:00:26 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include <minishell.h>
 
-#include "../Libft/libft.h"
-#include <stdio.h>
-#include <signal.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-enum e_commands
+void    exit_cleanup(void)
 {
-    ECHO,
-    CD,
-    PWD,
-    EXPORT,
-    UNSET,
-    ENV,
-    EXIT
-};
-
-// Handling Signals
-void	handle_ctrl_c(int sig);
-void	handle_ctrl_z(int sig);
-
-// utils.c
-void    exit_cleanup(void);
-
-
-
-
-#endif
+    exit(1);
+}

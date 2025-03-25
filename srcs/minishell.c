@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/25 14:21:46 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/03/25 14:57:51 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int main(int ac, char *av[], char *envp[])
 	while (1)
 	{
 		signal(SIGINT, handle_ctrl_c);
+		signal(SIGTSTP, handle_ctrl_z);
 		line = readline("prompt: ");
 		add_history(line);
 		parser(line);
