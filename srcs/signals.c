@@ -1,42 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/25 14:21:46 by isahmed          ###   ########.fr       */
+/*   Created: 2025/03/25 14:21:20 by isahmed           #+#    #+#             */
+/*   Updated: 2025/03/25 14:21:40 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parser(char *input)
+void	handle_ctrl_c(int sig)
 {
-	char	**strings;
-	int		i;
-
-	i = 0;
-	strings = ft_split(input, ' ');
-	while (strings[i] != 0)
-	{
-		printf("%s\n", strings[i]);
-		free(strings[i]);
-		i++;
-	}
-}
-
-int main(int ac, char *av[], char *envp[])
-{
-	char	*line;
-
-	while (1)
-	{
-		signal(SIGINT, handle_ctrl_c);
-		line = readline("prompt: ");
-		add_history(line);
-		parser(line);
-	}
-	return (0);
+	write(1, "\n", 1);
+	return ;
 }
