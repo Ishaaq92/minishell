@@ -67,6 +67,8 @@ void	parser(char *input, char *envp[])
 		// printf("%s\n", strings[i]);
 		if (strings[i][0] == '$')
 			printf("%s\n", expand_env(envp, strings[i]));
+		else if (ft_strncmp(strings[i], "pwd", 3) == 0)
+			printf("%s\n", getcwd(NULL, 0));
 		free(strings[i]);
 		i++;
 	}
