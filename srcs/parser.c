@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:14:19 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/26 11:01:04 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/03/26 14:48:02 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	skip_special_chars(char *str)
 
 	quotes = 0;
 	i = 0;
-	while (str[i] != 92 && str[i] != 59 && str[i] != '\0');
+	while (str[i] != 92 && str[i] != 59 && str[i] != '\0')
 		i ++;
 	if (str[i] != '\0')
 		exit_cleanup();
