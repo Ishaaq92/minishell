@@ -56,4 +56,7 @@ void    exit_cleanup(void);
 // parser.c
 void	parser(char *input, char *envp[]);
 
+// ft_split2.c
+char	**ft_split2(char *str, char *charset);
+
 #endif

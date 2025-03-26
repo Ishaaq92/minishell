@@ -36,7 +36,7 @@ void	skip_special_chars(char *str)
 
 	quotes = 0;
 	i = 0;
-	while (str[i] != 92 && str[i] != 59 && str[i] != '\0');
+	while (str[i] != 92 && str[i] != 59 && str[i] != '\0')
 		i ++;
 	if (str[i] != '\0')
 		exit_cleanup();
@@ -54,8 +54,8 @@ void	parser(char *input, char *envp[])
 	int		i;
 
 	i = 0;
-	// skip_special_chars(input);
-	strings = ft_split(input, ' ');
+	skip_special_chars(input);
+	strings = ft_split2(input, " ");
 	while (strings[i] != 0)
 	{
 		// printf("%s\n", strings[i]);
