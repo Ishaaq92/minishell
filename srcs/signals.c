@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:21:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/25 15:27:59 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/03/26 14:49:14 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	handle_ctrl_c(int sig)
 
 void	handle_ctrl_z(int sig)
 {
-	write(1, "Control Z was inputed\n", 1);
+	write(1, "Control Z was inputed\n", 23);
 	exit_cleanup();
 	return ;
 }
