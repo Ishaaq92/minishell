@@ -29,7 +29,7 @@ stat retrieves information about the file pointed to it.
 lstat does the same but if its a symbolic link, it returns info on the link itself.
 fstat is identical to stat, but the info on the file is specified with a file descriptor.
 
-## unlink
+## unlink (pipex)
 
 `int unlink(const char *pathname);`
 
@@ -41,7 +41,7 @@ If it refers to a symlink, the link is removed.
 
 returns zero on success, -1 on failure.
 
-## execve
+## execve (pipex)
 
 `int execve(const char *pathname, char const **argv, char const **envp);`
 
@@ -49,7 +49,7 @@ executes the program referred to by pathname. The program currently running is r
 
 does not return on success, -1 if error.
 
-## dup, dup2
+## dup, dup2 (pipex)
 
 `#include <fcntl.h> /* Definition of O_* constants */`
 
@@ -62,7 +62,7 @@ dup2 does the same but allows you to specify the new fd. If newfd was already op
 
 returns new fd on success, -1 on error.
 
-## pipe
+## pipe (pipex)
 
 `int pipe(int pipefd[2]);`
 
