@@ -72,7 +72,7 @@ int	create_tokens(char *str, t_token **head)
 
 	// buffer = ft_calloc(ft_strlen(str), sizeof(char));
 	i = 0;
-	while (str[i])// process the entire line? Or do we break upon newline
+	while (str && str[i])// process the entire line? Or do we break upon newline
 	{
 		j = 0;
 		while (str[i + j] && ft_isalnum(str[i + j]))
