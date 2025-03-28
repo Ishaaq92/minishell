@@ -43,6 +43,7 @@ typedef	struct s_token
 {
 	char			*literal;
 	enum e_type		type;
+	struct s_token	*next;
 }					t_token;
 
 // Handling Signals
@@ -58,5 +59,8 @@ void	parser(char *input, char *envp[]);
 
 // ft_split2.c
 char	**ft_split2(char *str, char *charset);
+
+// tokens.c
+int	create_tokens(char *str, t_token **head);
 
 #endif
