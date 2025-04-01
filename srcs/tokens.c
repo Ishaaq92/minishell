@@ -52,17 +52,36 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 void	print_tokens(t_token **head)
 {
 	t_token *temp;
-	int		i;
 
 	temp = *head;
-	i = 1;
+	printf("tokens: {");
 	while (temp != NULL)
 	{
-		printf("token %i: %s\n", i++, temp->literal);
+		printf("%s, ", temp->literal);
 		temp = temp->next;
 	}
+	printf("}\n");
 }
 
+int	is_blank(char c)
+{
+	if (c == ' ' || (c <= '\r' && c >= '\t'))
+		return (1);
+	return (0);
+}
+
+int	is_op(char c)
+{
+	if (c == '<' || c == '>' || \
+		c == '|' || c == '$' || \
+		c == '(' || c == ')')
+		return (1);
+	return (0);
+}
+
+
+// a token that doesn't contain meta characters and isn't quoted is a word
+// a token with no quotes and at least one meta character is an operator
 int	create_tokens(char *str, t_token **head)
 {
 	char	*buffer;
@@ -70,17 +89,14 @@ int	create_tokens(char *str, t_token **head)
 	int		i;
 	int		j;
 
-	// buffer = ft_calloc(ft_strlen(str), sizeof(char));
 	i = 0;
 	while (str && str[i])// process the entire line? Or do we break upon newline
 	{
 		j = 0;
-		while (str[i + j] && ft_isalnum(str[i + j]))
+		while (str[i + j] && !is_blank(str[i + j]))
 			j ++;
-		// write(1, &str[i], j);
 		if (j)
 			ft_lstadd_back(head, ft_lstnew(ft_substr(str, i, j)));
-		// printf("\n");
 		i = i + j + 1;
 	}
 	print_tokens(head);

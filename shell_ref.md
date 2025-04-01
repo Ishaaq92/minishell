@@ -53,4 +53,11 @@ after a token is delimited but before applying the grammar rules, determine if t
 
 ### heredoc TODO
 
-## 
+## Quoting
+
+metacharacters: an unqouted character that separates words: space, tab, newline, |, &, ;, (, ), <, >. 
+
+token: sequence of chars considered a single unit by the shell. It is either a word or an operator
+
+escape char '\': preserves the literal value of the next character that follows, with the exception of enwline. If \newline happens, it is treated as line continuation (removed from input stream and effectively ignored).
+
