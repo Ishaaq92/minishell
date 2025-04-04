@@ -65,4 +65,7 @@ char	**ft_split2(char *str, char *charset);
 // tokens.c
 int	create_tokens(char *str, t_token **head);
 
+// ft_strndup.c
+char	*ft_strndup(const char *s, int n);
+
 #endif

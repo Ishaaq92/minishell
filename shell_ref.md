@@ -63,3 +63,6 @@ escape char '\': preserves the literal value of the next character that follows,
 
 for readline on Debian WSL, need to install readline development libraries
 `sudo apt-get install libreadline-dev`
+
+Command to test, should result in exactly two tokens":
+echo i\'m" "bashful" "hello
