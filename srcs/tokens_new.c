@@ -21,6 +21,7 @@ t_token	*ft_lstnew(char *str)
 		return (NULL);
 	token->literal = str;
 	token->next = NULL;
+	token->open_quote = 0;
 	return (token);
 }
 
@@ -79,15 +80,29 @@ int	is_op(char c)
 	return (0);
 }
 
-int	token_quotes(char *str, int *i, t_token *token)
+int	token_quotes(char *str, int i, t_token *token)
 {
 	char	c;
 	char	*temp;
 
-	c = str[*i];
-	temp = str;
-	str = ft_strjoin(str, &str[*i]); //make or find one function that does this
-	free(temp);
+	c = str[i];
+	// temp = str;
+	// str = ft_strjoin(str, &str[*i]); //make or find one function that does this
+	// free(temp);
+	if (c == '\'')
+	{
+		while (str[i])
+		{
+			if (str[i] == '\'')
+			{
+				i++;
+
+			}
+			i++;
+		}
+	}
+	else
+
 	return (0);
 }
 
@@ -106,7 +121,22 @@ int	create_tokens(char *str, t_token **head)
 	{
 		j = 0;
 		while (str[i + j] && !is_blank(str[i + j]))
+		{
+			if (ft_strchr("\'\"", str[i + j]))
+			{
+				; // handle quotes, do not break the token
+				
+
+			}
+			else if (is_op(str[i + j])) // operators break tokens
+				break ;
+			else if (str[i + j] == '\\')
+			{
+				j++;
+				// what if char after backslash is empty? Need to prompt a PS2
+			}
 			j ++;
+		}
 		if (j)
 			ft_lstadd_back(head, ft_lstnew(ft_substr(str, i, j)));
 		i = i + j + 1;

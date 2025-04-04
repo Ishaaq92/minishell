@@ -39,11 +39,13 @@ enum e_type
 	PIPE
 };
 
+// open_quote is used to mark the beginning of quoted text
 typedef	struct s_token
 {
 	char			*literal;
 	enum e_type		type;
 	struct s_token	*next;
+	int				open_quote;
 }					t_token;
 
 // Handling Signals
