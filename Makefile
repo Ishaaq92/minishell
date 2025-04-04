@@ -16,7 +16,7 @@ ODIR = objs
 SDIR = srcs
 LIBFT = Libft/libft.a
 BINARY = minishell 
-CFILES = minishell.c signals.c utils.c parser.c ft_split2.c tokens.c strndup.c
+CFILES = minishell.c signals.c utils.c parser.c ft_split2.c tokens.c ft_strndup.c
 
 VPATH = $(SDIR)
 OBJECTS = $(CFILES:$(SDIR)/%.c=$(ODIR)/%.o)

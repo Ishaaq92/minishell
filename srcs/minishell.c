@@ -34,6 +34,7 @@ int main(int ac, char *av[], char *envp[])
 	t_token	*head;
 
 	head = NULL;
+	int	i = 0;
 	while (1)
 	{
 		handle_signals();
@@ -43,6 +44,7 @@ int main(int ac, char *av[], char *envp[])
 		create_tokens(line, &head);
 		ft_lstclear(&head);
 		free(line);
+		i++;
 	}
 	return (0);
 }
