@@ -104,8 +104,13 @@ int	handle_quotes(char *str, int *i, t_token *token)
 	else if (quote_char == '\\')
 		(*i) += 2;
 	if (open_quotes)
-		; // do something, idk
+		; // TODO: do something, idk
 	return (0);
+}
+
+void	handle_op(char **str, char **literal, t_token *token)
+{
+
 }
 
 void	handle_word(char **str, char **literal, t_token *token)
@@ -126,6 +131,24 @@ void	handle_word(char **str, char **literal, t_token *token)
 	(*str) += i;
 }
 
+void	handle_num(char **str, char **literal, t_token *token)
+{
+	int		i;
+
+	i = 0;
+	while ((*str)[i] >= '0' && (*str)[i] <= '9')
+	{
+		i++;
+	}
+	if ((*str)[i] && (*str[i] != ' '))
+	{
+		// TODO: what if the next character is a pipe or ampersand?
+		if (ft_strchr("<>", (*str)[i]))
+			return ; // is an operator token
+	}
+	handle_word(str, literal, token);
+}
+
 int	create_tokens(char *str, t_token **head)
 {
 	t_token *token;
@@ -135,7 +158,9 @@ int	create_tokens(char *str, t_token **head)
 		while (is_blank(*str))
 			str++;
 		token = ft_lstnew(NULL);
-		if (*str && is_op(*str))
+		if (*str >= '0' && *str <= '9')
+			handle_num(&str, &token->literal, token);
+		else if (*str && is_op(*str))
 			; // create logic for operator tokens
 			// numbers can be part of operators too
 		else if (*str)
