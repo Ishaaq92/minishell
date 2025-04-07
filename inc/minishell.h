@@ -33,10 +33,15 @@ enum e_commands
 
 enum e_type
 {
-	CMD,
-	ARG,
-	REDIR,
-	PIPE
+	AND,
+	OR,
+	REDIRECT_IN,
+	REDIRECT_OUT,
+	REDIRECT_APPEND,
+	REDIRECT_HEREDOC,
+	PIPE,
+	COMMAND,
+	ARGS,
 };
 
 // open_quote is used to mark the beginning of quoted text

@@ -73,8 +73,9 @@ int	is_blank(char c)
 int	is_op(char c)
 {
 	if (c == '<' || c == '>' || \
-		c == '|' || c == '$' || \
-		c == '(' || c == ')')
+		c == '|' || \
+		c == '(' || c == ')' || \
+		c == '&')
 		return (1);
 	return (0);
 }
@@ -105,6 +106,8 @@ int	handle_quotes(char *str, int *i, t_token *token)
 		(*i) += 2;
 	if (open_quotes)
 		; // TODO: do something, idk
+		  // subject explicitly states do not interpret unclosed quotes
+		//   can do it if we want to, or just force quit here and call it a day
 	return (0);
 }
 
@@ -194,7 +197,6 @@ int	create_tokens(char *str, t_token **head)
 // 	char	*token_start;
 // 	int		i;
 // 	int		j;
-
 // 	i = 0;
 // 	while (str && str[i])// process the entire line? Or do we break upon newline
 // 	{
@@ -204,8 +206,6 @@ int	create_tokens(char *str, t_token **head)
 // 			if (ft_strchr("\'\"", str[i + j]))
 // 			{
 // 				; // handle quotes, do not break the token
-				
-
 // 			}
 // 			else if (is_op(str[i + j])) // operators break tokens
 // 				break ;
