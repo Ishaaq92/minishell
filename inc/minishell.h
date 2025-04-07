@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/26 10:44:28 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/07 17:46:17 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,14 @@ void	handle_ctrl_c(int sig);
 void	handle_ctrl_z(int sig);
 void	handle_signals(void);
 
+// linked_list.c
+void	print_tokens(t_token **head);
+t_token	*ft_lstnew(char *str);
+void	ft_lstadd_back(t_token **lst, t_token *new);
+
+// tokens.c
+int	create_tokens(char *str, t_token **head);
+
 // utils.c
 void    exit_cleanup(void);
 
@@ -67,9 +75,6 @@ void	parser(char *input, char *envp[]);
 
 // ft_split2.c
 char	**ft_split2(char *str, char *charset);
-
-// tokens.c
-int	create_tokens(char *str, t_token **head);
 
 // ft_strndup.c
 char	*ft_strndup(const char *s, int n);

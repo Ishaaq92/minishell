@@ -6,7 +6,7 @@
 #    By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:52:30 by isahmed           #+#    #+#              #
-#    Updated: 2025/03/25 16:14:35 by isahmed          ###   ########.fr        #
+#    Updated: 2025/04/07 17:41:44 by isahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,9 @@ ODIR = objs
 SDIR = srcs
 LIBFT = Libft/libft.a
 BINARY = minishell 
-CFILES = minishell.c signals.c utils.c parser.c ft_split2.c tokens.c ft_strndup.c
+CFILES = minishell.c signals.c  \
+	parsing/ast.c parsing/linked_list.c parsing/parser.c  parsing/tokens.c \
+	utils/ft_strndup.c utils/ft_split2.c utils/utils.c
 
 VPATH = $(SDIR)
 OBJECTS = $(CFILES:$(SDIR)/%.c=$(ODIR)/%.o)
