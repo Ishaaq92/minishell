@@ -54,6 +54,17 @@ typedef	struct s_token
 	int				open_quote;
 }					t_token;
 
+// abstract synatx tree nodes
+typedef struct s_ast
+{
+	char				*literal;
+	enum e_type			type;
+	struct s_ast		*first_child;
+	struct s_ast		*next_sibling;
+	struct s_ast		*previous_sibling;
+	struct s_ast		*parent;
+}					s_ast;
+
 // Handling Signals
 void	handle_ctrl_c(int sig);
 void	handle_ctrl_z(int sig);
