@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-03-28 12:40:37 by avalsang          #+#    #+#             */
-/*   Updated: 2025-03-28 12:40:37 by avalsang         ###   ########.fr       */
+/*   Created: 2025/03/28 12:40:37 by avalsang          #+#    #+#             */
+/*   Updated: 2025/04/07 17:23:45 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,7 @@ int	handle_quotes(char *str, int *i, t_token *token)
 	else if (quote_char == '\\')
 		(*i) += 2;
 	if (open_quotes)
-		; // TODO: do something, idk
-		  // subject explicitly states do not interpret unclosed quotes
-		//   can do it if we want to, or just force quit here and call it a day
+		return (1);
 	return (0);
 }
 
@@ -218,6 +216,25 @@ void	handle_num(char **str, char **literal, t_token *token)
 	handle_word(str, literal, token);
 }
 
+int	check_valid_order(t_token **head)
+{
+	t_token	*tmp;
+
+	tmp = *head;
+	if (tmp->type == LOGICAL_AND || tmp->type == LOGICAL_OR || tmp->type == PIPE)
+		return (1);
+	while (tmp)
+	{
+		if (tmp->next && tmp->type < 7 && tmp->next->type < 7)
+			return (1);
+		if (tmp->next == NULL && tmp->type < 7)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
+
 int	create_tokens(char *str, t_token **head)
 {
 	t_token *token;
@@ -238,6 +255,8 @@ int	create_tokens(char *str, t_token **head)
 		else
 			ft_lstadd_back(head, token);
 	}
+	if (check_valid_order(head) == 1)
+		printf("Invalid order of tokens\n");
 	print_tokens(head);
 }
 
