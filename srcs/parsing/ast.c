@@ -3,13 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-07 12:56:37 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-07 12:56:37 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/07 12:56:37 by avalsang          #+#    #+#             */
+/*   Updated: 2025/04/07 18:20:02 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void    ll_to_ast(t_token **head)
+{
+
+}
 
 
