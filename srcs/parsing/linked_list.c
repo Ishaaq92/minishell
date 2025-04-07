@@ -39,6 +39,7 @@ t_token	*ft_lstnew(char *str)
 	token->next = NULL;
 	token->type = 0;
 	token->open_quote = 0;
+	token->prev = NULL;
 	return (token);
 }
 
@@ -61,5 +62,6 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 		while (tmp -> next != NULL)
 			tmp = tmp -> next;
 		tmp -> next = new;
+		new -> prev = tmp;
 	}
 }

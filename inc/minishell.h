@@ -51,6 +51,7 @@ typedef	struct s_token
 	char			*literal;
 	enum e_type		type;
 	struct s_token	*next;
+	struct s_token	*prev;
 	int				open_quote;
 }					t_token;
 
