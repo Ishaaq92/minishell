@@ -21,6 +21,7 @@ t_token	*ft_lstnew(char *str)
 		return (NULL);
 	token->literal = str;
 	token->next = NULL;
+	token->type = 0;
 	token->open_quote = 0;
 	return (token);
 }
@@ -57,7 +58,7 @@ void	print_tokens(t_token **head)
 	printf("tokens: {");
 	while (temp != NULL)
 	{
-		printf("%s, ", temp->literal);
+		printf("%s[%i], ", temp->literal, temp->type);
 		temp = temp->next;
 	}
 	printf("}\n");
@@ -111,12 +112,59 @@ int	handle_quotes(char *str, int *i, t_token *token)
 	return (0);
 }
 
+int	compare_op(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n && s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	if (i < n)
+		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	return (0);
+}
+
+
+enum e_type		set_op_type(char *str)
+{
+	// if (strcmp("<", token->literal))
+	// {
+	// 	token->type = REDIRECT_IN;
+	// }
+	// else if (strcmp(">", token->literal))
+	// {
+	// 	token->type = REDIRECT_OUT;
+	// }
+	while (*str >= '0' && *str <= '9')
+		str++;	
+	if (!ft_strncmp("<<", str, 2))
+		return (REDIRECT_HEREDOC);
+	else if (!ft_strncmp(">>", str, 2))
+		return (REDIRECT_APPEND);
+	else if (!ft_strncmp("<", str, 1))
+		return (REDIRECT_IN);
+	else if (!ft_strncmp(">", str, 1))
+		return (REDIRECT_OUT);
+	else if (!ft_strncmp("||", str, 2))
+		return (LOGICAL_OR);
+	else if (!ft_strncmp("&&", str, 2))
+		return (LOGICAL_AND);
+	else if (!ft_strncmp("|", str, 1))
+		return (PIPE);
+	else
+		return (ERROR);
+}
+
 void	handle_op(char **str, char **literal, t_token *token)
 {
 	int		i;
 
 	i = 0;
-	while (ft_strchr("<>&|", (*str)[i]))
+	while (ft_strchr("<>&|()", (*str)[i]))
 	{
 		i++;
 		if ((*str)[i] == (*str)[i - 1])
@@ -125,6 +173,7 @@ void	handle_op(char **str, char **literal, t_token *token)
 			break ;
 	}
 	*literal = ft_strndup(*str, i);
+	token->type = set_op_type(*literal);
 	(*str) += i;
 }
 
@@ -143,6 +192,7 @@ void	handle_word(char **str, char **literal, t_token *token)
 		i++;
 	}
 	*literal = ft_strndup(*str, i);
+	token->type = COMMAND;
 	(*str) += i;
 }
 
@@ -157,9 +207,11 @@ void	handle_num(char **str, char **literal, t_token *token)
 	}
 	if ((*str)[i] && ((*str)[i] != ' ') && ft_strchr("<>", (*str)[i]))
 	{
-		while (is_op((*str)[i]))
+		i++;
+		if ((*str)[i] && (*str)[i] == (*str)[i - 1])
 			i++;
 		*literal = ft_strndup(*str, i);
+		token->type = set_op_type(*literal);
 		(*str) += i;
 		return ;
 	}

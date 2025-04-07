@@ -33,8 +33,8 @@ enum e_commands
 
 enum e_type
 {
-	AND,
-	OR,
+	LOGICAL_AND,
+	LOGICAL_OR,
 	REDIRECT_IN,
 	REDIRECT_OUT,
 	REDIRECT_APPEND,
@@ -42,6 +42,7 @@ enum e_type
 	PIPE,
 	COMMAND,
 	ARGS,
+	ERROR,
 };
 
 // open_quote is used to mark the beginning of quoted text
