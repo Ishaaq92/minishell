@@ -39,6 +39,7 @@ t_token	*ft_lstnew(char *str)
 	token->next = NULL;
 	token->type = 0;
 	token->open_quote = 0;
+	token->prev = NULL;
 	return (token);
 }
 
