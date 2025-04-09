@@ -61,5 +61,6 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 		while (tmp -> next != NULL)
 			tmp = tmp -> next;
 		tmp -> next = new;
+		new -> prev = tmp;
 	}
 }

@@ -51,19 +51,19 @@ typedef	struct s_token
 	char			*literal;
 	enum e_type		type;
 	struct s_token	*next;
+	struct s_token	*prev;
 	int				open_quote;
 }					t_token;
 
 // abstract synatx tree nodes
 typedef struct s_ast
 {
-	char				*literal;
+	char				**literal;
 	enum e_type			type;
-	struct s_ast		*first_child;
-	struct s_ast		*next_sibling;
-	struct s_ast		*previous_sibling;
+	struct s_ast		*left;
+	struct s_ast		*right;
 	struct s_ast		*parent;
-}					s_ast;
+}					t_ast;
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
