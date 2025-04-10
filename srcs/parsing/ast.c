@@ -6,21 +6,21 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 12:56:37 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/07 18:20:02 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:44:07 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-t_ast	*ast_new(enum e_type type);
-int	count_argc(t_token *node);
+t_ast	*ast_new(t_token *token);
+int		count_argc(t_token *node);
 char	**parse_cmd_args(t_token *node, int argc);
 t_ast	*parse_cmd(t_token **node);
 t_ast	*parse_logical(t_token **token);
 t_ast	*parse_pipe(t_token **token);
 t_ast	*parse_redir(t_token **token);
 
-t_ast	*ast_new(enum e_type type)
+t_ast	*ast_new(t_token *token)
 {
 	t_ast *new;
 
@@ -29,7 +29,8 @@ t_ast	*ast_new(enum e_type type)
 	new->right = NULL;
 	new->literal = NULL;
 	new->parent = NULL;
-	new->type = type;
+	new->token = token;
+	new->type = token->type;
 	return (new);
 }
 
@@ -65,12 +66,23 @@ char	**parse_cmd_args(t_token *node, int argc)
 	return (result);
 }
 
+void	print_ast(t_ast *ast)
+{
+	if (ast == NULL)
+		return ;
+	printf("%s\n", ast->token->literal);
+	if (ast != NULL)
+		printf("	");
+	print_ast(ast->left);
+	print_ast(ast->right);
+}
+
 t_ast	*parse_cmd(t_token **node)
 {
 	t_ast	*cmd;
 	int		argc;
 
-	cmd = ast_new(COMMAND);
+	cmd = ast_new(*node);
 	argc = count_argc(*node);
 	
 	cmd->literal = parse_cmd_args(*node, argc);
@@ -90,8 +102,7 @@ t_ast	*parse_logical(t_token **token)
 	{
 		if ((*token)->type == LOGICAL_AND || (*token)->type == LOGICAL_OR)
 		{
-			logical = ast_new((*token)->type);
-			(*token)->next = NULL;
+			logical = ast_new(*token);
 			logical->left = parse_pipe(&start);
 			logical->right = parse_logical(&((*token)->next));
 			return (logical);
@@ -111,8 +122,7 @@ t_ast	*parse_pipe(t_token **token)
 	{
 		if ((*token)->type == PIPE)
 		{
-			pipe = ast_new((*token)->type);
-			(*token)->next->next = NULL;
+			pipe = ast_new(*token);
 			pipe->left = parse_redir(&start);
 			pipe->right = parse_pipe(&((*token)->next));
 			return (pipe);
