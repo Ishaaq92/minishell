@@ -42,6 +42,7 @@ enum e_type
 	PIPE,
 	COMMAND,
 	ARGS,
+	PATH,
 	ERROR,
 };
 

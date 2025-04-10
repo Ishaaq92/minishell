@@ -81,6 +81,9 @@ t_ast	*parse_cmd(t_token **node)
 {
 	t_ast	*cmd;
 	int		argc;
+	
+	if (node == NULL || *node == NULL)
+		return (NULL);
 
 	cmd = ast_new(*node);
 	argc = count_argc(*node);
@@ -90,24 +93,26 @@ t_ast	*parse_cmd(t_token **node)
 		return (NULL); // free cmd now, or in a catch-all function later?
 	return (cmd);
 }
-
+// cmd1 && cmd2 | cmd3
 t_ast	*parse_logical(t_token **token)
 {
 	t_token	*start;
-	t_token	*current;
+	t_token	*cut_off;
 	t_ast	*logical;
 
 	start = *token;
 	while ((*token) && (*token)->next)
 	{
+		cut_off = (*token)->next;
 		if ((*token)->type == LOGICAL_AND || (*token)->type == LOGICAL_OR)
 		{
-			logical = ast_new(*token);
+			logical = ast_new(*token);			
+			(*token)->next = NULL;
 			logical->left = parse_pipe(&start);
-			logical->right = parse_logical(&((*token)->next));
+			logical->right = parse_logical(&cut_off);
 			return (logical);
 		}
-		(*token) = (*token)->next;
+		(*token) = cut_off;
 	}
 	return (parse_pipe(&start));
 }
@@ -132,6 +137,16 @@ t_ast	*parse_pipe(t_token **token)
 	return (parse_redir(&start));
 }
 
+t_ast	*parse_path(t_token **token)
+{
+	t_ast	*path;
+
+	path = ast_new(*token);
+	// path->literal = ft_strdup((*token)->literal);
+	path->type = PATH;
+	return (path);
+}
+
 t_ast	*parse_redir(t_token **token)
 {
 	t_token	*start;
@@ -140,13 +155,21 @@ t_ast	*parse_redir(t_token **token)
 	start = *token;
 	while ((*token) && (*token)->next)
 	{
-		if ((*token)->type > 1 && (*token)->type < 6)
+		if ((*token)->type == REDIRECT_IN || (*token)->type == REDIRECT_HEREDOC)
 		{
-			redir = ast_new((*token)->type);
-			redir->left;
-			redir->right;
+			redir = ast_new((*token));
+			redir->left = parse_cmd(&(*token)->next->next);
+			redir->right = parse_path(&((*token)->next));
 			return (redir);
 		}
+		else if ((*token)->type == REDIRECT_OUT || (*token)->type == REDIRECT_APPEND)
+		{
+			redir = ast_new((*token));
+			redir->left = parse_cmd(&(*token)->prev);
+			redir->right = parse_path(&((*token)->next));
+			return (redir);
+		}
+		(*token) = (*token)->next;
 	}
 	return (parse_cmd(&start));
 }
