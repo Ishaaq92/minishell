@@ -16,9 +16,9 @@ t_ast	*ast_new(enum e_type type);
 int	count_argc(t_token *node);
 char	**parse_cmd_args(t_token *node, int argc);
 t_ast	*parse_cmd(t_token **node);
-void	*parse_logical(t_token **token);
-void	*parse_pipe(t_token **token);
-void	*parse_redir(t_token **token);
+t_ast	*parse_logical(t_token **token);
+t_ast	*parse_pipe(t_token **token);
+t_ast	*parse_redir(t_token **token);
 
 t_ast	*ast_new(enum e_type type)
 {
@@ -79,7 +79,7 @@ t_ast	*parse_cmd(t_token **node)
 	return (cmd);
 }
 
-void	*parse_logical(t_token **token)
+t_ast	*parse_logical(t_token **token)
 {
 	t_token	*start;
 	t_token	*current;
@@ -91,6 +91,7 @@ void	*parse_logical(t_token **token)
 		if ((*token)->type == LOGICAL_AND || (*token)->type == LOGICAL_OR)
 		{
 			logical = ast_new((*token)->type);
+			(*token)->next = NULL;
 			logical->left = parse_pipe(&start);
 			logical->right = parse_logical(&((*token)->next));
 			return (logical);
@@ -100,7 +101,7 @@ void	*parse_logical(t_token **token)
 	return (parse_pipe(&start));
 }
 
-void	*parse_pipe(t_token **token)
+t_ast	*parse_pipe(t_token **token)
 {
 	t_token	*start;
 	t_ast	*pipe;
@@ -111,6 +112,7 @@ void	*parse_pipe(t_token **token)
 		if ((*token)->type == PIPE)
 		{
 			pipe = ast_new((*token)->type);
+			(*token)->next->next = NULL;
 			pipe->left = parse_redir(&start);
 			pipe->right = parse_pipe(&((*token)->next));
 			return (pipe);
@@ -120,12 +122,22 @@ void	*parse_pipe(t_token **token)
 	return (parse_redir(&start));
 }
 
-void	*parse_redir(t_token **token)
+t_ast	*parse_redir(t_token **token)
 {
 	t_token	*start;
-	t_ast	*node;
+	t_ast	*redir;
 
 	start = *token;
+	while ((*token) && (*token)->next)
+	{
+		if ((*token)->type > 1 && (*token)->type < 6)
+		{
+			redir = ast_new((*token)->type);
+			redir->left;
+			redir->right;
+			return (redir);
+		}
+	}
 	return (parse_cmd(&start));
 }
 
