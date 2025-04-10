@@ -103,10 +103,20 @@ void	*parse_logical(t_token **token)
 void	*parse_pipe(t_token **token)
 {
 	t_token	*start;
-	t_ast	*node;
+	t_ast	*pipe;
 
 	start = *token;
-
+	while ((*token) && (*token)->next)
+	{
+		if ((*token)->type == PIPE)
+		{
+			pipe = ast_new((*token)->type);
+			pipe->left = parse_redir(&start);
+			pipe->right = parse_pipe(&((*token)->next));
+			return (pipe);
+		}
+		(*token) = (*token)->next;
+	}
 	return (parse_redir(&start));
 }
 
@@ -132,7 +142,6 @@ t_ast	*parse_tokens(t_token **head)
 	start = *head;
 	ast_head = parse_logical(&start);
 	return (ast_head);
-
 }
 
 // leaving off here, next steps: add code for logical, pipes, and redir, in that order
