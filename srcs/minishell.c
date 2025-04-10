@@ -42,6 +42,7 @@ int main(int ac, char *av[], char *envp[])
 		add_history(line);
 		// parser(line, envp);
 		create_tokens(line, &head);
+		parse_tokens(&head);
 		ft_lstclear(&head);
 		free(line);
 		i++;

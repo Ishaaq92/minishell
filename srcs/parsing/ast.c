@@ -12,6 +12,14 @@
 
 #include "../inc/minishell.h"
 
+t_ast	*ast_new(enum e_type type);
+int	count_argc(t_token *node);
+char	**parse_cmd_args(t_token *node, int argc);
+t_ast	*parse_cmd(t_token **node);
+void	*parse_logical(t_token **token);
+void	*parse_pipe(t_token **token);
+void	*parse_redir(t_token **token);
+
 t_ast	*ast_new(enum e_type type)
 {
 	t_ast *new;
@@ -57,36 +65,80 @@ char	**parse_cmd_args(t_token *node, int argc)
 	return (result);
 }
 
-t_ast	*parse_cmd(t_token *node)
+t_ast	*parse_cmd(t_token **node)
 {
 	t_ast	*cmd;
 	int		argc;
 
 	cmd = ast_new(COMMAND);
-	argc = count_argc(node);
+	argc = count_argc(*node);
 	
+	cmd->literal = parse_cmd_args(*node, argc);
 	if (cmd->literal == NULL)
-		return (NULL);
-	cmd->literal = parse_cmd_args(node, argc);
+		return (NULL); // free cmd now, or in a catch-all function later?
 	return (cmd);
 }
 
-void	*parse_tokens(t_token *head)
+void	*parse_logical(t_token **token)
+{
+	t_token	*start;
+	t_token	*current;
+	t_ast	*logical;
+
+	start = *token;
+	while ((*token) && (*token)->next)
+	{
+		if ((*token)->type == LOGICAL_AND || (*token)->type == LOGICAL_OR)
+		{
+			logical = ast_new((*token)->type);
+			logical->left = parse_pipe(&start);
+			logical->right = parse_logical(&((*token)->next));
+			return (logical);
+		}
+		(*token) = (*token)->next;
+	}
+	return (parse_pipe(&start));
+}
+
+void	*parse_pipe(t_token **token)
+{
+	t_token	*start;
+	t_ast	*node;
+
+	start = *token;
+
+	return (parse_redir(&start));
+}
+
+void	*parse_redir(t_token **token)
+{
+	t_token	*start;
+	t_ast	*node;
+
+	start = *token;
+	return (parse_cmd(&start));
+}
+
+t_ast	*parse_tokens(t_token **head)
 {
 	t_ast	*ast_head;
-	t_token	*current;
+	t_token	*start;
 
 	if (head == NULL)
 	{
 		printf("error, no tokens\n");
 		return (NULL);
 	}
-	current = head;
-	// leaving off here, next steps: add code for logical, pipes, and redir, in that order
-	// https://www.chidiwilliams.com/posts/on-recursive-descent-and-pratt-parsing
-	// use recursive descent, find the first logical node, then look for more. If you don't find one,
-	// start looking for pipes, and so on, like this:
-	// ast->left = parse_redir(), ast->right = parse_logical()
-	// or perhaps the other way around
-	// The last step is command, which I think is done
+	start = *head;
+	ast_head = parse_logical(&start);
+	return (ast_head);
+
 }
+
+// leaving off here, next steps: add code for logical, pipes, and redir, in that order
+// https://www.chidiwilliams.com/posts/on-recursive-descent-and-pratt-parsing
+// use recursive descent, find the first logical node, then look for more. If you don't find one,
+// start looking for pipes, and so on, like this:
+// ast->left = parse_redir(), ast->right = parse_logical()
+// or perhaps the other way around
+// The last step is command, which I think is done
