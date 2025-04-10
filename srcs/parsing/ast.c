@@ -6,14 +6,14 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 12:56:37 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/07 18:20:02 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:22:31 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 t_ast	*ast_new(enum e_type type);
-int	count_argc(t_token *node);
+int		count_argc(t_token *node);
 char	**parse_cmd_args(t_token *node, int argc);
 t_ast	*parse_cmd(t_token **node);
 void	*parse_logical(t_token **token);

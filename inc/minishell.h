@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/07 17:46:17 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:44:53 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_ast
 	struct s_ast		*left;
 	struct s_ast		*right;
 	struct s_ast		*parent;
-}					t_ast;
+}						t_ast;
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
