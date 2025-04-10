@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/03/26 14:47:49 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:19:14 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int main(int ac, char *av[], char *envp[])
 {
 	char	*line;
 	t_token	*head;
+	t_ast	*ast;
 
 	head = NULL;
 	int	i = 0;
@@ -42,7 +43,8 @@ int main(int ac, char *av[], char *envp[])
 		add_history(line);
 		// parser(line, envp);
 		create_tokens(line, &head);
-		parse_tokens(&head);
+		ast = parse_tokens(&head);
+		print_ast(ast);
 		ft_lstclear(&head);
 		free(line);
 		i++;

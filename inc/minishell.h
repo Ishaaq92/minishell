@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/10 16:44:53 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:35:03 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_ast
 {
 	char				**literal;
 	enum e_type			type;
+	t_token				*token;
 	struct s_ast		*left;
 	struct s_ast		*right;
 	struct s_ast		*parent;
@@ -92,5 +93,6 @@ char	*ft_strndup(const char *s, int n);
 
 // ast
 t_ast	*parse_tokens(t_token **head);
+void	print_ast(t_ast *ast);
 
 #endif
