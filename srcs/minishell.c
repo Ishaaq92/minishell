@@ -43,8 +43,8 @@ int main(int ac, char *av[], char *envp[])
 		add_history(line);
 		// parser(line, envp);
 		create_tokens(line, &head);
-		ast = parse_tokens(&head);
-		print_ast(ast);
+		ast = parse_tokens(head);
+		print_ast(ast, 5);
 		ft_lstclear(&head);
 		free(line);
 		i++;

@@ -93,7 +93,7 @@ char	**ft_split2(char *str, char *charset);
 char	*ft_strndup(const char *s, int n);
 
 // ast
-t_ast	*parse_tokens(t_token **head);
-void	print_ast(t_ast *ast);
+t_ast	*parse_tokens(t_token *head);
+void	print_ast(t_ast *ast, int i);
 
 #endif

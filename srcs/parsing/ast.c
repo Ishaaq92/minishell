@@ -16,9 +16,9 @@ t_ast	*ast_new(t_token *token);
 int		count_argc(t_token *node);
 char	**parse_cmd_args(t_token *node, int argc);
 t_ast	*parse_cmd(t_token **node);
-t_ast	*parse_logical(t_token **token);
-t_ast	*parse_pipe(t_token **token);
-t_ast	*parse_redir(t_token **token);
+t_ast	*parse_logical(t_token **token, t_token **stop);
+t_ast	*parse_pipe(t_token **token, t_token **stop);
+t_ast	*parse_redir(t_token **token, t_token **stop);
 
 t_ast	*ast_new(t_token *token)
 {
@@ -66,15 +66,18 @@ char	**parse_cmd_args(t_token *node, int argc)
 	return (result);
 }
 
-void	print_ast(t_ast *ast)
+void	print_ast(t_ast *ast, int i)
 {
+	int	j;
+
+	j = 0;
 	if (ast == NULL)
 		return ;
-	printf("%s\n", ast->token->literal);
-	if (ast != NULL)
+	while (j++ < i)
 		printf("	");
-	print_ast(ast->left);
-	print_ast(ast->right);
+	printf("%s\n", ast->token->literal);
+	print_ast(ast->left, --i);
+	print_ast(ast->right, i + 2);
 }
 
 t_ast	*parse_cmd(t_token **node)
@@ -93,51 +96,61 @@ t_ast	*parse_cmd(t_token **node)
 		return (NULL); // free cmd now, or in a catch-all function later?
 	return (cmd);
 }
+
 // cmd1 && cmd2 | cmd3
-t_ast	*parse_logical(t_token **token)
+// temp needs a new name: it is the new start point for finding the next 
+// logical operator in the token list
+t_ast	*parse_logical(t_token **token, t_token **stop)
 {
 	t_token	*start;
 	t_token	*cut_off;
+	t_token *temp;
 	t_ast	*logical;
 
 	start = *token;
-	while ((*token) && (*token)->next)
+	while ((*token) && (*token)->next && (*token) != (*stop))
 	{
-		cut_off = (*token)->next;
+		// cut_off = (*token)->next;
 		if ((*token)->type == LOGICAL_AND || (*token)->type == LOGICAL_OR)
 		{
 			logical = ast_new(*token);			
-			(*token)->next = NULL;
-			logical->left = parse_pipe(&start);
-			logical->right = parse_logical(&cut_off);
+			// (*token)->next = NULL;
+			temp = (*token)->next;
+			logical->left = parse_pipe(&start, token);
+			logical->right = parse_logical(&temp, stop);
 			return (logical);
 		}
-		(*token) = cut_off;
+		// (*token) = cut_off;
+		(*token) = (*token)->next;
 	}
-	return (parse_pipe(&start));
+	// if you didn't find any logical nodes, start from the beginning and
+	// look for pipe nodes
+	return (parse_pipe(&start, stop));
 }
 
-t_ast	*parse_pipe(t_token **token)
+t_ast	*parse_pipe(t_token **token, t_token **stop)
 {
 	t_token	*start;
+	t_token	*temp;
 	t_ast	*pipe;
 
 	start = *token;
-	while ((*token) && (*token)->next)
+	while ((*token) && (*token)->next && (*token) != (*stop))
 	{
 		if ((*token)->type == PIPE)
 		{
 			pipe = ast_new(*token);
-			pipe->left = parse_redir(&start);
-			pipe->right = parse_pipe(&((*token)->next));
+			temp = (*token)->next;
+			pipe->left = parse_redir(&start, token);
+			pipe->right = parse_pipe(&temp, stop);
 			return (pipe);
 		}
 		(*token) = (*token)->next;
 	}
-	return (parse_redir(&start));
+	return (parse_redir(&start, stop));
 }
 
-t_ast	*parse_path(t_token **token)
+t_ast	*parse_file(t_token **token)
 {
 	t_ast	*path;
 
@@ -147,26 +160,29 @@ t_ast	*parse_path(t_token **token)
 	return (path);
 }
 
-t_ast	*parse_redir(t_token **token)
+t_ast	*parse_redir(t_token **token, t_token **stop)
 {
 	t_token	*start;
+	t_token *temp;
 	t_ast	*redir;
 
 	start = *token;
-	while ((*token) && (*token)->next)
+	while ((*token) && (*token)->next && (*token) != (*stop))
 	{
 		if ((*token)->type == REDIRECT_IN || (*token)->type == REDIRECT_HEREDOC)
 		{
 			redir = ast_new((*token));
+			temp = (*token)->next;
 			redir->left = parse_cmd(&(*token)->next->next);
-			redir->right = parse_path(&((*token)->next));
+			redir->right = parse_file(&((*token)->next));
 			return (redir);
 		}
 		else if ((*token)->type == REDIRECT_OUT || (*token)->type == REDIRECT_APPEND)
 		{
 			redir = ast_new((*token));
+			temp = (*token)->next;
 			redir->left = parse_cmd(&(*token)->prev);
-			redir->right = parse_path(&((*token)->next));
+			redir->right = parse_file(&(*token)->next);
 			return (redir);
 		}
 		(*token) = (*token)->next;
@@ -174,21 +190,26 @@ t_ast	*parse_redir(t_token **token)
 	return (parse_cmd(&start));
 }
 
-t_ast	*parse_tokens(t_token **head)
+t_ast	*parse_tokens(t_token *head)
 {
 	t_ast	*ast_head;
 	t_token	*start;
+	t_token	*end;
 
 	if (head == NULL)
 	{
 		printf("error, no tokens\n");
 		return (NULL);
 	}
-	start = *head;
-	ast_head = parse_logical(&start);
+	start = head;
+	end = head;
+	while (end->next != NULL)
+		end = end->next;
+	ast_head = parse_logical(&start, &end);
 	return (ast_head);
 }
 
+// https://www.rioki.org/2016/04/18/recusive-descent-parser.html
 // leaving off here, next steps: add code for logical, pipes, and redir, in that order
 // https://www.chidiwilliams.com/posts/on-recursive-descent-and-pratt-parsing
 // use recursive descent, find the first logical node, then look for more. If you don't find one,
