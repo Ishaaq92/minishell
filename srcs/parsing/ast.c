@@ -110,7 +110,14 @@ t_ast	*parse_logical(t_token **token, t_token **stop)
 	start = *token;
 	while ((*token) && (*token)->next && (*token) != (*stop))
 	{
-		// cut_off = (*token)->next;
+		// if you find a logical token, take these following steps:
+		// create an ast node
+		// start looking for pipes on the left hand side 
+		// (there won't be any logical nodes there because you have just traversed through them)
+		// look for more logical nodes on the right hand side
+		// return the logical node created to the function that called it
+		// if its the root node, it will be returned to the parse_tokens function
+		// if its a branch, it will connect to logical->right
 		if ((*token)->type == LOGICAL_AND || (*token)->type == LOGICAL_OR)
 		{
 			logical = ast_new(*token);			
