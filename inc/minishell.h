@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/15 19:04:17 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/15 19:29:45 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_envp
 {
 	char			*literal;
 	struct s_envp	*next;
-}		t_envp;
+}					t_envp;
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
