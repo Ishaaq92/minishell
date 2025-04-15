@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 12:56:37 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/10 17:44:07 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:31:27 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,24 @@ static t_ast	*parse_pipe(t_token **token, t_token **stop)
 		(*token) = (*token)->next;
 	}
 	return (parse_redir(&start, stop));
+}
+
+void	free_ast(t_ast *ast)
+{
+	int	i;
+
+	if (ast == NULL)
+		return ;
+	free_ast(ast->left);
+	free_ast(ast->right);
+	i = 0;
+	while(ast->literal && ast->literal[i])
+	{
+		free(ast->literal[i]);
+		i ++;
+	}
+	free(ast->literal);
+	free(ast);
 }
 
 void	print_ast(t_ast *ast, int i)
