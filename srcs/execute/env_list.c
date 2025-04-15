@@ -15,6 +15,7 @@
 static ssize_t		find_equalsign(char *str);
 static t_envp		*env_add(void);
 static void			env_lstadd_back(t_envp **lst, t_envp *new);
+int					ft_lstsize(t_envp *lst);
 
 // ## functions needed
 // a function to stitch the linked list into a double pointer array
@@ -22,6 +23,33 @@ static void			env_lstadd_back(t_envp **lst, t_envp *new);
 // a function to free the linked list AND the double pointer array
 // a function to update elements in the array, which would also update the array?
 // a function that searches through the array and does param expansion
+
+int	ft_lstsize(t_envp *lst)
+{
+	size_t	count;
+
+	count = 0;
+	while (lst)
+	{
+		count++;
+		lst = lst->next;
+	}
+	return (count);
+}
+
+char	**stitch_env(t_envp *head)
+{
+	char	**envp;
+	int		size;
+	int		i;
+
+	size = ft_lstsize(head);
+	envp = (char **) malloc(sizeof(t_envp) * (size + 1));
+	while (i < size)
+		envp[i++] = head->literal;
+	envp[i] = '\0';
+	return (envp);
+}
 
 t_envp	*set_envp(char **envp)
 {
