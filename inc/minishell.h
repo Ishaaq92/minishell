@@ -67,6 +67,13 @@ typedef struct s_ast
 	struct s_ast		*parent;
 }						t_ast;
 
+// linked list to hold the environment variables unique to our shell
+typedef struct s_envp
+{
+	char			*literal;
+	struct s_envp	*next;
+}		t_envp;
+
 // Handling Signals
 void	handle_ctrl_c(int sig);
 void	handle_ctrl_z(int sig);
@@ -102,5 +109,8 @@ t_ast	*ast_new(t_token *token);
 
 // ast_redir.c
 t_ast	*parse_redir(t_token **token, t_token **stop);
+
+// Execution
+t_envp	*set_envp(char **envp);
 
 #endif

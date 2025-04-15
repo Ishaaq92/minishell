@@ -33,6 +33,7 @@ int main(int ac, char *av[], char *envp[])
 	char	*line;
 	t_token	*head;
 	t_ast	*ast;
+	t_envp	*env_list;
 
 	head = NULL;
 	int	i = 0;
@@ -41,11 +42,12 @@ int main(int ac, char *av[], char *envp[])
 		handle_signals();
 		line = readline("prompt: ");
 		add_history(line);
-		// parser(line, envp);
+		parser(line, envp);
 		create_tokens(line, &head);
 		ast = parse_tokens(head);
 		print_ast(ast, 5);
 		ft_lstclear(&head);
+		env_list = set_envp(envp);
 		free(line);
 		i++;
 	}
