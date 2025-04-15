@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_redir.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-15 13:23:07 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-15 13:23:07 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/15 13:23:07 by avalsang          #+#    #+#             */
+/*   Updated: 2025/04/15 17:07:21 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_ast	*parse_redir(t_token **token, t_token **stop)
 			(*token)->next = (next_token)->next->next;
 			redir->left = parse_redir(&start, stop);
 			redir->right = parse_file(&next_token->next);
+			(*token)->next = next_token;
 			return (redir);
 		}
 		*token = next_token;
@@ -46,12 +47,15 @@ static t_ast	*parse_redir2(t_token **token, t_token **stop)
 {
 	t_ast	*redir;
 	t_token	*start;
+	t_token	*temp;
 
 	start = *token;
 	redir = ast_new(*token);
+	temp = *token;
 	(*token) = (*token)->next->next;
 	redir->left = parse_redir(token, stop);
 	redir->right = parse_file(&start->next);
+	*token = temp;
 	return (redir);
 }
 

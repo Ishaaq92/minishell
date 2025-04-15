@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/10 17:19:14 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:26:35 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int main(int ac, char *av[], char *envp[])
 
 	head = NULL;
 	int	i = 0;
-	while (1)
+	printf("%ld", sizeof(char *));
+	while (i < 1)
 	{
 		handle_signals();
 		line = readline("prompt: ");
@@ -49,6 +50,7 @@ int main(int ac, char *av[], char *envp[])
 		ft_lstclear(&head);
 		env_list = set_envp(envp);
 		free(line);
+		free_ast(ast);
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/10 17:35:03 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:32:02 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ char	*ft_strndup(const char *s, int n);
 // ast.c
 t_ast	*parse_tokens(t_token *head);
 void	print_ast(t_ast *ast, int i);
+void	free_ast(t_ast *ast);
 
 // ast_cmd.c
 t_ast	*parse_cmd(t_token **node);
