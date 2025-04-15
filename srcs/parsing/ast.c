@@ -71,7 +71,7 @@ void	print_ast(t_ast *ast, int i)
 	int	j;
 
 	j = 0;
-	if (ast == NULL)
+	if (ast == NULL || ast->token->literal == NULL)
 		return ;
 	while (j++ < i)
 		printf("	");
@@ -170,29 +170,32 @@ t_ast	*parse_file(t_token **token)
 t_ast	*parse_redir(t_token **token, t_token **stop)
 {
 	t_token	*start;
-	t_token *temp;
+	t_token *next_token;
 	t_ast	*redir;
 
+	if (!*token)
+		return (NULL);
 	start = *token;
+	if ((*token)->type > 1 && (*token)->type < 6)
+	{
+		redir = ast_new(*token);
+		(*token) = (next_token)->next->next;
+		redir->left = parse_redir(token, stop);
+		redir->right = parse_file(&start->next);
+		return (redir);
+	}
 	while ((*token) && (*token)->next && (*token) != (*stop))
 	{
-		if ((*token)->type == REDIRECT_IN || (*token)->type == REDIRECT_HEREDOC)
+		next_token = (*token)->next;
+		if ((*token)->next->type > 1 && (*token)->next->type < 6)
 		{
-			redir = ast_new((*token));
-			temp = (*token)->next;
-			redir->left = parse_cmd(&(*token)->next->next);
-			redir->right = parse_file(&((*token)->next));
+			redir = ast_new((*token)->next);
+			(*token)->next = (next_token)->next->next;
+			redir->left = parse_redir(&start, stop);
+			redir->right = parse_file(&next_token->next);
 			return (redir);
 		}
-		else if ((*token)->type == REDIRECT_OUT || (*token)->type == REDIRECT_APPEND)
-		{
-			redir = ast_new((*token));
-			temp = (*token)->next;
-			redir->left = parse_cmd(&(*token)->prev);
-			redir->right = parse_file(&(*token)->next);
-			return (redir);
-		}
-		(*token) = (*token)->next;
+		*token = next_token;
 	}
 	return (parse_cmd(&start));
 }
@@ -224,3 +227,36 @@ t_ast	*parse_tokens(t_token *head)
 // ast->left = parse_redir(), ast->right = parse_logical()
 // or perhaps the other way around
 // The last step is command, which I think is done
+
+
+// t_ast	*parse_redir(t_token **token, t_token **stop)
+// {
+// 	t_token	*start;
+// 	t_token *temp;
+// 	t_ast	*redir;
+
+// 	if (!*token)
+// 		return (NULL);
+// 	start = *token;
+// 	while ((*token) && (*token)->next && (*token) != (*stop))
+// 	{
+// 		if ((*token)->type == REDIRECT_IN || (*token)->type == REDIRECT_HEREDOC)
+// 		{
+// 			redir = ast_new((*token));
+// 			temp = (*token)->next;
+// 			redir->left = parse_cmd(&(*token)->next->next);
+// 			redir->right = parse_file(&((*token)->next));
+// 			return (redir);
+// 		}
+// 		else if ((*token)->type == REDIRECT_OUT || (*token)->type == REDIRECT_APPEND)
+// 		{
+// 			redir = ast_new((*token));
+// 			temp = (*token)->next;
+// 			redir->left = parse_cmd(&(*token)->prev);
+// 			redir->right = parse_file(&(*token)->next);
+// 			return (redir);
+// 		}
+// 		(*token) = (*token)->next;
+// 	}
+// 	return (parse_cmd(&start));
+// }
