@@ -92,8 +92,15 @@ char	**ft_split2(char *str, char *charset);
 // ft_strndup.c
 char	*ft_strndup(const char *s, int n);
 
-// ast
+// ast.c
 t_ast	*parse_tokens(t_token *head);
 void	print_ast(t_ast *ast, int i);
+
+// ast_cmd.c
+t_ast	*parse_cmd(t_token **node);
+t_ast	*ast_new(t_token *token);
+
+// ast_redir.c
+t_ast	*parse_redir(t_token **token, t_token **stop);
 
 #endif

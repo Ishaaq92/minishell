@@ -17,7 +17,8 @@ SDIR = srcs
 LIBFT = Libft/libft.a
 BINARY = minishell 
 CFILES = minishell.c signals.c  \
-	parsing/ast.c parsing/linked_list.c parsing/parser.c  parsing/tokens.c \
+	parsing/ast.c parsing/ast_cmd.c parsing/ast_redir.c \
+	parsing/linked_list.c parsing/parser.c  parsing/tokens.c \
 	utils/ft_strndup.c utils/ft_split2.c utils/utils.c
 
 VPATH = $(SDIR)
