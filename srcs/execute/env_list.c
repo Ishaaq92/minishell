@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-15 14:59:54 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
+/*   Updated: 2025/04/15 19:18:34 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,23 @@ int	ft_lstsize(t_envp *lst)
 		lst = lst->next;
 	}
 	return (count);
+}
+
+void	remove_node(t_envp *lst, char *var)
+{
+	t_envp	*tmp;
+
+	while (lst != NULL)
+	{
+		if (ft_strcmp(var, lst->literal) == 0)
+		{
+			tmp = lst->next;		
+			free(lst->literal);
+			free(lst);
+			return ;
+		}
+		lst = lst->next;
+	}
 }
 
 char	**stitch_env(t_envp *head)
