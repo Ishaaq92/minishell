@@ -18,7 +18,7 @@ static void			env_lstadd_back(t_envp **lst, t_envp *new);
 int					ft_lstsize(t_envp *lst);
 
 // ## functions needed
-// a function to stitch the linked list into a double pointer array
+// DONE: a function to stitch the linked list into a double pointer array
 // a function to remove elements from the linked list, then redo the array
 // a function to free the linked list AND the double pointer array
 // a function to update elements in the array, which would also update the array?
@@ -43,10 +43,14 @@ char	**stitch_env(t_envp *head)
 	int		size;
 	int		i;
 
+	i = 0;
 	size = ft_lstsize(head);
-	envp = (char **) malloc(sizeof(t_envp) * (size + 1));
-	while (i < size)
+	envp = (char **) malloc(sizeof(char *) * (size + 1));
+	while (i < size && head->literal)
+	{
 		envp[i++] = head->literal;
+		head = head->next;
+	}
 	envp[i] = '\0';
 	return (envp);
 }

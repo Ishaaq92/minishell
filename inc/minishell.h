@@ -113,5 +113,6 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 
 // Execution
 t_envp	*set_envp(char **envp);
+char	**stitch_env(t_envp *head);
 
 #endif

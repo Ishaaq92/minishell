@@ -43,14 +43,15 @@ int main(int ac, char *av[], char *envp[])
 		handle_signals();
 		line = readline("prompt: ");
 		add_history(line);
-		parser(line, envp);
-		create_tokens(line, &head);
-		ast = parse_tokens(head);
-		print_ast(ast, 5);
-		ft_lstclear(&head);
+		// parser(line, envp);
+		// create_tokens(line, &head);
+		// ast = parse_tokens(head);
+		// print_ast(ast, 5);
 		env_list = set_envp(envp);
-		free(line);
-		free_ast(ast);
+		stitch_env(env_list);
+		// ft_lstclear(&head);
+		// free(line);
+		// free_ast(ast);
 		i++;
 	}
 	return (0);
