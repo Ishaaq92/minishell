@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-15 13:24:24 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-15 13:24:24 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/15 13:24:24 by avalsang          #+#    #+#             */
+/*   Updated: 2025/04/17 19:25:44 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,6 @@ static char	**parse_cmd_args(t_token *node, int argc)
 		result[i++] = ft_strdup(current->literal);
 		current = current->next;
 	}
-	result[i] = '\0';
+	result[i] = NULL;
 	return (result);
 }

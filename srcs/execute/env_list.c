@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/17 19:23:43 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 19:25:09 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	**stitch_env(t_envp *head)
 		envp[i++] = head->literal;
 		head = head->next;
 	}
-	envp[i] = '\0';
+	envp[i] = NULL;
 	return (envp);
 }
 
