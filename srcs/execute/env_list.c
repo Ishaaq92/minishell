@@ -21,7 +21,7 @@ int					ft_lstsize(t_envp *lst);
 // DONE: a function to stitch the linked list into a double pointer array
 // NEEDS TESTING: a function to remove elements from the linked list, then redo the array
 // NEEDS TESTING: a function to free the linked list AND the double pointer array
-// a function to update elements in the array, which would also update the array?
+// a function to update elements in the linked list, which would also update the double pointer array?
 // a function that searches through the array and does param expansion
 
 int	ft_lstsize(t_envp *lst)
@@ -173,13 +173,5 @@ static void	env_lstadd_back(t_envp **lst, t_envp *new)
 		while (tmp -> next != NULL)
 			tmp = tmp -> next;
 		tmp -> next = new;
-	}
-}
-
-void	execute_cmd(t_ast *ast_node, char **envp)
-{
-	if (ast_node->type == COMMAND)
-	{
-		;
 	}
 }

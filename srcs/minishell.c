@@ -34,25 +34,27 @@ int main(int ac, char *av[], char *envp[])
 	t_token	*head;
 	t_ast	*ast;
 	t_envp	*env_list;
+	char	**env2;
 
 	head = NULL;
 	int	i = 0;
 	printf("%ld", sizeof(char *));
-	while (i < 1)
+	while (i < 1)		
 	{
 		handle_signals();
 		line = readline("prompt: ");
 		add_history(line);
 		// parser(line, envp);
-		// create_tokens(line, &head);
-		// ast = parse_tokens(head);
-		// print_ast(ast, 5);
+		create_tokens(line, &head);
+		ast = parse_tokens(head);
+		print_ast(ast, 5);
 		env_list = set_envp(envp);
-		stitch_env(env_list);
-		// ft_lstclear(&head);
-		// free(line);
-		// free_ast(ast);
-		i++;
+		env2 = stitch_env(env_list);
+		execute_ast(ast, env2);
+		ft_lstclear(&head);
+		free(line);
+		free_ast(ast);
+		// i++;
 	}
 	return (0);
 }

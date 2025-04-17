@@ -73,5 +73,6 @@ static char	**parse_cmd_args(t_token *node, int argc)
 		result[i++] = ft_strdup(current->literal);
 		current = current->next;
 	}
+	result[i] = '\0';
 	return (result);
 }

@@ -20,6 +20,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# include <sys/wait.h> // for wait functions
+
 enum e_commands
 {
 	ECHO,
@@ -113,7 +115,12 @@ t_ast	*ast_new(t_token *token);
 t_ast	*parse_redir(t_token **token, t_token **stop);
 
 // Execution
+
+// env_list.c
 t_envp	*set_envp(char **envp);
 char	**stitch_env(t_envp *head);
+
+// cmd_path.c
+void	execute_ast(t_ast *node, char **envp);
 
 #endif
