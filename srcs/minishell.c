@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 15:38:57 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 15:56:10 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,21 @@ int main(int ac, char *av[], char *envp[])
 	t_token	*head;
 	t_ast	*ast;
 	t_envp	*env_list;
+	char	**env2;
 
 	head = NULL;
 	int	i = 0;
 	while (i < 1)
+	printf("%ld", sizeof(char *));
+	while (i < 1)		
 	{
 		handle_signals();
 		line = readline("prompt: ");
 		add_history(line);
 		// parser(line, envp);
-		// create_tokens(line, &head);
-		// ast = parse_tokens(head);
-		// print_ast(ast, 5);
+		create_tokens(line, &head);
+		ast = parse_tokens(head);
+		print_ast(ast, 5);
 		env_list = set_envp(envp);
 		stitch_env(env_list);
 		testing(&env_list);
