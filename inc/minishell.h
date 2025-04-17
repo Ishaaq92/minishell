@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 21:32:16 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 23:01:00 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,19 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 
 // Execution
 
-// env_list.c
-t_envp	*set_envp(char **envp);
-char	**stitch_env(t_envp *head);
-void	print_envp(t_envp **lst);
-char	*value_envp(t_envp **lst, char *str);
+// env_delete.c
 void	remove_node(t_envp **lst, char ***envp, char *var);
 void	del_array(char **envp);
+
+// env_create.c
+char	**stitch_env(t_envp *head);
+t_envp	*set_envp(char **envp);
 void	append_node(t_envp **lst, char **array, char *string);
+
+// env_utils.c
+void	print_envp(t_envp **lst);
+void	env_lstadd_back(t_envp **lst, t_envp *new);
+char	*value_envp(t_envp **lst, char *str);
 
 // cmd_path.c
 void	execute_ast(t_ast *node, char **envp);
