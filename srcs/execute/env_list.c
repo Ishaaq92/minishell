@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/15 20:00:14 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/17 15:38:24 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,38 @@ int					ft_lstsize(t_envp *lst);
 // DONE: a function to stitch the linked list into a double pointer array
 // NEEDS TESTING: a function to remove elements from the linked list, then redo the array
 // NEEDS TESTING: a function to free the linked list AND the double pointer array
+// NEEDS TESTING: a function that returns the value of env variable
 // a function to update elements in the array, which would also update the array?
 // a function that searches through the array and does param expansion
 
-int	ft_lstsize(t_envp *lst)
+void	print_envp(t_envp **lst)
 {
-	size_t	count;
+	t_envp	*curr;
 
-	count = 0;
-	while (lst)
+	curr = *lst;
+	while (curr != NULL)
 	{
-		count++;
-		lst = lst->next;
+		printf("%s\n", curr->literal);
+		curr = curr->next;        
 	}
-	return (count);
 }
 
+// Purpose is to check variable exists. Returns malloc'd value of variable if exists. NULL otherwise. 
+char	*value_envp(t_envp **lst, char *str)
+{
+	t_envp	*curr;
+	int		length;
+
+	length = ft_strlen(str);
+	curr = *lst;
+	while (curr != NULL)
+	{
+		if (ft_strncmp(str, curr->literal, length) == 0 && curr->literal[length] == '=')
+			return (ft_strndup(&curr->literal[length + 1], ft_strlen(&curr->literal[length + 1])));
+		curr = curr->next;
+	}
+	return (NULL);
+}
 // Note that deleting the lst will delete the envp array.
 void	del_lst(t_envp **lst)
 {
@@ -73,8 +89,9 @@ void	remove_node(t_envp **lst,char **envp, char *var)
 	prev = NULL;
 	while (curr != NULL)
 	{
-		if (ft_strcmp(var, curr->literal) == 0)
+		if (ft_strncmp(var, curr->literal, ft_strlen(var)) == 0)
 		{
+			printf("1");
 			if (prev == NULL)
 				*lst = curr->next;
 			else
@@ -86,8 +103,9 @@ void	remove_node(t_envp **lst,char **envp, char *var)
 		prev = curr;
 		curr = curr->next;
 	}
-	del_envp(envp);
-	stitch_env(*lst);
+	printf("0");
+	// del_envp(envp);
+	// envp = stitch_env(*lst);
 }
 
 char	**stitch_env(t_envp *head)
@@ -106,6 +124,19 @@ char	**stitch_env(t_envp *head)
 	}
 	envp[i] = '\0';
 	return (envp);
+}
+
+int	ft_lstsize(t_envp *lst)
+{
+	size_t	count;
+
+	count = 0;
+	while (lst)
+	{
+		count++;
+		lst = lst->next;
+	}
+	return (count);
 }
 
 t_envp	*set_envp(char **envp)

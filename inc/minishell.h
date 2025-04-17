@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/15 19:29:45 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:43:35 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ void	handle_signals(void);
 void	print_tokens(t_token **head);
 t_token	*ft_lstnew(char *str);
 void	ft_lstadd_back(t_token **lst, t_token *new);
+void	print_envp(t_envp **lst);
+char	*value_envp(t_envp **lst, char *str);
+void	remove_node(t_envp **lst,char **envp, char *var);
 
 // tokens.c
 int	create_tokens(char *str, t_token **head);

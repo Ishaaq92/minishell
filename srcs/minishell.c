@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/15 17:26:35 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/17 15:38:57 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,27 @@ void	ft_lstclear(t_token **lst)
 	}
 }
 
+void	testing(t_envp **lst)
+{
+	t_envp	*env_list;
+	char	**env_array;
+	int		i;
+
+	i = 0;
+	env_list = *lst;
+	char	str[8] = "SHELL\0";
+	// printf("%s\n", str);
+	// printf("%s\n", value_envp(&env_list, str));
+	// printf("%zu\n", ft_strlen(value_envp(&env_list, str)));
+	// printf("%s\n", value_envp(&env_list, str));
+	print_envp(&env_list);
+	env_array = stitch_env(env_list);
+	printf("\n\n");
+	remove_node(lst, env_array, str);
+	print_envp(&env_list);
+	// printf("%s\n", value_envp(&env_list, str));
+}
+
 int main(int ac, char *av[], char *envp[])
 {
 	char	*line;
@@ -37,7 +58,6 @@ int main(int ac, char *av[], char *envp[])
 
 	head = NULL;
 	int	i = 0;
-	printf("%ld", sizeof(char *));
 	while (i < 1)
 	{
 		handle_signals();
@@ -49,6 +69,7 @@ int main(int ac, char *av[], char *envp[])
 		// print_ast(ast, 5);
 		env_list = set_envp(envp);
 		stitch_env(env_list);
+		testing(&env_list);
 		// ft_lstclear(&head);
 		// free(line);
 		// free_ast(ast);
