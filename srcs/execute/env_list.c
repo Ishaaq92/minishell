@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/17 21:10:08 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 21:38:08 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,21 @@ static ssize_t		find_equalsign(char *str);
 static t_envp		*env_add(void);
 static void			env_lstadd_back(t_envp **lst, t_envp *new);
 int					ft_lstsize(t_envp *lst);
+static t_envp		*env_add(void);
+static void	env_lstadd_back(t_envp **lst, t_envp *new);
 
 // ## functions needed
 // DONE: a function to stitch the linked list into a double pointer array
-// NEEDS TESTING: a function to remove elements from the linked list, then redo the array
-// NEEDS TESTING: a function to free the linked list AND the double pointer array
-// NEEDS TESTING: a function that returns the value of env variable
-// a function to update elements in the array, which would also update the array?
+//		stitch_env()
+// DONE: a function to remove elements from the linked list, then redo the array
+//		remove_node() 
+// DONE: a function that returns the value of env variable
+//		value_envp() 
+// DONE: a function to update elements in the array, which would also update the array?
+//		append_node()
 // a function that searches through the array and does param expansion
+//		Not sure. value_envp() does something similar.
+// CHECK FOR LEAKS: a function to free the linked list AND the double pointer array
 
 void	print_envp(t_envp **lst)
 {
@@ -53,6 +60,16 @@ char	*value_envp(t_envp **lst, char *str)
 	}
 	return (NULL);
 }
+// MUST INCLUDE FULL STRING: eg. 'PWD=/Users/tim'
+void	append_node(t_envp **lst, char **array, char *string)
+{
+	t_envp	*new;	
+	
+	new = env_add();
+	new ->literal = string;
+	env_lstadd_back(lst, new);
+	del_array(array);
+}
 // Note that deleting the lst will delete the envp array.
 void	del_lst(t_envp **lst)
 {
@@ -72,7 +89,7 @@ void	del_lst(t_envp **lst)
 
 // Note that deleting the envp will delete the linked list literals.
 // CHECK FOR LEAKS
-void	del_envp(char **envp)
+void	del_array(char **envp)
 {
 	// int	i;
 
@@ -82,6 +99,7 @@ void	del_envp(char **envp)
 	// free(envp);
 	free(envp);
 }
+
 // Works but need to check effects on the array.
 void	remove_node(t_envp **lst, char ***envp, char *var)
 {
@@ -105,7 +123,7 @@ void	remove_node(t_envp **lst, char ***envp, char *var)
 		prev = curr;
 		curr = curr->next;
 	}
-	del_envp(*envp);
+	del_array(*envp);
 	*envp = stitch_env(*lst);
 }
 

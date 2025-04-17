@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 20:54:34 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 21:32:16 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	create_tokens(char *str, t_token **head);
 
 // utils.c
 void    exit_cleanup(void);
-int	ft_strcmp(char *s1, char *s2);
+int		ft_strcmp(char *s1, char *s2);
 
 // parser.c
 void	parser(char *input, char *envp[]);
@@ -123,7 +123,8 @@ char	**stitch_env(t_envp *head);
 void	print_envp(t_envp **lst);
 char	*value_envp(t_envp **lst, char *str);
 void	remove_node(t_envp **lst, char ***envp, char *var);
-void	del_envp(char **envp);
+void	del_array(char **envp);
+void	append_node(t_envp **lst, char **array, char *string);
 
 // cmd_path.c
 void	execute_ast(t_ast *node, char **envp);

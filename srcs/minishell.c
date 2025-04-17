@@ -6,12 +6,11 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 20:59:50 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 21:33:02 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	testing(t_envp **lst)
 {
@@ -19,19 +18,12 @@ void	testing(t_envp **lst)
 	char	**env_array;
 
 	env_list = *lst;
-	char	str[8] = "PWD\0";
-	// printf("%s\n", str);
-	// printf("%s\n", value_envp(&env_list, str));
-	// printf("%zu\n", ft_strlen(value_envp(&env_list, str)));
-	// printf("%s\n", value_envp(&env_list, str));
-	print_envp(&env_list);
 	env_array = stitch_env(env_list);
-	printf("\n\n");
-	remove_node(lst, &env_array, str);
-	printf("\n\n");
-	int	i = 0;
-	while (env_array[i] != NULL)
-		printf("%s\n", env_array[i++]);
+	char	str[8] = "ISHAAQ\0";
+    print_envp(lst);
+    printf("\n\n\n");
+	append_node(lst, env_array, str);
+    print_envp(lst);
 }
 
 int main(int ac, char *av[], char *envp[])
