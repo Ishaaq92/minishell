@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 14:43:35 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 20:54:34 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,7 @@ void	handle_signals(void);
 void	print_tokens(t_token **head);
 t_token	*ft_lstnew(char *str);
 void	ft_lstadd_back(t_token **lst, t_token *new);
-void	print_envp(t_envp **lst);
-char	*value_envp(t_envp **lst, char *str);
-void	remove_node(t_envp **lst,char **envp, char *var);
+void	ft_lstclear(t_token **lst);
 
 // tokens.c
 int	create_tokens(char *str, t_token **head);
@@ -122,6 +120,10 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 // env_list.c
 t_envp	*set_envp(char **envp);
 char	**stitch_env(t_envp *head);
+void	print_envp(t_envp **lst);
+char	*value_envp(t_envp **lst, char *str);
+void	remove_node(t_envp **lst, char ***envp, char *var);
+void	del_envp(char **envp);
 
 // cmd_path.c
 void	execute_ast(t_ast *node, char **envp);

@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/17 19:25:09 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 21:10:08 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,19 @@ void	del_lst(t_envp **lst)
 }
 
 // Note that deleting the envp will delete the linked list literals.
+// CHECK FOR LEAKS
 void	del_envp(char **envp)
 {
-	int	i;
+	// int	i;
 
-	i = 0;
-	while (envp[i] != 0)
-		free(envp[i++]);
+	// i = 0;
+	// while (envp[i] != 0)
+	// 	free(envp[i++]);
+	// free(envp);
+	free(envp);
 }
-
-void	remove_node(t_envp **lst,char **envp, char *var)
+// Works but need to check effects on the array.
+void	remove_node(t_envp **lst, char ***envp, char *var)
 {
 	t_envp	*curr;
 	t_envp	*prev;
@@ -91,21 +94,19 @@ void	remove_node(t_envp **lst,char **envp, char *var)
 	{
 		if (ft_strncmp(var, curr->literal, ft_strlen(var)) == 0)
 		{
-			printf("1");
 			if (prev == NULL)
 				*lst = curr->next;
 			else
 				prev->next = curr->next;
 			free(curr->literal);
 			free(curr);
-			return;
+			break ;
 		}
 		prev = curr;
 		curr = curr->next;
 	}
-	printf("0");
-	// del_envp(envp);
-	// envp = stitch_env(*lst);
+	del_envp(*envp);
+	*envp = stitch_env(*lst);
 }
 
 char	**stitch_env(t_envp *head)

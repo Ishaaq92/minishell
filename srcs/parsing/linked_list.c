@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:34:58 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/07 17:35:56 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/17 20:54:20 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,22 @@ void	print_tokens(t_token **head)
 		temp = temp->next;
 	}
 	printf("}\n");
+}
+
+void	ft_lstclear(t_token **lst)
+{
+	t_token	*tmp;
+
+	if (lst)
+	{
+		while (*lst)
+		{
+			tmp = (*lst)->next;
+			free((*lst)->literal);
+			free((*lst));
+			(*lst) = tmp;
+		}
+	}
 }
 
 t_token	*ft_lstnew(char *str)
