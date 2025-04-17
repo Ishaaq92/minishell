@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 15:56:10 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/17 16:02:04 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ int main(int ac, char *av[], char *envp[])
 
 	head = NULL;
 	int	i = 0;
-	while (i < 1)
-	printf("%ld", sizeof(char *));
 	while (i < 1)		
 	{
 		handle_signals();
@@ -77,6 +75,12 @@ int main(int ac, char *av[], char *envp[])
 		// free(line);
 		// free_ast(ast);
 		i++;
+		env2 = stitch_env(env_list);
+		execute_ast(ast, env2);
+		ft_lstclear(&head);
+		free(line);
+		free_ast(ast);
+		// i++;
 	}
 	return (0);
 }
