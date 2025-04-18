@@ -132,6 +132,6 @@ void	env_lstadd_back(t_envp **lst, t_envp *new);
 char	*value_envp(t_envp **lst, char *str);
 
 // cmd_path.c
-void	execute_ast(t_ast *node, char **envp);
+void	execute_ast(t_ast *node, char **envp, t_envp *env_list);
 
 #endif

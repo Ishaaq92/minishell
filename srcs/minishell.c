@@ -47,13 +47,13 @@ int main(int ac, char *av[], char *envp[])
 		print_ast(ast, 5);
 		env_list = set_envp(envp);
 		stitch_env(env_list);
-		testing(&env_list);
-		// env_array = stitch_env(env_list);
-		// execute_ast(ast, env_array);
+		// testing(&env_list);
+		env_array = stitch_env(env_list);
+		execute_ast(ast, env_array, env_list);
 		ft_lstclear(&head);
 		free(line);
 		free_ast(ast);
-		i++;
+		// i++;
 	}
 	return (0);
 }
