@@ -21,7 +21,7 @@ t_ast	*parse_redir(t_token **token, t_token **stop)
 	t_token	*next_token;
 	t_ast	*redir;
 
-	if (!*token)
+	if (*token == NULL)
 		return (NULL);
 	start = *token;
 	if ((*token)->type > 1 && (*token)->type < 6)
