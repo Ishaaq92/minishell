@@ -132,9 +132,12 @@ void	env_lstadd_back(t_envp **lst, t_envp *new);
 char	*value_envp(t_envp **lst, char *str);
 
 // cmd_path.c
-int	set_cmd_path(t_ast *node, t_envp *env_list);
+int		set_cmd_path(t_ast *node, t_envp *env_list);
 
 // exec.c
-void	execute_ast(t_ast *node, char **envp, t_envp *env_list);
+int		execute_node(t_ast *node, char **envp, t_envp *env_list);
+
+// exec_pipe.c
+int		execute_pipe(t_ast *node, char **envp, t_envp *env_list);
 
 #endif

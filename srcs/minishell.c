@@ -40,19 +40,22 @@ int main(int ac, char *av[], char *envp[])
 	while (i < 1)		
 	{
 		line = readline("prompt: ");
-		add_history(line);
-		// parser(line, envp);
-		create_tokens(line, &head);
-		ast = parse_tokens(head);
-		print_ast(ast, 5);
-		env_list = set_envp(envp);
-		stitch_env(env_list);
-		// testing(&env_list);
-		env_array = stitch_env(env_list);
-		execute_ast(ast, env_array, env_list);
-		ft_lstclear(&head);
+		if (*line)
+		{	
+			add_history(line);
+			// parser(line, envp);
+			create_tokens(line, &head);
+			ast = parse_tokens(head);
+			print_ast(ast, 5);
+			env_list = set_envp(envp);
+			stitch_env(env_list);
+			// testing(&env_list);
+			env_array = stitch_env(env_list);
+			execute_node(ast, env_array, env_list);
+			ft_lstclear(&head);
+			free_ast(ast);
+		}
 		free(line);
-		free_ast(ast);
 		// i++;
 	}
 	return (0);

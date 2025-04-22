@@ -12,30 +12,6 @@
 
 #include "../inc/minishell.h"
 
-// TODO: change these numbers to macros
-int	is_builtin(char *str)
-{
-	if (!str)
-		return (0);
-	else if (!ft_strcmp(str, "echo"))
-		return (1);
-	else if (!ft_strcmp(str, "cd"))
-			return (2);
-	else if (!ft_strcmp(str, "pwd"))
-			return (3);
-	else if (!ft_strcmp(str, "export"))
-			return (4);
-	else if (!ft_strcmp(str, "unset"))
-			return (5);
-	else if (!ft_strcmp(str, "env"))
-			return (6);
-	else if (!ft_strcmp(str, "exit"))
-			return (7);
-	else
-		return (0);
-}
-
-
 char	**get_pathlist(t_envp *env_list)
 {
 	int		i;
