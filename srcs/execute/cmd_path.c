@@ -12,6 +12,31 @@
 
 #include "../inc/minishell.h"
 
+int	execute_cmd(t_ast *node, char **envp, t_envp *env_list);
+// TODO: change these numbers to macros
+int	is_builtin(char *str)
+{
+	if (!str)
+		return (0);
+	else if (!ft_strcmp(str, "echo"))
+		return (1);
+	else if (!ft_strcmp(str, "cd"))
+			return (2);
+	else if (!ft_strcmp(str, "pwd"))
+			return (3);
+	else if (!ft_strcmp(str, "export"))
+			return (4);
+	else if (!ft_strcmp(str, "unset"))
+			return (5);
+	else if (!ft_strcmp(str, "env"))
+			return (6);
+	else if (!ft_strcmp(str, "exit"))
+			return (7);
+	else
+		return (0);
+}
+
+
 char	**get_pathlist(t_envp *env_list)
 {
 	int		i;
@@ -24,8 +49,7 @@ char	**get_pathlist(t_envp *env_list)
 		env_list = env_list->next;
 	if (env_list != NULL)
 	{
-		env_list->literal += 5;
-		result = ft_split(env_list->literal, ':');
+		result = ft_split(env_list->literal + 5, ':');
 		return (result);
 	}
 	return (NULL);
@@ -67,9 +91,21 @@ int	set_cmd_path(t_ast *node, t_envp *env_list)
 	return (1);
 }
 
-void	execute_ast(t_ast *node, char **envp, t_envp *env_list)
+void	execute_logical(t_ast *node, char **envp, t_envp *env_list)
+{
+	int	status;
+
+	status = execute_cmd(node->left, envp, env_list);
+	if (node->type == LOGICAL_AND && status == 0)
+		execute_cmd(node->right, envp, env_list);
+	else if (node->type == LOGICAL_OR && status != 0)
+		execute_cmd(node->right, envp, env_list);
+}
+
+int	execute_cmd(t_ast *node, char **envp, t_envp *env_list)
 {
 	int	pid;
+	int	status;
 
 	pid = fork();
 	set_cmd_path(node, env_list);
@@ -81,6 +117,17 @@ void	execute_ast(t_ast *node, char **envp, t_envp *env_list)
 	else
 	{
 		// parent
-		wait(NULL);
+		waitpid(pid, &status, 0);
 	}
+	return (WEXITSTATUS(status));
 }
+
+
+void	execute_ast(t_ast *node, char **envp, t_envp *env_list)
+{
+	if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
+		execute_logical(node, envp, env_list);
+	if (node->type == COMMAND)
+		execute_cmd(node, envp, env_list);
+}
+

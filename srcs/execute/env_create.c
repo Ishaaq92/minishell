@@ -89,11 +89,3 @@ char	**stitch_env(t_envp *head)
 	envp[i] = NULL;
 	return (envp);
 }
-
-void	execute_cmd(t_ast *ast_node, char **envp)
-{
-	if (ast_node->type == COMMAND)
-	{
-		;
-	}
-}
