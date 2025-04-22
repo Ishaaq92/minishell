@@ -20,6 +20,7 @@ CFILES = minishell.c signals.c  \
 	parsing/ast.c parsing/ast_cmd.c parsing/ast_redir.c \
 	parsing/linked_list.c parsing/parser.c  parsing/tokens.c \
 	execute/env_delete.c execute/cmd_path.c execute/env_create.c execute/env_utils.c \
+	execute/exec.c \
 	utils/ft_strndup.c utils/ft_split2.c utils/utils.c
 
 VPATH = $(SDIR)
