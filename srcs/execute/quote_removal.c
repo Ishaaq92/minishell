@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:00:07 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 16:00:51 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/23 16:41:07 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,16 @@ void	collapse_quotes(char *str, int *i, char quote_char)
 		ft_memmove(str + *i, str + *i + 1, ft_strlen(str + *i));
 }
 
-// #include <stdio.h>
-// int main()
-// {
-// 	char *test;
+#include <stdio.h>
+int main()
+{
+	char *test;
 
-// 	test = ft_strdup("\'hello\' \'world\' \\a \\b");
-// 	printf("test = %s\n", test);
-// 	remove_quotes(test);
-// 	printf("result = %s\n", test);
-// 	free(test);
+	test = ft_strdup("\'hello\' \'world\' \\< \\>");
+	printf("test = %s\n", test);
+	remove_quotes(test);
+	printf("result = %s\n", test);
+	free(test);
 
-// 	return (0);
-// }
+	return (0);
+}
