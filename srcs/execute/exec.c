@@ -1,10 +1,11 @@
 
 #include "../inc/minishell.h"
 
-int		is_builtin(char *str);
+int		is_builtin(char *str, t_ast *node);
 int		execute_logical(t_ast *node, char **envp, t_envp *env_list);
 int		execute_cmd(t_ast *node, char **envp, t_envp *env_list);
 int		execute_redir(t_ast *node, char **envp, t_envp *env_list);
+int		bi_cd(t_data *data);
 
 int	execute_node(t_ast *node, char **envp, t_envp *env_list)
 {
@@ -45,14 +46,15 @@ int	execute_redir(t_ast *node, char **envp, t_envp *env_list)
 }
 
 // TODO: change these numbers to macros
-int	is_builtin(char *str)
+int	is_builtin(char *str, t_ast *node)
 {
 	if (!str)
 		return (0);
 	else if (!ft_strcmp(str, "echo"))
 		return (1);
 	else if (!ft_strcmp(str, "cd"))
-			return (2);
+		return (2);
+		// bi_cd(node);
 	else if (!ft_strcmp(str, "pwd"))
 			return (3);
 	else if (!ft_strcmp(str, "export"))
@@ -65,6 +67,18 @@ int	is_builtin(char *str)
 			return (7);
 	else
 		return (0);
+	return (1);
+}
+
+int	bi_cd(t_data *data)
+{
+	t_envp *lst;
+	lst = data->lst;
+}
+
+void clean_args()
+{
+
 }
 
 int	execute_cmd(t_ast *node, char **envp, t_envp *env_list)
@@ -73,10 +87,11 @@ int	execute_cmd(t_ast *node, char **envp, t_envp *env_list)
 	int	status;
 
 	pid = fork();
-	if (is_builtin(node->literal[0]))
-		;
+	// if (is_builtin(node->literal[0], node) != 0)
+		// return (0);
 		// return (); TODO
 	set_cmd_path(node, env_list);
+	clean_args();
 	if (pid == 0)
 	{
 		// child

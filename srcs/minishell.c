@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 21:33:02 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/23 17:46:33 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ int main(int ac, char *av[], char *envp[])
 	char	**env_array;
 
 	head = NULL;
-	int	i = 0;
 	handle_signals();
+	int	i = 0;
 	while (i < 1)		
 	{
-		line = readline("prompt: ");
+		line = readline("Prompt: ");
 		if (*line)
 		{	
 			add_history(line);
@@ -51,7 +51,6 @@ int main(int ac, char *av[], char *envp[])
 			print_ast(ast, 5);
 			env_list = set_envp(envp);
 			stitch_env(env_list);
-			// testing(&env_list);
 			env_array = stitch_env(env_list);
 			printf("\n***COMMAND EXECUTION***\n");
 			execute_node(ast, env_array, env_list);

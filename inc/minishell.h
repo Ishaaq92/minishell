@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 23:01:00 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/23 17:41:46 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ enum e_type
 };
 
 // open_quote is used to mark the beginning of quoted text
+
 typedef	struct s_token
 {
 	char			*literal;
@@ -75,6 +76,14 @@ typedef struct s_envp
 	char			*literal;
 	struct s_envp	*next;
 }					t_envp;
+
+typedef struct s_data
+{
+	t_envp	*lst;
+	char	**env;
+	t_ast	**head;
+	int		status;
+}			t_data;
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
