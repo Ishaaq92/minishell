@@ -14,6 +14,8 @@ int	execute_node(t_ast *node, char **envp, t_envp *env_list)
 		status = execute_logical(node, envp, env_list);
 	else if (node->type == PIPE)
 		status = execute_pipe(node, envp, env_list);
+	else if (node->type > 1 && node->type < 6)
+		status = execute_redir(node, envp, env_list);
 	else if (node->type == COMMAND)
 		status = execute_cmd(node, envp, env_list);
 	return (status);
@@ -33,7 +35,13 @@ int	execute_logical(t_ast *node, char **envp, t_envp *env_list)
 
 int	execute_redir(t_ast *node, char **envp, t_envp *env_list)
 {
-	
+	int		fd_newfile;
+	int		fd_redir;
+
+	if (ft_isdigit(node->token->literal[0]))
+	{
+		printf("isdigit");
+	}
 }
 
 // TODO: change these numbers to macros
