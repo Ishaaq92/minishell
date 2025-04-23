@@ -44,13 +44,16 @@ int main(int ac, char *av[], char *envp[])
 		{	
 			add_history(line);
 			// parser(line, envp);
+			printf("\n***TOKEN LIST***\n");
 			create_tokens(line, &head);
 			ast = parse_tokens(head);
+			printf("\n*** AST TREE***\n");
 			print_ast(ast, 5);
 			env_list = set_envp(envp);
 			stitch_env(env_list);
 			// testing(&env_list);
 			env_array = stitch_env(env_list);
+			printf("\n***COMMAND EXECUTION***\n");
 			execute_node(ast, env_array, env_list);
 			ft_lstclear(&head);
 			free_ast(ast);

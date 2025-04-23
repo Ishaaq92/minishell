@@ -7,3 +7,5 @@ objs/
 README.md
 
 *.o
+
+big_infile
