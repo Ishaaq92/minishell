@@ -2,47 +2,31 @@
 #include "../inc/minishell.h"
 
 int		is_builtin(char *str, t_ast *node);
-int		execute_logical(t_ast *node, char **envp, t_envp *env_list);
-int		execute_cmd(t_ast *node, char **envp, t_envp *env_list);
-int		execute_redir(t_ast *node, char **envp, t_envp *env_list);
+int		execute_logical(t_data *data, t_ast *node);
+int		execute_cmd(t_data *data, t_ast *node);
 int		bi_cd(t_data *data);
 
-int	execute_node(t_ast *node, char **envp, t_envp *env_list)
+int		execute_node(t_data *data, t_ast *node)
 {
-	int	status;
-
 	if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
-		status = execute_logical(node, envp, env_list);
+		data->exit_status = execute_logical(data, node);
 	else if (node->type == PIPE)
-		status = execute_pipe(node, envp, env_list);
+		data->exit_status = execute_pipe(data, node);
 	else if (node->type > 1 && node->type < 6)
-		status = execute_redir(node, envp, env_list);
+		data->exit_status = execute_redir(data, node);
 	else if (node->type == COMMAND)
-		status = execute_cmd(node, envp, env_list);
-	return (status);
+		data->exit_status = execute_cmd(data, node);
+	return (data->exit_status);
 }
 
-int	execute_logical(t_ast *node, char **envp, t_envp *env_list)
+int		execute_logical(t_data *data, t_ast *node)
 {
-	int	status;
-
-	status = execute_node(node->left, envp, env_list);
-	if (node->type == LOGICAL_AND && status == 0)
-		status = execute_node(node->right, envp, env_list);
-	else if (node->type == LOGICAL_OR && status != 0)
-		status = execute_node(node->right, envp, env_list);
-	return (status);
-}
-
-int	execute_redir(t_ast *node, char **envp, t_envp *env_list)
-{
-	int		fd_newfile;
-	int		fd_redir;
-
-	if (ft_isdigit(node->token->literal[0]))
-	{
-		printf("isdigit");
-	}
+	data->exit_status = execute_node(data, node->left);
+	if (node->type == LOGICAL_AND && data->exit_status == 0)
+		data->exit_status = execute_node(data, node->right);
+	else if (node->type == LOGICAL_OR && data->exit_status != 0)
+		data->exit_status = execute_node(data, node->right);
+	return (data->exit_status);
 }
 
 // TODO: change these numbers to macros
@@ -73,36 +57,32 @@ int	is_builtin(char *str, t_ast *node)
 int	bi_cd(t_data *data)
 {
 	t_envp *lst;
-	lst = data->lst;
+	lst = data->env_llst;
 }
 
 void clean_args()
 {
-
 }
 
-int	execute_cmd(t_ast *node, char **envp, t_envp *env_list)
+int	execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
-	int	status;
 
 	pid = fork();
 	// if (is_builtin(node->literal[0], node) != 0)
 		// return (0);
 		// return (); TODO
-	set_cmd_path(node, env_list);
+	set_cmd_path(node, data->env_llst);
 	clean_args();
 	if (pid == 0)
 	{
 		// child
-		execve(node->literal[0], node->literal, envp);
+		execve(node->literal[0], node->literal, data->envp);
 	}
 	else
 	{
 		// parent
-		waitpid(pid, &status, 0);
+		waitpid(pid, &data->exit_status, 0);
 	}
-	return (WEXITSTATUS(status));
+	return (WEXITSTATUS(data->exit_status));
 }
-
-

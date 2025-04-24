@@ -12,6 +12,62 @@
 
 #include "minishell.h"
 
+void	free_data(t_data *data);
+void	testing(t_envp **lst);
+
+int main(int ac, char *av[], char *envp[])
+{
+	char	*line;
+	t_data	*data;
+
+	handle_signals();
+	data = NULL;
+	while (42)		
+	{
+		line = readline("Prompt: ");
+		if (*line)
+		{	
+			add_history(line);
+			data = init_exec_data(line, envp);
+			printf("\n***COMMAND EXECUTION***\n");
+			if (data)
+				execute_node(data, data->head);
+			free_data(data);
+		}
+		free(line);
+	}
+	return (0);
+}
+
+t_data	*init_exec_data(char *line, char **envp)
+{
+	t_data		*data;
+
+	data = (t_data *) malloc(sizeof(t_data));
+	if (!data)
+		return (NULL);
+	data->token_list = NULL;
+	printf("\n***TOKEN LIST***\n");
+	create_tokens(line, &(data->token_list));
+	data->head = parse_tokens(data->token_list);
+	printf("\n*** AST TREE***\n");
+	print_ast(data->head, 3);
+	data->env_llst = set_envp(envp);
+	data->envp = stitch_env(data->env_llst);
+	data->exit_status = 0;
+	data->std_fd[0] = dup(STDIN_FILENO);
+	data->std_fd[1] = dup(STDOUT_FILENO);
+	data->std_fd[2] = dup(STDERR_FILENO);
+	return (data);
+}
+
+void	free_data(t_data *data)
+{
+	ft_lstclear(&data->token_list);
+	free_ast(data->head);
+	free(data);
+}
+
 void	testing(t_envp **lst)
 {
 	t_envp	*env_list;
@@ -24,41 +80,4 @@ void	testing(t_envp **lst)
     printf("\n\n\n");
 	append_node(lst, env_array, str);
     print_envp(lst);
-}
-
-int main(int ac, char *av[], char *envp[])
-{
-	char	*line;
-	t_token	*head;
-	t_ast	*ast;
-	t_envp	*env_list;
-	char	**env_array;
-
-	head = NULL;
-	handle_signals();
-	int	i = 0;
-	while (i < 1)		
-	{
-		line = readline("Prompt: ");
-		if (*line)
-		{	
-			add_history(line);
-			// parser(line, envp);
-			printf("\n***TOKEN LIST***\n");
-			create_tokens(line, &head);
-			ast = parse_tokens(head);
-			printf("\n*** AST TREE***\n");
-			print_ast(ast, 5);
-			env_list = set_envp(envp);
-			stitch_env(env_list);
-			env_array = stitch_env(env_list);
-			printf("\n***COMMAND EXECUTION***\n");
-			execute_node(ast, env_array, env_list);
-			ft_lstclear(&head);
-			free_ast(ast);
-		}
-		free(line);
-		// i++;
-	}
-	return (0);
 }

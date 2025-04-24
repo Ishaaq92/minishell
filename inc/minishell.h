@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
 
 # include <sys/wait.h> // for wait functions
 
@@ -49,15 +50,14 @@ enum e_type
 };
 
 // open_quote is used to mark the beginning of quoted text
-
 typedef	struct s_token
 {
-	char			*literal;
-	enum e_type		type;
-	struct s_token	*next;
-	struct s_token	*prev;
-	int				open_quote;
-}					t_token;
+	char				*literal;
+	enum e_type			type;
+	struct s_token		*next;
+	struct s_token		*prev;
+	int					open_quote;
+}						t_token;
 
 // abstract synatx tree nodes
 typedef struct s_ast
@@ -73,17 +73,22 @@ typedef struct s_ast
 // linked list to hold the environment variables unique to our shell
 typedef struct s_envp
 {
-	char			*literal;
-	struct s_envp	*next;
-}					t_envp;
+	char				*literal;
+	struct s_envp		*next;
+}						t_envp;
 
 typedef struct s_data
 {
-	t_envp	*lst;
-	char	**env;
-	t_ast	**head;
-	int		status;
-}			t_data;
+	t_envp				*env_llst;
+	t_token				*token_list;
+	char				**envp;
+	t_ast				*head;
+	int					exit_status;
+	int					std_fd[3];
+}						t_data;
+
+// "main" minishell.c
+t_data	*init_exec_data(char *line, char **envp);
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
@@ -144,9 +149,12 @@ char	*value_envp(t_envp **lst, char *str);
 int		set_cmd_path(t_ast *node, t_envp *env_list);
 
 // exec.c
-int		execute_node(t_ast *node, char **envp, t_envp *env_list);
+int		execute_node(t_data *data, t_ast *node);
 
 // exec_pipe.c
-int		execute_pipe(t_ast *node, char **envp, t_envp *env_list);
+int		execute_pipe(t_data *data, t_ast *node);
+
+// exec_redir.c
+int		execute_redir(t_data *data, t_ast *node);
 
 #endif
