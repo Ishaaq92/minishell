@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/25 17:17:33 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 17:45:08 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 // unset: NOT DONE
 // export: ALMOST DONE
 // exit: TESTING
-// env: TESTING
-// pwd: TESTING
+// env: DONE
+// pwd: DONE
 
 int	bi_cd(t_data *data)
 {
@@ -44,7 +44,7 @@ void	bi_env(t_data *data)
 	i = 0;
 	env = data->envp;
 	while (env[i] != NULL)
-		printf("%s", env[i++]);
+		printf("%s\n", env[i++]);
 	data->exit_status = WEXITSTATUS(EXIT_SUCCESS);
 }
 
@@ -61,7 +61,7 @@ void	bi_export(t_data *data, char *str)
 	append_node(&data->env_llst, &str, str);
 }
 
-void	bi_exit(t_data *data, t_ast *node)
+void	bi_exit(t_data *data)
 {
 	exit_cleanup();
 }

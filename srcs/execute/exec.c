@@ -34,20 +34,19 @@ int	is_builtin(t_data *data, char *str)
 	if (!str)
 		return (0);
 	else if (!ft_strcmp(str, "echo"))
-		return (1);
+		return (0);
 	else if (!ft_strcmp(str, "cd"))
-		return (2);
+		return (0);
 	else if (!ft_strcmp(str, "pwd"))
 		bi_pwd(data);
 	else if (!ft_strcmp(str, "export"))
-		return (4);
+		return (0);
 	else if (!ft_strcmp(str, "unset"))
-		return (5);
+		return (0);
 	else if (!ft_strcmp(str, "env"))
-		return (6);
-		// bi_env(data);
+		bi_env(data);
 	else if (!ft_strcmp(str, "exit"))
-		return (7);
+		bi_exit(data);
 	else
 		return (0);
 	return (1);
