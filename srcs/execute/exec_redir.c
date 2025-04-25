@@ -5,31 +5,62 @@ int		execute_redir(t_data *data, t_ast *node);
 int		redir_input(t_data *data, t_ast *node);
 void	reset_redir(t_data *data);
 int		redir_output(t_data *data, t_ast *node);
+int		exec_heredoc(t_data *data, t_ast *node);
 
-int	execute_redir(t_data *data, t_ast *node)
+int		execute_redir(t_data *data, t_ast *node)
 {
 	// if fd is provided with the token atoi and set it as fd
 	if (node->type == REDIRECT_IN)
 		redir_input(data, node);
-	else if (node->type == REDIRECT_OUT)
+	else if (node->type == REDIRECT_OUT || node->type == REDIRECT_APPEND)
 		redir_output(data, node);
-	
+	else if (node->type == REDIRECT_HEREDOC)
+		redir_heredoc(data, node);
 	execute_node(data, node->left);
 	dup2(data->std_fd[0], STDIN_FILENO);
 	reset_redir(data);
 	return (0);
 }
 
+int		redir_heredoc(t_data *data, t_ast *node)
+{
+	int		fd[2];
+	pid_t	pid;
+
+	if (pipe(fd) < 0)
+		; // pipe failed, print error
+	pid = fork();
+	if (pid < 0)
+		; // forking failed, print error
+	if (pid == 0)
+	{
+		// child
+		// need signals here
+		close(fd[0]);
+		
+	}
+	else
+	{
+
+	}
+	
+}
+
 int		redir_output(t_data *data, t_ast *node)
 {
 	int		fd_newfile;
 	int		fd_redir;
+	int		flag;
 
 	if (ft_isdigit(node->token->literal[0]))
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = 1;
-	fd_newfile = open(node->right->token->literal, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (node->type == REDIRECT_OUT)
+		flag = O_TRUNC;
+	else
+		flag = O_APPEND;
+	fd_newfile = open(node->right->token->literal, O_CREAT | O_WRONLY | flag, 0666);
 	// printf("filename = %s, fd = %i\n", node->right->token->literal, fd_newfile);
 	if (fd_newfile < 0)
 		; // couldn't create a new file, return error

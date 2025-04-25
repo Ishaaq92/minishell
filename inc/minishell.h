@@ -157,4 +157,7 @@ int		execute_pipe(t_data *data, t_ast *node);
 // exec_redir.c
 int		execute_redir(t_data *data, t_ast *node);
 
+// quote_removal.c
+void		remove_quotes(char *str);
+
 #endif

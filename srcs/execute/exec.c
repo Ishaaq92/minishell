@@ -60,20 +60,32 @@ int	bi_cd(t_data *data)
 	lst = data->env_llst;
 }
 
-void clean_args()
+void	clean_args(t_data *data, t_ast *node)
 {
+	int		i;
+
+	i = 0;
+	if (node->type == COMMAND)
+	{
+		while (node->literal[i])
+		{
+			// parameter expansion at this step
+			remove_quotes(node->literal[i]);
+			i++;
+		}
+	}
 }
 
-int	execute_cmd(t_data *data, t_ast *node)
+int		execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
 
-	pid = fork();
 	// if (is_builtin(node->literal[0], node) != 0)
-		// return (0);
 		// return (); TODO
+	
 	set_cmd_path(node, data->env_llst);
-	clean_args();
+	clean_args(data, node);
+	pid = fork();
 	if (pid == 0)
 	{
 		// child
