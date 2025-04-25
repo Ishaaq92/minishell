@@ -5,7 +5,7 @@ int		execute_redir(t_data *data, t_ast *node);
 int		redir_input(t_data *data, t_ast *node);
 void	reset_redir(t_data *data);
 int		redir_output(t_data *data, t_ast *node);
-int		exec_heredoc(t_data *data, t_ast *node);
+int		redir_heredoc(t_data *data, t_ast *node);
 
 int		execute_redir(t_data *data, t_ast *node)
 {

@@ -4,7 +4,6 @@
 int		is_builtin(char *str, t_ast *node);
 int		execute_logical(t_data *data, t_ast *node);
 int		execute_cmd(t_data *data, t_ast *node);
-int		bi_cd(t_data *data);
 
 int		execute_node(t_data *data, t_ast *node)
 {
@@ -52,12 +51,6 @@ int	is_builtin(char *str, t_ast *node)
 	else
 		return (0);
 	return (1);
-}
-
-int	bi_cd(t_data *data)
-{
-	t_envp *lst;
-	lst = data->env_llst;
 }
 
 void	clean_args(t_data *data, t_ast *node)

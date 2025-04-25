@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 17:41:46 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 14:59:20 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,5 +159,13 @@ int		execute_redir(t_data *data, t_ast *node);
 
 // quote_removal.c
 void		remove_quotes(char *str);
+
+// bi_func.c
+char	*bi_pwd(t_data *data);
+int		bi_cd(t_data *data);
+void	bi_env(t_data *data);
+void	bi_export(t_data *data, char *str);
+void	bi_exit(t_data *data);
+
 
 #endif

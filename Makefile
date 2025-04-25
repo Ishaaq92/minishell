@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+         #
+#    By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:52:30 by isahmed           #+#    #+#              #
-#    Updated: 2025/04/17 22:54:34 by ishaaq           ###   ########.fr        #
+#    Updated: 2025/04/25 15:04:42 by isahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ BINARY = minishell
 CFILES = minishell.c signals.c  \
 	parsing/ast.c parsing/ast_cmd.c parsing/ast_redir.c \
 	parsing/linked_list.c parsing/parser.c  parsing/tokens.c \
-	execute/env_delete.c execute/cmd_path.c execute/env_create.c execute/env_utils.c \
+	execute/env_delete.c execute/cmd_path.c execute/env_create.c execute/env_utils.c execute/bi_func.c\
 	execute/exec.c execute/exec_pipe.c execute/exec_redir.c execute/quote_removal.c\
 	utils/ft_strndup.c utils/ft_split2.c utils/utils.c
 
