@@ -6,11 +6,19 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 17:46:33 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 17:37:41 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+TODO:
+1. Exit status
+2. Built in functions
+3. Parameter substitution with quote removal
+4. Signals
+*/
 
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
@@ -25,10 +33,12 @@ int main(int ac, char *av[], char *envp[])
 	while (42)		
 	{
 		line = readline("Prompt: ");
-		if (*line)
+		if (line && *line)
 		{	
 			add_history(line);
 			data = init_exec_data(line, envp);
+			if (data->head == NULL)
+				continue;
 			printf("\n***COMMAND EXECUTION***\n");
 			if (data)
 				execute_node(data, data->head);

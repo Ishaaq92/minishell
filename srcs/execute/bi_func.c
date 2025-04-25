@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/25 15:08:05 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 17:17:33 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,13 @@ int	bi_cd(t_data *data)
 	lst = data->env_llst;
 }
 
-char	*bi_pwd(t_data *data)
+void	bi_pwd(t_data *data)
 {
-	char	**env;	
-	int		i;
+	char	*pwd;
 
-	i = 0;
-	env = data->envp;
-	while (env[i] != NULL && ft_strncmp(env[i], "pwd", 3) == 0)
-		i++;
-	if (env[i][4] == '=')
-		return (value_envp(&data->env_llst, "pwd"));
-	else if (env[i] == NULL)
-		return (NULL);
+	pwd = getcwd(NULL, 0);
+	printf("%s\n", pwd);
+	free(pwd);
 }
 
 void	bi_env(t_data *data)
@@ -51,6 +45,7 @@ void	bi_env(t_data *data)
 	env = data->envp;
 	while (env[i] != NULL)
 		printf("%s", env[i++]);
+	data->exit_status = WEXITSTATUS(EXIT_SUCCESS);
 }
 
 // void	bi_unset(t_data *data, char *str)
@@ -59,14 +54,14 @@ void	bi_env(t_data *data)
 // }
 
 // str must be the full string eg. 'pwd=/home/tim'
-// str can be in the form 'pwd="/home/tim"
+// str can be in the form 'pwd="/home/tim"'
 void	bi_export(t_data *data, char *str)
 {
 	// Quote Removal.
 	append_node(&data->env_llst, &str, str);
 }
 
-void	bi_exit(t_data *data)
+void	bi_exit(t_data *data, t_ast *node)
 {
 	exit_cleanup();
 }

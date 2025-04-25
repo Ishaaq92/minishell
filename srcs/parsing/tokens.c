@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:40:37 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/17 12:32:25 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/25 16:52:45 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ int	create_tokens(char *str, t_token **head)
 		else
 			ft_lstadd_back(head, token);
 	}
-	if (check_valid_order(head) == 1)
+	if (*head && check_valid_order(head) == 1)
 		printf("Invalid order of tokens\n");
 	print_tokens(head);
 	return (0);

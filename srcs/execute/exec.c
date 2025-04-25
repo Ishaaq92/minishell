@@ -1,7 +1,7 @@
 
 #include "../inc/minishell.h"
 
-int		is_builtin(char *str, t_ast *node);
+int		is_builtin(t_data *data, char *str);
 int		execute_logical(t_data *data, t_ast *node);
 int		execute_cmd(t_data *data, t_ast *node);
 
@@ -29,7 +29,7 @@ int		execute_logical(t_data *data, t_ast *node)
 }
 
 // TODO: change these numbers to macros
-int	is_builtin(char *str, t_ast *node)
+int	is_builtin(t_data *data, char *str)
 {
 	if (!str)
 		return (0);
@@ -37,17 +37,17 @@ int	is_builtin(char *str, t_ast *node)
 		return (1);
 	else if (!ft_strcmp(str, "cd"))
 		return (2);
-		// bi_cd(node);
 	else if (!ft_strcmp(str, "pwd"))
-			return (3);
+		bi_pwd(data);
 	else if (!ft_strcmp(str, "export"))
-			return (4);
+		return (4);
 	else if (!ft_strcmp(str, "unset"))
-			return (5);
+		return (5);
 	else if (!ft_strcmp(str, "env"))
-			return (6);
+		return (6);
+		// bi_env(data);
 	else if (!ft_strcmp(str, "exit"))
-			return (7);
+		return (7);
 	else
 		return (0);
 	return (1);
@@ -73,8 +73,8 @@ int		execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
 
-	// if (is_builtin(node->literal[0], node) != 0)
-		// return (); TODO
+	if (is_builtin(data, node->literal[0]) != 0)
+		return (0);
 	
 	set_cmd_path(node, data->env_llst);
 	clean_args(data, node);
