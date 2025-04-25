@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/25 17:44:05 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 17:52:08 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	ft_lstclear(t_token **lst);
 int	create_tokens(char *str, t_token **head);
 
 // utils.c
-void    exit_cleanup(void);
+void    exit_cleanup(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 
 // parser.c
@@ -134,6 +134,7 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 // env_delete.c
 void	remove_node(t_envp **lst, char ***envp, char *var);
 void	del_array(char **envp);
+void	del_lst(t_envp **lst);
 
 // env_create.c
 char	**stitch_env(t_envp *head);

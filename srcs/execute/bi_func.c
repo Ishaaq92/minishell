@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/25 17:45:08 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 17:54:59 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,5 @@ void	bi_export(t_data *data, char *str)
 
 void	bi_exit(t_data *data)
 {
-	exit_cleanup();
+	exit_cleanup(data);
 }
