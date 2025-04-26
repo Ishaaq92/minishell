@@ -26,25 +26,6 @@ int		execute_redir(t_data *data, t_ast *node)
 
 int		redir_heredoc(t_data *data, t_ast *node)
 {
-	// int		fd[2];
-	// pid_t	pid;
-
-	// if (pipe(fd) < 0)
-	// 	; // pipe failed, print error
-	// pid = fork();
-	// if (pid < 0)
-	// 	; // forking failed, print error
-	// if (pid == 0)
-	// {
-	// 	// child
-	// 	// need signals here?
-	// 	close(fd[0]);
-
-	// }
-	// else
-	// {
-
-	// }
 	int		temp_fd;
 	char	*buffer;
 	char	*eof;
@@ -67,10 +48,10 @@ int		redir_heredoc(t_data *data, t_ast *node)
 	}
 	(free(buffer));
 	close(temp_fd);
+	// cat needs the fd to have this flag I think? look it up TODO
 	temp_fd = open("temp", O_RDONLY);
 	if (dup2(temp_fd, STDIN_FILENO))
 		; // print error
-	// close(STDIN_FILENO);
 	return (0);
 }
 
