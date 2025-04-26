@@ -19,6 +19,8 @@ int		execute_redir(t_data *data, t_ast *node)
 	execute_node(data, node->left);
 	dup2(data->std_fd[0], STDIN_FILENO);
 	reset_redir(data);
+	if (node->type == REDIRECT_HEREDOC)
+		unlink("temp");
 	return (0);
 }
 
