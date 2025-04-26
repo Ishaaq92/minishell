@@ -29,7 +29,7 @@ int					ft_lstsize(t_envp *lst);
 // CHECK FOR LEAKS: a function to free the linked list AND the double pointer array
 
 // MUST INCLUDE FULL STRING: eg. 'PWD=/Users/tim'
-void	append_node(t_envp **lst, char **array, char *string)
+void	add_node(t_envp **lst, char **array, char *string)
 {
 	t_envp	*new;	
 	

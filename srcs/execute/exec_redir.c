@@ -24,26 +24,52 @@ int		execute_redir(t_data *data, t_ast *node)
 
 int		redir_heredoc(t_data *data, t_ast *node)
 {
-	int		fd[2];
-	pid_t	pid;
+	// int		fd[2];
+	// pid_t	pid;
 
-	if (pipe(fd) < 0)
-		; // pipe failed, print error
-	pid = fork();
-	if (pid < 0)
-		; // forking failed, print error
-	if (pid == 0)
-	{
-		// child
-		// need signals here
-		close(fd[0]);
-		
-	}
-	else
-	{
+	// if (pipe(fd) < 0)
+	// 	; // pipe failed, print error
+	// pid = fork();
+	// if (pid < 0)
+	// 	; // forking failed, print error
+	// if (pid == 0)
+	// {
+	// 	// child
+	// 	// need signals here?
+	// 	close(fd[0]);
 
+	// }
+	// else
+	// {
+
+	// }
+	int		temp_fd;
+	char	*buffer;
+	char	*eof;
+
+	// check limiter, make sure its not null
+	// if (lim) {}
+	temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	eof = node->right->token->literal;
+	if (temp_fd < 0)
+		; // print error
+	while (42)
+	{
+		write(1, "> ", 2);
+		buffer = get_next_line(0);
+		if (buffer == NULL)
+			break ;
+		if (ft_strncmp(buffer, eof, ft_strlen(buffer) - 1) == 0)
+			break ;
+		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
 	}
-	
+	(free(buffer));
+	close(temp_fd);
+	temp_fd = open("temp", O_RDONLY);
+	if (dup2(temp_fd, STDIN_FILENO))
+		; // print error
+	// close(STDIN_FILENO);
+	return (0);
 }
 
 int		redir_output(t_data *data, t_ast *node)

@@ -139,7 +139,7 @@ void	del_lst(t_envp **lst);
 // env_create.c
 char	**stitch_env(t_envp *head);
 t_envp	*set_envp(char **envp);
-void	append_node(t_envp **lst, char **array, char *string);
+void	add_node(t_envp **lst, char **array, char *string);
 
 // env_utils.c
 void	print_envp(t_envp **lst);

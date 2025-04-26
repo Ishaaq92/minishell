@@ -58,7 +58,7 @@ void	bi_env(t_data *data)
 void	bi_export(t_data *data, char *str)
 {
 	// Quote Removal.
-	append_node(&data->env_llst, &str, str);
+	add_node(&data->env_llst, &str, str);
 }
 
 void	bi_exit(t_data *data)
