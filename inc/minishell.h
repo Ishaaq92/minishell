@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/28 12:26:25 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/28 14:28:40 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ void	bi_env(t_data *data);
 void	bi_export(t_data *data, char *str);
 void	bi_exit(t_data *data);
 void	bi_unset(t_data *data, char *str);
+void	bi_echo(t_data *data, t_ast *node);
 
 
 #endif

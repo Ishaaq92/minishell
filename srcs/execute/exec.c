@@ -34,7 +34,7 @@ int	is_builtin(t_data *data, t_ast *node)
 	if (!node)
 		return (0);
 	else if (!ft_strcmp(node->literal[0], "echo"))
-		return (0);
+		bi_echo(data, node);
 	else if (!ft_strcmp(node->literal[0], "cd"))
 		bi_cd(data, node);
 	else if (!ft_strcmp(node->literal[0], "pwd"))
