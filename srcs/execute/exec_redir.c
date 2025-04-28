@@ -43,7 +43,7 @@ int		redir_heredoc(t_data *data, t_ast *node)
 	{
 
 	}
-	
+	return (0);	
 }
 
 int		redir_output(t_data *data, t_ast *node)

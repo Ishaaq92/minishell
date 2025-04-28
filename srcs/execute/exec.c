@@ -1,7 +1,7 @@
 
 #include "../inc/minishell.h"
 
-int		is_builtin(t_data *data, char *str);
+int		is_builtin(t_data *data, t_ast *node);
 int		execute_logical(t_data *data, t_ast *node);
 int		execute_cmd(t_data *data, t_ast *node);
 
@@ -29,23 +29,23 @@ int		execute_logical(t_data *data, t_ast *node)
 }
 
 // TODO: change these numbers to macros
-int	is_builtin(t_data *data, char *str)
+int	is_builtin(t_data *data, t_ast *node)
 {
-	if (!str)
+	if (!node)
 		return (0);
-	else if (!ft_strcmp(str, "echo"))
+	else if (!ft_strcmp(node->literal[0], "echo"))
 		return (0);
-	else if (!ft_strcmp(str, "cd"))
-		return (0);
-	else if (!ft_strcmp(str, "pwd"))
+	else if (!ft_strcmp(node->literal[0], "cd"))
+		bi_cd(data, node);
+	else if (!ft_strcmp(node->literal[0], "pwd"))
 		bi_pwd(data);
-	else if (!ft_strcmp(str, "export"))
+	else if (!ft_strcmp(node->literal[0], "export"))
 		return (0);
-	else if (!ft_strcmp(str, "unset"))
+	else if (!ft_strcmp(node->literal[0], "unset"))
 		return (0);
-	else if (!ft_strcmp(str, "env"))
+	else if (!ft_strcmp(node->literal[0], "env"))
 		bi_env(data);
-	else if (!ft_strcmp(str, "exit"))
+	else if (!ft_strcmp(node->literal[0], "exit"))
 		bi_exit(data);
 	else
 		return (0);
@@ -71,10 +71,8 @@ void	clean_args(t_data *data, t_ast *node)
 int		execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
-
-	if (is_builtin(data, node->literal[0]) != 0)
+	if (is_builtin(data, node) != 0)
 		return (0);
-	
 	set_cmd_path(node, data->env_llst);
 	clean_args(data, node);
 	pid = fork();
