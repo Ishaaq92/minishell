@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/28 10:35:21 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/28 14:19:56 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	env_alter(t_data *data, char *key, char *value)
 		return ;
 	free(curr->literal);
 	curr ->literal = ft_strjoin(key, value);
-	// Do we need to restitch the char **envp array?
+	free(data->envp);
+	data->envp = stitch_env(data->env_llst);
 }
 
 static t_envp	*env_add(void)
@@ -100,7 +101,8 @@ char	**stitch_env(t_envp *head)
 	envp = (char **) malloc(sizeof(char *) * (size + 1));
 	while (i < size && head->literal)
 	{
-		envp[i++] = head->literal;
+		envp[i] = ft_strdup(head->literal);
+		i++;
 		head = head->next;
 	}
 	envp[i] = NULL;

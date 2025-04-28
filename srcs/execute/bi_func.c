@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/28 12:23:06 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/28 14:21:26 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 // Functions to Build 
 // echo: NOT DONE
-// cd: NOT DONE
 // export: ALMOST DONE
 // exit: TESTING
 // unset: TESTING
+// cd: TESTING
 // env: DONE
 // pwd: DONE
 
@@ -29,7 +29,12 @@ int	bi_cd(t_data *data, t_ast *node)
 
 	cwd = getcwd(NULL, 0);
 	if (chdir(node->literal[1]) == -1)
-		printf("Failure");
+		printf("Bad Path\n");
+	env_alter(data, "OLDPWD=", cwd);
+	free(cwd);
+	cwd = getcwd(NULL, 0);	
+	env_alter(data, "PWD=", cwd);
+	free(cwd);
 	return (0);
 }
 

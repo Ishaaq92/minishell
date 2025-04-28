@@ -40,9 +40,9 @@ int	is_builtin(t_data *data, t_ast *node)
 	else if (!ft_strcmp(node->literal[0], "pwd"))
 		bi_pwd(data);
 	else if (!ft_strcmp(node->literal[0], "export"))
-		return (0);
+		bi_export(data, node->literal[0]);
 	else if (!ft_strcmp(node->literal[0], "unset"))
-		return (0);
+		bi_unset(data, node->literal[0]);
 	else if (!ft_strcmp(node->literal[0], "env"))
 		bi_env(data);
 	else if (!ft_strcmp(node->literal[0], "exit"))
