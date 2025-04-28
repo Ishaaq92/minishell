@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/25 17:52:08 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:28:40 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
-
 # include <sys/wait.h> // for wait functions
 
 enum e_commands
@@ -140,6 +139,7 @@ void	del_lst(t_envp **lst);
 char	**stitch_env(t_envp *head);
 t_envp	*set_envp(char **envp);
 void	append_node(t_envp **lst, char **array, char *string);
+void	env_alter(t_data *data, char *key, char *value);
 
 // env_utils.c
 void	print_envp(t_envp **lst);
@@ -163,10 +163,12 @@ void		remove_quotes(char *str);
 
 // bi_func.c
 void	bi_pwd(t_data *data);
-int		bi_cd(t_data *data);
+int		bi_cd(t_data *data, t_ast *node);
 void	bi_env(t_data *data);
 void	bi_export(t_data *data, char *str);
 void	bi_exit(t_data *data);
+void	bi_unset(t_data *data, char *str);
+void	bi_echo(t_data *data, t_ast *node);
 
 
 #endif
