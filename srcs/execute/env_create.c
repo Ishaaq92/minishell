@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/17 22:59:50 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/04/28 14:19:56 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,24 @@ t_envp	*set_envp(char **envp)
 	}
 	return (head);
 }
+// This function does NOT free key or value. Only free curr->literal.
+// KEY MUST INCLUE THE '=' CHARACTER. Eg. 'PWD='
+void	env_alter(t_data *data, char *key, char *value)
+{
+	t_envp		*curr;
+	int			len;
+
+	len = ft_strlen(key);
+	curr = data->env_llst;
+	while (curr != NULL && ft_strncmp(curr->literal, key, len) != 0)
+		curr = curr->next;
+	if (curr == NULL)
+		return ;
+	free(curr->literal);
+	curr ->literal = ft_strjoin(key, value);
+	free(data->envp);
+	data->envp = stitch_env(data->env_llst);
+}
 
 static t_envp	*env_add(void)
 {
@@ -83,7 +101,8 @@ char	**stitch_env(t_envp *head)
 	envp = (char **) malloc(sizeof(char *) * (size + 1));
 	while (i < size && head->literal)
 	{
-		envp[i++] = head->literal;
+		envp[i] = ft_strdup(head->literal);
+		i++;
 		head = head->next;
 	}
 	envp[i] = NULL;
