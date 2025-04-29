@@ -14,6 +14,7 @@
 
 static t_ast	*parse_logical(t_token **token, t_token **stop);
 static t_ast	*parse_pipe(t_token **token, t_token **stop);
+static t_ast	*parse_brackets(t_token **token, t_token **stop);
 
 t_ast	*parse_tokens(t_token *head)
 {
@@ -50,26 +51,17 @@ static t_ast	*parse_logical(t_token **token, t_token **stop)
 	t_token	*temp;
 	t_ast	*logical;
 
-	// start = *token;
-	// while ((*token) && (*token)->next && (*token) != (*stop))
-	// {
-	// 	if ((*token)->type == LOGICAL_AND || (*token)->type == LOGICAL_OR)
-	// 	{
-	// 		logical = ast_new(*token);	
-	// 		temp = (*token)->next;
-	// 		logical->left = parse_pipe(&start, token);
-	// 		logical->right = parse_logical(&temp, stop);
-	// 		return (logical);
-	// 	}
-	// 	(*token) = (*token)->next;
-	// }
-
 	start = *token;
 	temp = *token;
 	while (temp != *stop)
 		temp = temp->next;
 	while (temp && (temp)->prev && (temp) != (start))
 	{
+		if (temp->type == BRACKET_END)
+		{
+			while (temp->type != BRACKET_START)
+				temp = temp->prev;
+		}
 		if ((temp)->type == LOGICAL_AND || (temp)->type == LOGICAL_OR)
 		{
 			logical = ast_new(temp);
@@ -96,9 +88,31 @@ static t_ast	*parse_pipe(t_token **token, t_token **stop)
 		{
 			pipe = ast_new(*token);
 			temp = (*token)->next;
-			pipe->left = parse_redir(&start, token);
+			pipe->left = parse_brackets(&start, token);
 			pipe->right = parse_pipe(&temp, stop);
 			return (pipe);
+		}
+		(*token) = (*token)->next;
+	}
+	return (parse_brackets(&start, stop));
+}
+
+static t_ast	*parse_brackets(t_token **token, t_token **stop)
+{
+	t_token	*start;
+	t_token	*temp;
+	t_ast	*logical;
+
+	start = *token;
+	while ((*token) && (*token)->next && (*token) != (*stop))
+	{
+		if ((*token)->type == LOGICAL_AND || (*token)->type == LOGICAL_OR)
+		{
+			logical = ast_new(*token);	
+			temp = (*token)->next;
+			logical->left = parse_redir(&start, token);
+			logical->right = parse_logical(&temp, stop);
+			return (logical);
 		}
 		(*token) = (*token)->next;
 	}

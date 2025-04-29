@@ -76,6 +76,10 @@ enum e_type		set_op_type(char *str)
 		return (LOGICAL_AND);
 	else if (!ft_strncmp("|", str, 1))
 		return (PIPE);
+	else if (!ft_strncmp("(", str, 1))
+		return (BRACKET_START);
+	else if (!ft_strncmp(")", str, 1))
+		return (BRACKET_END);
 	else
 		return (ERROR);
 }

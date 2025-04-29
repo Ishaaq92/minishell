@@ -88,6 +88,6 @@ void	testing(t_envp **lst)
 	char	str[8] = "ISHAAQ\0";
     print_envp(lst);
     printf("\n\n\n");
-	add_node(lst, env_array, str);
+	// add_node(lst, env_array, str);
     print_envp(lst);
 }

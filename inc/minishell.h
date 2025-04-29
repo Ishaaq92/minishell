@@ -45,6 +45,8 @@ enum e_type
 	COMMAND,
 	ARGS,
 	PATH,
+	BRACKET_START,
+	BRACKET_END,
 	ERROR,
 };
 
@@ -160,6 +162,10 @@ int		execute_redir(t_data *data, t_ast *node);
 
 // quote_removal.c
 void		remove_quotes(char *str);
+
+// param_sub.c
+void	param_sub(t_data *data, char **str);
+
 
 // bi_func.c
 void	bi_pwd(t_data *data);
