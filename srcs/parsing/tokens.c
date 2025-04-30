@@ -63,13 +63,13 @@ enum e_type		set_op_type(char *str)
 	while (*str >= '0' && *str <= '9')
 		str++;	
 	if (!ft_strncmp("<<", str, 2))
-		return (REDIRECT_HEREDOC);
+		return (IN_HEREDOC);
 	else if (!ft_strncmp(">>", str, 2))
-		return (REDIRECT_APPEND);
+		return (OUT_APPEND);
 	else if (!ft_strncmp("<", str, 1))
-		return (REDIRECT_IN);
+		return (REDIR_IN);
 	else if (!ft_strncmp(">", str, 1))
-		return (REDIRECT_OUT);
+		return (REDIR_OUT);
 	else if (!ft_strncmp("||", str, 2))
 		return (LOGICAL_OR);
 	else if (!ft_strncmp("&&", str, 2))
@@ -77,9 +77,9 @@ enum e_type		set_op_type(char *str)
 	else if (!ft_strncmp("|", str, 1))
 		return (PIPE);
 	else if (!ft_strncmp("(", str, 1))
-		return (BRACKET_START);
+		return (LBRACE);
 	else if (!ft_strncmp(")", str, 1))
-		return (BRACKET_END);
+		return (RBRACE);
 	else
 		return (ERROR);
 }

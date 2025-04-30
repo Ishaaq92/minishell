@@ -36,6 +36,8 @@ t_ast	*parse_cmd(t_token	**node)
 
 	if (node == NULL || *node == NULL)
 		return (NULL);
+	while ((*node)->type == LBRACE || (*node)->type == RBRACE)
+		(*node) = (*node)->next;
 	cmd = ast_new(*node);
 	argc = count_argc(*node);
 	cmd->literal = parse_cmd_args(*node, argc);

@@ -10,16 +10,16 @@ int		redir_heredoc(t_data *data, t_ast *node);
 int		execute_redir(t_data *data, t_ast *node)
 {
 	// if fd is provided with the token atoi and set it as fd
-	if (node->type == REDIRECT_IN)
+	if (node->type == REDIR_IN)
 		redir_input(data, node);
-	else if (node->type == REDIRECT_OUT || node->type == REDIRECT_APPEND)
+	else if (node->type == REDIR_OUT || node->type == OUT_APPEND)
 		redir_output(data, node);
-	else if (node->type == REDIRECT_HEREDOC)
+	else if (node->type == IN_HEREDOC)
 		redir_heredoc(data, node);
 	execute_node(data, node->left);
 	dup2(data->std_fd[0], STDIN_FILENO);
 	reset_redir(data);
-	if (node->type == REDIRECT_HEREDOC)
+	if (node->type == IN_HEREDOC)
 		unlink("temp");
 	return (0);
 }
@@ -65,7 +65,7 @@ int		redir_output(t_data *data, t_ast *node)
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = 1;
-	if (node->type == REDIRECT_OUT)
+	if (node->type == REDIR_OUT)
 		flag = O_TRUNC;
 	else
 		flag = O_APPEND;
