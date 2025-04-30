@@ -12,10 +12,10 @@
 
 #include "../inc/minishell.h"
 
-int		handle_quotes(char *str, int *i, t_token *token);
-void	handle_op(char **str, char **literal, t_token *token);
-void	handle_word(char **str, char **literal, t_token *token);
-void	handle_num(char **str, char **literal, t_token *token);
+static int	handle_quotes(char *str, int *i, t_token *token);
+static void	handle_op(char **str, char **literal, t_token *token);
+static void	handle_word(char **str, char **literal, t_token *token);
+static void	handle_num(char **str, char **literal, t_token *token);
 
 int	create_tokens(char *str, t_token **head)
 {
@@ -37,13 +37,13 @@ int	create_tokens(char *str, t_token **head)
 		else
 			ft_lstadd_back(head, token);
 	}
-	if (*head && check_valid_order(head) == 1)
+	if (*head && check_valid_order(head))
 		printf("Invalid order of tokens\n");
 	print_tokens(head);
 	return (0);
 }
 
-int	handle_quotes(char *str, int *i, t_token *token)
+static int	handle_quotes(char *str, int *i, t_token *token)
 {
 	char	quote_char;
 	char	*temp;
@@ -56,13 +56,11 @@ int	handle_quotes(char *str, int *i, t_token *token)
 		(*i)++;
 		while (str[*i])
 		{
-			if (str[*i] == quote_char)
+			if (str[(*i)++] == quote_char)
 			{
-				(*i)++;
 				open_quotes = 0;
 				break ;
 			}
-			(*i)++;
 		}
 	}
 	else if (quote_char == '\\')
@@ -72,7 +70,7 @@ int	handle_quotes(char *str, int *i, t_token *token)
 	return (0);
 }
 
-void	handle_op(char **str, char **literal, t_token *token)
+static void	handle_op(char **str, char **literal, t_token *token)
 {
 	int		i;
 
@@ -90,7 +88,7 @@ void	handle_op(char **str, char **literal, t_token *token)
 	(*str) += i;
 }
 
-void	handle_word(char **str, char **literal, t_token *token)
+static void	handle_word(char **str, char **literal, t_token *token)
 {
 	char	*temp;
 	int		i;
@@ -109,15 +107,13 @@ void	handle_word(char **str, char **literal, t_token *token)
 	(*str) += i;
 }
 
-void	handle_num(char **str, char **literal, t_token *token)
+static void	handle_num(char **str, char **literal, t_token *token)
 {
 	int		i;
 
 	i = 0;
 	while ((*str)[i] >= '0' && (*str)[i] <= '9')
-	{
 		i++;
-	}
 	if ((*str)[i] && ((*str)[i] != ' ') && ft_strchr("<>", (*str)[i]))
 	{
 		i++;

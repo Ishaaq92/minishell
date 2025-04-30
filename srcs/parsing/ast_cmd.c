@@ -23,7 +23,6 @@ t_ast	*ast_new(t_token *token)
 	new->left = NULL;
 	new->right = NULL;
 	new->literal = NULL;
-	new->parent = NULL;
 	new->token = token;
 	new->type = token->type;
 	return (new);

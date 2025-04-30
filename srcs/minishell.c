@@ -22,6 +22,20 @@ TODO:
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
 
+void	ft_perror()
+{
+	perror("minishell: ");
+}
+
+void	custom_error(char *str, char *msg)
+{
+	write(2, "pipex: ", 7);
+	write(2, msg, ft_strlen(msg));
+	write(2, ": ", 2);
+	write(2, str, ft_strlen(str));
+	write(2, "\n", 1);
+}
+
 int	main(int ac, char *av[], char *envp[])
 {
 	char	*line;
