@@ -14,7 +14,7 @@
 
 void	print_tokens(t_token **head)
 {
-	t_token *temp;
+	t_token		*temp;
 
 	temp = *head;
 	printf("tokens: {");

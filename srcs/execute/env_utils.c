@@ -55,11 +55,12 @@ void	print_envp(t_envp **lst)
 	while (curr != NULL)
 	{
 		printf("%s\n", curr->literal);
-		curr = curr->next;        
+		curr = curr->next;
 	}
 }
 
-// Purpose is to check variable exists. Returns malloc'd value of variable if exists. NULL otherwise. 
+// Purpose is to check variable exists. 
+// Returns malloc'd value of variable if exists. NULL otherwise. 
 char	*value_envp(t_envp **lst, char *str)
 {
 	t_envp	*curr;
@@ -69,8 +70,10 @@ char	*value_envp(t_envp **lst, char *str)
 	curr = *lst;
 	while (curr != NULL)
 	{
-		if (ft_strncmp(str, curr->literal, length) == 0 && curr->literal[length] == '=')
-			return (ft_strndup(&curr->literal[length + 1], ft_strlen(&curr->literal[length + 1])));
+		if (ft_strncmp(str, curr->literal, length) == 0 \
+			&& curr->literal[length] == '=')
+			return (ft_strndup(&curr->literal[length + 1],
+					ft_strlen(&curr->literal[length + 1])));
 		curr = curr->next;
 	}
 	return (NULL);

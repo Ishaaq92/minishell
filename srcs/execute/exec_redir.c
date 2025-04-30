@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redir.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-04-30 16:21:28 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:28 by avalsang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
@@ -7,9 +18,8 @@ void	reset_redir(t_data *data);
 int		redir_output(t_data *data, t_ast *node);
 int		redir_heredoc(t_data *data, t_ast *node);
 
-int		execute_redir(t_data *data, t_ast *node)
+int	execute_redir(t_data *data, t_ast *node)
 {
-	// if fd is provided with the token atoi and set it as fd
 	if (node->type == REDIR_IN)
 		redir_input(data, node);
 	else if (node->type == REDIR_OUT || node->type == OUT_APPEND)
@@ -24,18 +34,17 @@ int		execute_redir(t_data *data, t_ast *node)
 	return (0);
 }
 
-int		redir_heredoc(t_data *data, t_ast *node)
+// cat needs the fd to have RDONLY flag I think? look it up TODO
+int	redir_heredoc(t_data *data, t_ast *node)
 {
 	int		temp_fd;
 	char	*buffer;
 	char	*eof;
 
-	// check limiter, make sure its not null
-	// if (lim) {}
 	temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	eof = node->right->token->literal;
 	if (temp_fd < 0)
-		; // print error
+		;
 	while (42)
 	{
 		write(1, "> ", 2);
@@ -48,14 +57,13 @@ int		redir_heredoc(t_data *data, t_ast *node)
 	}
 	(free(buffer));
 	close(temp_fd);
-	// cat needs the fd to have this flag I think? look it up TODO
 	temp_fd = open("temp", O_RDONLY);
 	if (dup2(temp_fd, STDIN_FILENO))
-		; // print error
+		;
 	return (0);
 }
 
-int		redir_output(t_data *data, t_ast *node)
+int	redir_output(t_data *data, t_ast *node)
 {
 	int		fd_newfile;
 	int		fd_redir;
@@ -69,18 +77,18 @@ int		redir_output(t_data *data, t_ast *node)
 		flag = O_TRUNC;
 	else
 		flag = O_APPEND;
-	fd_newfile = open(node->right->token->literal, O_CREAT | O_WRONLY | flag, 0666);
-	// printf("filename = %s, fd = %i\n", node->right->token->literal, fd_newfile);
+	fd_newfile = open(node->right->token->literal,
+			O_CREAT | O_WRONLY | flag, 0666);
 	if (fd_newfile < 0)
-		; // couldn't create a new file, return error
+		;
 	if (dup2(fd_newfile, fd_redir) == -1)
-		; // failed dup2, print error and exit
+		;
 	return (0);
 }
 
 // TODO: fix the line with three arrows, put the filename in a 
 // more accessible location
-int		redir_input(t_data *data, t_ast *node)
+int	redir_input(t_data *data, t_ast *node)
 {
 	int		fd_newfile;
 	int		fd_redir;
@@ -90,11 +98,10 @@ int		redir_input(t_data *data, t_ast *node)
 	else
 		fd_redir = 0;
 	fd_newfile = open(node->right->token->literal, O_RDONLY);
-	// printf("filename = %s, fd = %i\n", node->right->token->literal, fd_newfile);
 	if (fd_newfile < 0)
-		; // couldn't create a new file, return error
+		;
 	if (dup2(fd_newfile, fd_redir) == -1)
-		; // failed dup2, print error and exit
+		;
 	return (0);
 }
 

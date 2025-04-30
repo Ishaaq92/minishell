@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
@@ -61,7 +72,6 @@ void	clean_args(t_data *data, t_ast *node)
 	{
 		while (node->literal[i])
 		{
-			// parameter expansion at this step
 			param_sub(data, &node->literal[i]);
 			remove_quotes(node->literal[i]);
 			i++;
@@ -72,6 +82,7 @@ void	clean_args(t_data *data, t_ast *node)
 int		execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
+
 	clean_args(data, node);
 	if (is_builtin(data, node) != 0)
 		return (0);
@@ -79,12 +90,10 @@ int		execute_cmd(t_data *data, t_ast *node)
 	pid = fork();
 	if (pid == 0)
 	{
-		// child
 		execve(node->literal[0], node->literal, data->envp);
 	}
 	else
 	{
-		// parent
 		waitpid(pid, &data->exit_status, 0);
 	}
 	return (WEXITSTATUS(data->exit_status));

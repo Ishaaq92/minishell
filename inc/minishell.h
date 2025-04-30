@@ -105,6 +105,13 @@ void	ft_lstclear(t_token **lst);
 // tokens.c
 int	create_tokens(char *str, t_token **head);
 
+// tokens_utils.c
+int	is_op(char c);
+int	is_blank(char c);
+enum e_type		set_op_type(char *str);
+int		check_valid_order(t_token **head);
+
+
 // utils.c
 void    exit_cleanup(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
@@ -120,6 +127,8 @@ char	*ft_strndup(const char *s, int n);
 
 // ast.c
 t_ast	*parse_tokens(t_token *head);
+
+// ast_utils.c
 void	print_ast(t_ast *ast, int i);
 void	free_ast(t_ast *ast);
 

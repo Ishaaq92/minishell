@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/25 17:37:41 by isahmed          ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   minishell.c										:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: isahmed <isahmed@student.42.fr>			+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2025/03/21 16:17:20 by isahmed		   #+#	#+#			 */
+/*   Updated: 2025/04/25 17:37:41 by isahmed		  ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -19,26 +19,25 @@ TODO:
 3. Parameter substitution with quote removal
 4. Signals
 */
-
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
 
-int main(int ac, char *av[], char *envp[])
+int	main(int ac, char *av[], char *envp[])
 {
 	char	*line;
 	t_data	*data;
 
 	handle_signals();
 	data = NULL;
-	while (42)		
+	while (42)
 	{
 		line = readline("Prompt: ");
 		if (line && *line)
-		{	
+		{
 			add_history(line);
 			data = init_exec_data(line, envp);
 			if (data->head == NULL)
-				continue;
+				continue ;
 			printf("\n***COMMAND EXECUTION***\n");
 			if (data)
 				execute_node(data, data->head);
@@ -82,12 +81,12 @@ void	testing(t_envp **lst)
 {
 	t_envp	*env_list;
 	char	**env_array;
+	char	str[8] = "ISHAAQ\0";
 
 	env_list = *lst;
 	env_array = stitch_env(env_list);
-	char	str[8] = "ISHAAQ\0";
-    print_envp(lst);
-    printf("\n\n\n");
+	print_envp(lst);
+	printf("\n\n\n");
 	// add_node(lst, env_array, str);
-    print_envp(lst);
+	print_envp(lst);
 }

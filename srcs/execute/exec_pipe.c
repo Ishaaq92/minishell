@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_pipe.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-04-30 16:21:33 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:33 by avalsang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 int		do_pipe_cmds(t_data *data, t_ast *node);
 
-int		execute_pipe(t_data *data, t_ast *node)
+int	execute_pipe(t_data *data, t_ast *node)
 {
 	pid_t	pid;
 
@@ -20,30 +31,27 @@ int		execute_pipe(t_data *data, t_ast *node)
 }
 
 // do you need the entire data struct for this function?
-// or can you just pass the ast node from data and save yourself some horizontal space
-int		do_pipe_cmds(t_data *data, t_ast *node)
+int	do_pipe_cmds(t_data *data, t_ast *node)
 {
 	int			fd[2];
 	pid_t		pid;
 
 	if (pipe(fd) == -1)
-		; // piping failed, error and exit here
+		;
 	pid = fork();
 	if (pid == 0)
 	{
-		// child
 		close(fd[0]);
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
-			; // exit function here
+			;
 		execute_node(data, node->left);
 		close(fd[1]);
 	}
 	else
 	{
-		// parent
 		close(fd[1]);
 		if (dup2(fd[0], STDIN_FILENO) == -1)
-			; // exit
+			;
 		execute_node(data, node->right);
 		close(fd[0]);
 		waitpid(pid, &data->exit_status, 0);

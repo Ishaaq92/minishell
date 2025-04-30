@@ -18,7 +18,7 @@
 
 static void	collapse_quotes(char *str, int *i, char quote_char);
 
-void		remove_quotes(char *str)
+void	remove_quotes(char *str)
 {
 	int		i;
 	int		end_quote;
@@ -43,17 +43,3 @@ static void	collapse_quotes(char *str, int *i, char quote_char)
 	if (str[*i] != '\0')
 		ft_memmove(str + *i, str + *i + 1, ft_strlen(str + *i));
 }
-
-// #include <stdio.h>
-// int main()
-// {
-// 	char *test;
-
-// 	test = ft_strdup("\'hello\' \'world\' \\< \\>");
-// 	printf("test = %s\n", test);
-// 	remove_quotes(test);
-// 	printf("result = %s\n", test);
-// 	free(test);
-
-// 	return (0);
-// }
