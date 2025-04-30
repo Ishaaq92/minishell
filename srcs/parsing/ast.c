@@ -98,41 +98,73 @@ static t_ast	*parse_pipe(t_token **token, t_token **stop)
 }
 
 
+// static t_ast	*parse_brackets(t_token **token, t_token **stop)
+// {
+// 	t_token	*start;
+// 	t_token	*temp;
+// 	t_token	*rbrace;
+// 	t_ast	*logical;
 
+// 	start = *token;
+// 	temp = *token;
+
+// 	while ((temp) && (temp)->next && (temp) != (*stop))
+// 	{
+// 		if (temp->type == LBRACE)
+// 		{
+// 			(temp) = (temp)->next;
+// 			rbrace = temp;
+// 			while (rbrace->next->type != RBRACE)
+// 				rbrace = rbrace->next;
+// 			while ((temp) && (temp)->next && (temp) != (*stop))
+// 			{
+// 				if ((temp)->type == LOGICAL_AND || (temp)->type == LOGICAL_OR)
+// 				{
+// 					logical = ast_new(temp);
+// 					temp = (temp)->next;
+// 					logical->left = parse_redir(&start, token);
+// 					logical->right = parse_logical(&temp, &rbrace);
+// 					return (logical);
+// 				}
+// 				(temp) = (temp)->next;
+// 			}
+// 		}
+// 		(temp) = (temp)->next;
+// 	}
+// 	return (parse_redir(&start, stop));
+// }
 
 static t_ast	*parse_brackets(t_token **token, t_token **stop)
 {
 	t_token	*start;
 	t_token	*temp;
+	t_token	*lbrace;
 	t_token	*rbrace;
 	t_ast	*logical;
 
 	start = *token;
 	temp = *token;
-	// while (temp && temp->next)
-	// {
-	// 		break ;
-	// 	(temp) = (temp)->next;
-	// }
+
 	while ((temp) && (temp)->next && (temp) != (*stop))
 	{
 		if (temp->type == LBRACE)
 		{
-			(temp) = (temp)->next;
+			lbrace = temp;
 			rbrace = temp;
 			while (rbrace->next->type != RBRACE)
 				rbrace = rbrace->next;
-			while ((temp) && (temp)->next && (temp) != (*stop))
+			temp = rbrace; // start at end
+			while ((temp) && (temp)->prev && (temp) != (start))
 			{
 				if ((temp)->type == LOGICAL_AND || (temp)->type == LOGICAL_OR)
 				{
 					logical = ast_new(temp);
-					temp = (temp)->next;
-					logical->left = parse_redir(&start, token);
-					logical->right = parse_logical(&temp, &rbrace);
+					logical->right = parse_pipe(&temp->next, &rbrace);
+					temp = (temp)->prev;
+					logical->left = parse_logical(&start->next, &temp);
 					return (logical);
 				}
-				(temp) = (temp)->next;
+				(temp) = (temp)->prev;
 			}
 		}
 		(temp) = (temp)->next;
