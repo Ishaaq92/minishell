@@ -23,6 +23,7 @@ TODO:
 /*
 BUGS:
 1. Execution breaks when a bad command name is given; stop forking and execve if a bad name is given
+2. while validating the token list, also validate brackets and quotes
 */
 
 void	free_data(t_data *data);

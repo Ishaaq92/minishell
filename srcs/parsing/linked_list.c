@@ -79,3 +79,12 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 		new -> prev = tmp;
 	}
 }
+
+t_token	*ft_lstlast(t_token *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}

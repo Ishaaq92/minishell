@@ -33,7 +33,7 @@ t_ast	*parse_cmd(t_token	**node)
 	t_ast	*cmd;
 	int		argc;
 
-	if (node == NULL || *node == NULL)
+	if (node == NULL || (*node) == NULL)
 		return (NULL);
 	while ((*node)->type == LBRACE || (*node)->type == RBRACE)
 		(*node) = (*node)->next;

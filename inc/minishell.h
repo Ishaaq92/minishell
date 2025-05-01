@@ -100,6 +100,7 @@ void	print_tokens(t_token **head);
 t_token	*ft_lstnew(char *str);
 void	ft_lstadd_back(t_token **lst, t_token *new);
 void	ft_lstclear(t_token **lst);
+t_token	*ft_lstlast(t_token *lst);
 
 // tokens.c
 int		create_tokens(char *str, t_token **head);
