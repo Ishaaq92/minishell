@@ -56,7 +56,7 @@ int	main(int ac, char *av[], char *envp[])
 		{
 			add_history(line);
 			data = init_exec_data(line, envp);
-			if (data->head == NULL)
+			if (data == NULL)
 				continue ;
 			printf("\n***COMMAND EXECUTION***\n");
 			if (data)
@@ -68,6 +68,7 @@ int	main(int ac, char *av[], char *envp[])
 	return (0);
 }
 
+// TODO: add condition: if input is empty blank spaces i.e. so token list is empty, clear data and return prompt to user without printing anything
 t_data	*init_exec_data(char *line, char **envp)
 {
 	t_data		*data;
@@ -76,8 +77,11 @@ t_data	*init_exec_data(char *line, char **envp)
 	if (!data)
 		return (NULL);
 	data->token_list = NULL;
+	data->head = NULL;
 	printf("\n***TOKEN LIST***\n");
 	create_tokens(line, &(data->token_list));
+	if (data->token_list == NULL)
+		return (free_data(data), NULL);
 	print_tokens(&(data->token_list));
 	data->head = parse_tokens(data->token_list);
 	printf("\n*** AST TREE***\n");

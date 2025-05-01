@@ -58,7 +58,7 @@ int	is_op(char c)
 	return (0);
 }
 
-// checks validity of the token list, if the starting token isn't
+// checks validity of the token list, if the starting token is
 // a wrong operator or if the token list ends in an operator
 int	check_valid_order(t_token **head)
 {
