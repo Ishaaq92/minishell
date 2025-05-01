@@ -52,7 +52,7 @@ static int	count_argc(t_token *node)
 
 	count = 0;
 	temp = node;
-	while (temp && temp->type == COMMAND)
+	while (temp && temp->type == WORD)
 	{
 		temp = temp->next;
 		count++;

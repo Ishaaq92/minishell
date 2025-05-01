@@ -42,7 +42,7 @@ enum e_type
 	OUT_APPEND,
 	IN_HEREDOC,
 	PIPE,
-	COMMAND,
+	WORD,
 	ARGS,
 	PATH,
 	LBRACE,
