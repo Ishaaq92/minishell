@@ -77,14 +77,14 @@ void	handle_op(char **str, char **literal, t_token *token)
 	int		i;
 
 	i = 0;
-	while (ft_strchr("<>&|()", (*str)[i]))
+	if (ft_strchr("<>&|", (*str)[i]))
 	{
 		i++;
 		if ((*str)[i] == (*str)[i - 1])
-			continue ;
-		else
-			break ;
+			i++;
 	}
+	else if ((*str)[i] == '(' || (*str)[i] == ')')
+		i++;
 	*literal = ft_strndup(*str, i);
 	token->type = set_op_type(*literal);
 	(*str) += i;
