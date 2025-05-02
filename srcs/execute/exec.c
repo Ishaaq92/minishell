@@ -24,7 +24,7 @@ int		execute_node(t_data *data, t_ast *node)
 		data->exit_status = execute_pipe(data, node);
 	else if (node->type > 1 && node->type < 6)
 		data->exit_status = execute_redir(data, node);
-	else if (node->type == COMMAND)
+	else if (node->type == WORD)
 		data->exit_status = execute_cmd(data, node);
 	return (data->exit_status);
 }
@@ -68,7 +68,7 @@ void	clean_args(t_data *data, t_ast *node)
 	int		i;
 
 	i = 0;
-	if (node->type == COMMAND)
+	if (node->type == WORD)
 	{
 		while (node->literal[i])
 		{
@@ -82,6 +82,7 @@ void	clean_args(t_data *data, t_ast *node)
 int		execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
+	int		test;
 
 	clean_args(data, node);
 	if (is_builtin(data, node) != 0)
@@ -90,7 +91,9 @@ int		execute_cmd(t_data *data, t_ast *node)
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(node->literal[0], node->literal, data->envp);
+		test = execve(node->literal[0], node->literal, data->envp);
+		printf("execve return = %i\n", test);
+		exit(1);
 	}
 	else
 	{

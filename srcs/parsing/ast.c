@@ -18,29 +18,48 @@ static t_ast	*parse_logical(t_token **token, t_token **stop);
 static t_ast	*parse_pipe(t_token **token, t_token **stop);
 static t_ast	*parse_brackets(t_token **token, t_token **stop);
 
+// ast generation starts here
+// take the entire token list and pass start and end to parse_logical
+// each of the parse_* functions loop through the token list and generate ast
+// nodes if they find a valid token
+// the search occurs in the following order:
+// logical > pipe > brackets > redir > commands
 t_ast	*parse_tokens(t_token *head)
 {
-	t_ast	*ast_head;
 	t_token	*start;
 	t_token	*end;
+	t_ast	*ast_head;
 
 	if (head == NULL)
-	{
-		printf("error, no tokens\n");
 		return (NULL);
-	}
 	start = head;
-	end = head;
-	while (end->next != NULL)
-		end = end->next;
+	end = ft_lstlast(head);
 	ast_head = parse_logical(&start, &end);
 	return (ast_head);
+}
+
+void	skip_braces(t_token **temp)
+{
+	int		count;
+
+	count = 0;
+	while ((*temp) && (*temp)->prev)
+	{
+		if ((*temp)->type == RBRACE)
+			count++;
+		if ((*temp)->type == LBRACE)
+		{
+			count--;
+			if (count <= 0)
+				break ;
+		}
+		(*temp) = (*temp)->prev;
+	}
 }
 
 static t_ast	*parse_logical(t_token **token, t_token **stop)
 {
 	t_token	*start;
-	t_token	*cut_off;
 	t_token	*temp;
 	t_ast	*logical;
 
@@ -51,16 +70,12 @@ static t_ast	*parse_logical(t_token **token, t_token **stop)
 	while (temp && (temp)->prev && (temp) != (start))
 	{
 		if (temp->type == RBRACE)
-		{
-			while (temp->type != LBRACE)
-				temp = temp->prev;
-		}
+			skip_braces(&temp);
 		if ((temp)->type == LOGICAL_AND || (temp)->type == LOGICAL_OR)
 		{
 			logical = ast_new(temp);
 			logical->right = parse_pipe(&temp->next, stop);
-			temp = temp->prev;
-			logical->left = parse_logical(&start, &temp);
+			logical->left = parse_logical(&start, &temp->prev);
 			return (logical);
 		}
 		temp = temp->prev;
@@ -115,8 +130,7 @@ static t_ast	*parse_brackets(t_token **token, t_token **stop)
 				{
 					logical = ast_new(temp);
 					logical->right = parse_pipe(&temp->next, &rbrace);
-					temp = (temp)->prev;
-					logical->left = parse_logical(&start->next, &temp);
+					logical->left = parse_logical(&start->next, &temp->prev);
 					return (logical);
 				}
 				(temp) = (temp)->prev;

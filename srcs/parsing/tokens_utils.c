@@ -12,6 +12,7 @@
 
 #include "../inc/minishell.h"
 
+// simple function that matches the operator with the correct enum
 enum e_type	set_op_type(char *str)
 {
 	while (*str >= '0' && *str <= '9')
@@ -38,6 +39,7 @@ enum e_type	set_op_type(char *str)
 		return (ERROR);
 }
 
+// returns true if character is a blank space
 int	is_blank(char c)
 {
 	if (c == ' ' || (c <= '\r' && c >= '\t'))
@@ -45,6 +47,7 @@ int	is_blank(char c)
 	return (0);
 }
 
+// returns true if the character is an operator
 int	is_op(char c)
 {
 	if (c == '<' || c == '>' || \
@@ -55,6 +58,8 @@ int	is_op(char c)
 	return (0);
 }
 
+// checks validity of the token list, if the starting token is
+// a wrong operator or if the token list ends in an operator
 int	check_valid_order(t_token **head)
 {
 	t_token	*tmp;

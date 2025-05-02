@@ -12,11 +12,15 @@
 
 #include "../inc/minishell.h"
 
-int		handle_quotes(char *str, int *i, t_token *token);
-void	handle_op(char **str, char **literal, t_token *token);
-void	handle_word(char **str, char **literal, t_token *token);
-void	handle_num(char **str, char **literal, t_token *token);
+static int	handle_quotes(char *str, int *i, t_token *token);
+static void	handle_op(char **str, char **literal, t_token *token);
+static void	handle_word(char **str, char **literal, t_token *token);
+static void	handle_num(char **str, char **literal, t_token *token);
 
+// takes input as a string and loops through every character
+// if a character is an operator token or start of a word, begin tokenising it
+// at the end, check if a token was created, add it to linked list if it was
+// TODO: the while loop doesn't have str++ at the end... why did we design it like that? Is there any character that can cause it to end up in an infinite loop?
 int	create_tokens(char *str, t_token **head)
 {
 	t_token		*token;
@@ -26,53 +30,52 @@ int	create_tokens(char *str, t_token **head)
 		while (is_blank(*str))
 			str++;
 		token = ft_lstnew(NULL);
-		if (*str >= '0' && *str <= '9')
+		if (ft_isdigit(*str))
 			handle_num(&str, &token->literal, token);
-		else if (*str && is_op(*str))
+		else if (is_op(*str))
 			handle_op(&str, &token->literal, token);
-		else if (*str)
+		else if (*str != '\0')
 			handle_word(&str, &token->literal, token);
 		if (!token->literal)
 			free(token);
 		else
 			ft_lstadd_back(head, token);
 	}
-	if (*head && check_valid_order(head) == 1)
+	if (*head && check_valid_order(head))
 		printf("Invalid order of tokens\n");
-	print_tokens(head);
 	return (0);
 }
 
-int	handle_quotes(char *str, int *i, t_token *token)
+// a number can be part of a word or a redir operator
+// loop through the number, if its immediately followed by a redir token,
+// tokenise it as an operator
+// otherwise handle it as a 'word'
+static void	handle_num(char **str, char **literal, t_token *token)
 {
-	char	quote_char;
-	char	*temp;
-	int		open_quotes;
+	int		i;
 
-	quote_char = str[*i];
-	open_quotes = 1;
-	if (quote_char == '\'' || quote_char == '\"')
+	i = 0;
+	while (ft_isdigit((*str)[i]))
+		i++;
+	if ((*str)[i] && ((*str)[i] != ' ') && ft_strchr("<>", (*str)[i]))
 	{
-		(*i)++;
-		while (str[*i])
-		{
-			if (str[*i] == quote_char)
-			{
-				(*i)++;
-				open_quotes = 0;
-				break ;
-			}
-			(*i)++;
-		}
+		i++;
+		if ((*str)[i] && (*str)[i] == (*str)[i - 1])
+			i++;
+		*literal = ft_strndup(*str, i);
+		token->type = set_op_type(*literal);
+		(*str) += i;
+		return ;
 	}
-	else if (quote_char == '\\')
-		(*i) += 2;
-	if (open_quotes)
-		return (1);
-	return (0);
+	handle_word(str, literal, token);
 }
 
-void	handle_op(char **str, char **literal, t_token *token)
+// if the current character is an operator token, begin the token
+// keep adding characters to the same token until the token is no longer valid
+// tokenising ends when the character is no longer the same operator or is a space
+// TODO: so two parentheseses would be considered one token... that's not right. Fix it
+// TODO: what about three redir tokens like <<<? How are these supposed to be handled
+static void	handle_op(char **str, char **literal, t_token *token)
 {
 	int		i;
 
@@ -90,7 +93,9 @@ void	handle_op(char **str, char **literal, t_token *token)
 	(*str) += i;
 }
 
-void	handle_word(char **str, char **literal, t_token *token)
+// if a character is not a number or an operator or a space, it has to be a word
+// loop through the string until you find a breakpoint, a token or a space
+static void	handle_word(char **str, char **literal, t_token *token)
 {
 	char	*temp;
 	int		i;
@@ -105,28 +110,38 @@ void	handle_word(char **str, char **literal, t_token *token)
 		i++;
 	}
 	*literal = ft_strndup(*str, i);
-	token->type = COMMAND;
+	token->type = WORD;
 	(*str) += i;
 }
 
-void	handle_num(char **str, char **literal, t_token *token)
+// if you encounter a quote, the spaces and operators inside it do not break the token
+// store the quote character, and keep looping through until you find it again
+// in bash, multiple quotes are treated from left to right, not as nested group
+// TODO: handle scenario where a quote isn't closed correctly
+// just print an error message saying quote not closed, and return the prompt
+static int	handle_quotes(char *str, int *i, t_token *token)
 {
-	int		i;
+	char	quote_char;
+	char	*temp;
+	int		open_quotes;
 
-	i = 0;
-	while ((*str)[i] >= '0' && (*str)[i] <= '9')
+	quote_char = str[*i];
+	open_quotes = 1;
+	if (quote_char == '\'' || quote_char == '\"')
 	{
-		i++;
+		(*i)++;
+		while (str[*i])
+		{
+			if (str[(*i)++] == quote_char)
+			{
+				open_quotes = 0;
+				break ;
+			}
+		}
 	}
-	if ((*str)[i] && ((*str)[i] != ' ') && ft_strchr("<>", (*str)[i]))
-	{
-		i++;
-		if ((*str)[i] && (*str)[i] == (*str)[i - 1])
-			i++;
-		*literal = ft_strndup(*str, i);
-		token->type = set_op_type(*literal);
-		(*str) += i;
-		return ;
-	}
-	handle_word(str, literal, token);
+	else if (quote_char == '\\')
+		(*i) += 2;
+	if (open_quotes)
+		return (1);
+	return (0);
 }

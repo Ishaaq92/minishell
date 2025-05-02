@@ -44,7 +44,7 @@ int	redir_heredoc(t_data *data, t_ast *node)
 	temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	eof = node->right->token->literal;
 	if (temp_fd < 0)
-		;
+		ft_perror();
 	while (42)
 	{
 		write(1, "> ", 2);

@@ -13,13 +13,15 @@
 #include "../inc/minishell.h"
 
 static char	*get_param_name(char *str);
+static void	copy_latter_half_of_string(char **result, char *str);
+static void	perform_sub(t_data *data, char **str, int i, char *param);
 
 static char	*get_param_name(char *str)
 {
 	int		i;
 
 	i = 0;
-	while (str[i] && str[i] != ' ' && str[i] != '=')
+	while (str[i] && !ft_strchr(" =\"\'\\", str[i]))
 		i++;
 	return (ft_strndup(str, i));
 }
@@ -28,32 +30,57 @@ static char	*get_param_name(char *str)
 void	param_sub(t_data *data, char **str)
 {
 	int		i;
-	char	*result;
-	char	*sub_str;
-	char	*temp;
-	char	*temp2;
 	char	*param;
 
 	i = 0;
-	result = NULL;
-	while ((*str) && (*str)[i])
+	while (*str && (*str)[i])
 	{
 		if ((*str)[i] == '$')
 		{
-			if (result)
-				free(result);
-			result = ft_strndup((*str), i - 1);
-			param = get_param_name((*str) + 1);
-			temp = value_envp(&data->env_llst, param);
-			temp2 = result;
-			result = ft_strjoin(temp2, temp);
-			free(temp2);
+			if ((*str)[i + 1] == '?')
+			{
+				param = ft_itoa(data->exit_status);
+				perform_sub(data, str, i, param);
+				i++;
+				continue ;
+			}
+			param = get_param_name((*str) + i + 1);
+			perform_sub(data, str, i, param);
 		}
 		i++;
 	}
+}
+
+static void	perform_sub(t_data *data, char **str, int i, char *param)
+{
+	char	*sub_value;
+	char	*result;
+	char	*temp;
+
+	result = NULL;
+	
+	sub_value = value_envp(&data->env_llst, param);
+	if (sub_value)
+	{
+		result = ft_strndup((*str), i - 1);
+		temp = result;
+		result = ft_strjoin(temp, sub_value);
+		free(temp);
+		copy_latter_half_of_string(&result, *str + ft_strlen(param) + i + 1);
+	}
 	if (result)
 	{
-		free((*str));
-		(*str) = result;
+		free(*str);
+		*str = result;
 	}
+	free(param);
+}
+
+static void	copy_latter_half_of_string(char **result, char *str)
+{
+	char	*temp;
+
+	temp = *result;
+	*result = ft_strjoin(temp, str);
+	free(temp);
 }

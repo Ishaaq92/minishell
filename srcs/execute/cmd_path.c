@@ -62,6 +62,7 @@ int	set_cmd_path(t_ast *node, t_envp *env_list)
 		free(test_path);
 		i++;
 	}
-	printf("COMMAND NOT FOUND\n");
+	// printf("COMMAND NOT FOUND\n");
+	perror(node->literal[0]);
 	return (1);
 }
