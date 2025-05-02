@@ -33,12 +33,11 @@ void	del_lst(t_envp **lst)
 // CHECK FOR LEAKS
 void	del_array(char **envp)
 {
-	// int	i;
+	int	i;
 
-	// i = 0;
-	// while (envp[i] != 0)
-	// 	free(envp[i++]);
-	// free(envp);
+	i = 0;
+	while (envp[i] != 0)
+		free(envp[i++]);
 	free(envp);
 }
 

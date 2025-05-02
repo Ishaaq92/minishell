@@ -13,8 +13,37 @@
 #include "../inc/minishell.h"
 
 static char	*get_test_path(char *path, char *cmd_name);
+static void	free_paths(char **paths);
+static char	**get_pathlist(t_envp *env_list);
 
-char	**get_pathlist(t_envp *env_list)
+int	find_cmd_path(t_ast *node, t_envp *env_list)
+{
+	char	*test_path;
+	char	**paths;
+	int		i;
+
+	if (access(node->literal[0], F_OK) == 0)
+		return (0);
+	paths = get_pathlist(env_list);
+	i = 0;
+	while (paths && paths[i])
+	{
+		test_path = get_test_path(paths[i], node->literal[0]);
+		if (test_path == NULL)
+			return (free_paths(paths), 1);
+		if (access(test_path, F_OK) == 0)
+		{
+			free(node->literal[0]);
+			node->literal[0] = test_path;
+			return (free_paths(paths), 0);
+		}
+		free(test_path);
+		i++;
+	}
+	return (perror(node->literal[0]), free_paths(paths), 1);
+}
+
+static char	**get_pathlist(t_envp *env_list)
 {
 	int		i;
 	char	**result;
@@ -32,33 +61,6 @@ char	**get_pathlist(t_envp *env_list)
 	return (NULL);
 }
 
-int	find_cmd_path(t_ast *node, t_envp *env_list)
-{
-	char	*test_path;
-	char	**paths;
-	int		i;
-
-	if (access(node->literal[0], F_OK) == 0)
-		return (0);
-	paths = get_pathlist(env_list);
-	i = 0;
-	while (paths && paths[i])
-	{
-		test_path = get_test_path(paths[i], node->literal[0]);
-		if (test_path == NULL)
-			return (1);
-		if (access(test_path, F_OK) == 0)
-		{
-			free(node->literal[0]);
-			node->literal[0] = test_path;
-			return (0);
-		}
-		free(test_path);
-		i++;
-	}
-	return (perror(node->literal[0]), 1);
-}
-
 static char	*get_test_path(char *path, char *cmd_name)
 {
 	char	*temp;
@@ -70,4 +72,14 @@ static char	*get_test_path(char *path, char *cmd_name)
 	test_path = ft_strjoin(temp, cmd_name);
 	free(temp);
 	return (test_path);
+}
+
+static void	free_paths(char **paths)
+{
+	int		i;
+
+	i = 0;
+	while (paths[i])
+		free(paths[i++]);
+	free(paths);
 }
