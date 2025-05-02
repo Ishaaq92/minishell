@@ -89,6 +89,7 @@ typedef struct s_data
 
 // "main" minishell.c
 t_data	*init_exec_data(char *line, char **envp);
+void	ft_perror();
 
 // Handling Signals
 void	handle_ctrl_c(int sig);

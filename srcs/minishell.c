@@ -36,7 +36,7 @@ void	ft_perror()
 
 void	custom_error(char *str, char *msg)
 {
-	write(2, "pipex: ", 7);
+	write(2, "minishell: ", 7);
 	write(2, msg, ft_strlen(msg));
 	write(2, ": ", 2);
 	write(2, str, ft_strlen(str));
