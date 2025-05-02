@@ -12,6 +12,8 @@
 
 #include "../inc/minishell.h"
 
+static char	*get_test_path(char *path, char *cmd_name);
+
 char	**get_pathlist(t_envp *env_list)
 {
 	int		i;
@@ -30,39 +32,42 @@ char	**get_pathlist(t_envp *env_list)
 	return (NULL);
 }
 
-
-int	set_cmd_path(t_ast *node, t_envp *env_list)
+int	find_cmd_path(t_ast *node, t_envp *env_list)
 {
-	char	*temp;
 	char	*test_path;
 	char	**paths;
 	int		i;
 
-	// if the given string is already a valid path
 	if (access(node->literal[0], F_OK) == 0)
 		return (0);
 	paths = get_pathlist(env_list);
 	i = 0;
 	while (paths && paths[i])
 	{
-		temp = ft_strjoin(paths[i], "/");
-		if (temp == NULL)
-			return (1);
-		test_path = ft_strjoin(temp, node->literal[0]);
-		free(temp);
+		test_path = get_test_path(paths[i], node->literal[0]);
 		if (test_path == NULL)
 			return (1);
 		if (access(test_path, F_OK) == 0)
 		{
-			temp = node->literal[0];
+			free(node->literal[0]);
 			node->literal[0] = test_path;
-			free(temp);
 			return (0);
 		}
 		free(test_path);
 		i++;
 	}
-	// printf("COMMAND NOT FOUND\n");
-	perror(node->literal[0]);
-	return (1);
+	return (perror(node->literal[0]), 1);
+}
+
+static char	*get_test_path(char *path, char *cmd_name)
+{
+	char	*temp;
+	char	*test_path;
+
+	temp = ft_strjoin(path, "/");
+	if (!temp)
+		return (NULL);
+	test_path = ft_strjoin(temp, cmd_name);
+	free(temp);
+	return (test_path);
 }

@@ -33,7 +33,7 @@ enum e_commands
 	EXIT
 };
 
-enum e_type
+typedef enum e_type
 {
 	LOGICAL_AND,
 	LOGICAL_OR,
@@ -48,10 +48,10 @@ enum e_type
 	LBRACE,
 	RBRACE,
 	ERROR,
-};
+}		t_type;
 
 // open_quote is used to mark the beginning of quoted text
-typedef struct	s_token
+typedef struct s_token
 {
 	char				*literal;
 	enum e_type			type;
@@ -89,7 +89,7 @@ typedef struct s_data
 
 // "main" minishell.c
 t_data	*init_exec_data(char *line, char **envp);
-void	ft_perror();
+void	ft_perror(void);
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
@@ -109,11 +109,11 @@ int		create_tokens(char *str, t_token **head);
 // tokens_utils.c
 int		is_op(char c);
 int		is_blank(char c);
-enum e_type		set_op_type(char *str);
+t_type	set_op_type(char *str);
 int		check_valid_order(t_token **head);
 
 // utils.c
-void    exit_cleanup(t_data *data);
+void	exit_cleanup(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 
 // parser.c
@@ -158,7 +158,7 @@ void	env_lstadd_back(t_envp **lst, t_envp *new);
 char	*value_envp(t_envp **lst, char *str);
 
 // cmd_path.c
-int		set_cmd_path(t_ast *node, t_envp *env_list);
+int		find_cmd_path(t_ast *node, t_envp *env_list);
 
 // exec.c
 int		execute_node(t_data *data, t_ast *node);

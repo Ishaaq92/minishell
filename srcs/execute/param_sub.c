@@ -58,7 +58,6 @@ static void	perform_sub(t_data *data, char **str, int i, char *param)
 	char	*temp;
 
 	result = NULL;
-	
 	sub_value = value_envp(&data->env_llst, param);
 	if (sub_value)
 	{

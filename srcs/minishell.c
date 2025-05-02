@@ -29,7 +29,7 @@ BUGS:
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
 
-void	ft_perror()
+void	ft_perror(void)
 {
 	perror("minishell: ");
 }
@@ -69,7 +69,6 @@ int	main(int ac, char *av[], char *envp[])
 	return (0);
 }
 
-// TODO: add condition: if input is empty blank spaces i.e. so token list is empty, clear data and return prompt to user without printing anything
 t_data	*init_exec_data(char *line, char **envp)
 {
 	t_data		*data;

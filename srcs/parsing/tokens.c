@@ -20,7 +20,6 @@ static void	handle_num(char **str, char **literal, t_token *token);
 // takes input as a string and loops through every character
 // if a character is an operator token or start of a word, begin tokenising it
 // at the end, check if a token was created, add it to linked list if it was
-// TODO: the while loop doesn't have str++ at the end... why did we design it like that? Is there any character that can cause it to end up in an infinite loop?
 int	create_tokens(char *str, t_token **head)
 {
 	t_token		*token;
@@ -72,7 +71,7 @@ static void	handle_num(char **str, char **literal, t_token *token)
 
 // if the current character is an operator token, begin the token
 // keep adding characters to the same token until the token is no longer valid
-// tokenising ends when the character is no longer the same operator or is a space
+// token ends when the character is no longer the same operator or is a space
 static void	handle_op(char **str, char **literal, t_token *token)
 {
 	int		i;
@@ -112,7 +111,7 @@ static void	handle_word(char **str, char **literal, t_token *token)
 	(*str) += i;
 }
 
-// if you encounter a quote, the spaces and operators inside it do not break the token
+// inside quotes, the spaces and operators do not break the token
 // store the quote character, and keep looping through until you find it again
 // in bash, multiple quotes are treated from left to right, not as nested group
 static int	handle_quotes(char *str, int *i, t_token *token)

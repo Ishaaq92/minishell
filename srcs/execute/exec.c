@@ -16,7 +16,7 @@ int		is_builtin(t_data *data, t_ast *node);
 int		execute_logical(t_data *data, t_ast *node);
 int		execute_cmd(t_data *data, t_ast *node);
 
-int		execute_node(t_data *data, t_ast *node)
+int	execute_node(t_data *data, t_ast *node)
 {
 	if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
 		data->exit_status = execute_logical(data, node);
@@ -29,7 +29,7 @@ int		execute_node(t_data *data, t_ast *node)
 	return (data->exit_status);
 }
 
-int		execute_logical(t_data *data, t_ast *node)
+int	execute_logical(t_data *data, t_ast *node)
 {
 	data->exit_status = execute_node(data, node->left);
 	if (node->type == LOGICAL_AND && data->exit_status == 0)
@@ -79,7 +79,7 @@ void	clean_args(t_data *data, t_ast *node)
 	}
 }
 
-int		execute_cmd(t_data *data, t_ast *node)
+int	execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
 	int		test;
@@ -87,7 +87,7 @@ int		execute_cmd(t_data *data, t_ast *node)
 	clean_args(data, node);
 	if (is_builtin(data, node) != 0)
 		return (0);
-	set_cmd_path(node, data->env_llst);
+	find_cmd_path(node, data->env_llst);
 	pid = fork();
 	if (pid == 0)
 	{
