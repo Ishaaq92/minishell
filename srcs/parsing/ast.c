@@ -14,6 +14,7 @@
 
 // https://www.chidiwilliams.com/posts/on-recursive-descent-and-pratt-parsing
 // https://www.rioki.org/2016/04/18/recusive-descent-parser.html
+
 static t_ast	*parse_logical(t_token **token, t_token **stop);
 static t_ast	*parse_pipe(t_token **token, t_token **stop);
 static t_ast	*parse_brackets(t_token **token, t_token **stop);
@@ -123,18 +124,7 @@ static t_ast	*parse_brackets(t_token **token, t_token **stop)
 			rbrace = temp;
 			while (rbrace->next->type != RBRACE)
 				rbrace = rbrace->next;
-			temp = rbrace;
-			while ((temp) && (temp)->prev && (temp) != (start))
-			{
-				if ((temp)->type == LOGICAL_AND || (temp)->type == LOGICAL_OR)
-				{
-					logical = ast_new(temp);
-					logical->right = parse_pipe(&temp->next, &rbrace);
-					logical->left = parse_logical(&start->next, &temp->prev);
-					return (logical);
-				}
-				(temp) = (temp)->prev;
-			}
+			return (parse_logical(&temp->next, &rbrace));
 		}
 		(temp) = (temp)->next;
 	}

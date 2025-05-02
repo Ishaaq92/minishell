@@ -12,10 +12,6 @@
 
 #include "../../inc/minishell.h"
 
-// it can't be this easy... what have I missed?
-// uncomment the main, and compile with:
-// cc quote_removal.c -L ../../Libft/ -lft
-
 static void	collapse_quotes(char *str, int *i, char quote_char);
 
 void	remove_quotes(char *str)

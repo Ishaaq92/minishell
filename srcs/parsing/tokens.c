@@ -115,8 +115,6 @@ static void	handle_word(char **str, char **literal, t_token *token)
 // if you encounter a quote, the spaces and operators inside it do not break the token
 // store the quote character, and keep looping through until you find it again
 // in bash, multiple quotes are treated from left to right, not as nested group
-// TODO: handle scenario where a quote isn't closed correctly
-// just print an error message saying quote not closed, and return the prompt
 static int	handle_quotes(char *str, int *i, t_token *token)
 {
 	char	quote_char;
