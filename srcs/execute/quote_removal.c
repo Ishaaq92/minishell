@@ -42,4 +42,5 @@ static void	collapse_quotes(char *str, int *i, char quote_char)
 		(*i)++;
 	if (str[*i] != '\0')
 		ft_memmove(str + *i, str + *i + 1, ft_strlen(str + *i));
+	*i = -1;
 }

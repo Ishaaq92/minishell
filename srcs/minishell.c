@@ -80,8 +80,7 @@ t_data	*init_exec_data(char *line, char **envp)
 	data->token_list = NULL;
 	data->head = NULL;
 	printf("\n***TOKEN LIST***\n");
-	create_tokens(line, &(data->token_list));
-	if (data->token_list == NULL)
+	if (create_tokens(line, &(data->token_list)) || data->token_list == NULL)
 		return (free_data(data), NULL);
 	print_tokens(&(data->token_list));
 	data->head = parse_tokens(data->token_list);

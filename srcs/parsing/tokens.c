@@ -42,7 +42,7 @@ int	create_tokens(char *str, t_token **head)
 			ft_lstadd_back(head, token);
 	}
 	if (*head && check_valid_order(head))
-		printf("Invalid order of tokens\n");
+		return (printf("Invalid order of tokens\n"), 1);
 	return (0);
 }
 
@@ -73,8 +73,6 @@ static void	handle_num(char **str, char **literal, t_token *token)
 // if the current character is an operator token, begin the token
 // keep adding characters to the same token until the token is no longer valid
 // tokenising ends when the character is no longer the same operator or is a space
-// TODO: so two parentheseses would be considered one token... that's not right. Fix it
-// TODO: what about three redir tokens like <<<? How are these supposed to be handled
 static void	handle_op(char **str, char **literal, t_token *token)
 {
 	int		i;
@@ -123,25 +121,25 @@ static int	handle_quotes(char *str, int *i, t_token *token)
 {
 	char	quote_char;
 	char	*temp;
-	int		open_quotes;
 
 	quote_char = str[*i];
-	open_quotes = 1;
+	token->open_quote = 1;
 	if (quote_char == '\'' || quote_char == '\"')
 	{
 		(*i)++;
 		while (str[*i])
 		{
-			if (str[(*i)++] == quote_char)
+			if (str[(*i)] == quote_char)
 			{
-				open_quotes = 0;
+				token->open_quote = 0;
 				break ;
 			}
+			(*i)++;
 		}
 	}
 	else if (quote_char == '\\')
 		(*i) += 2;
-	if (open_quotes)
+	if (token->open_quote)
 		return (1);
 	return (0);
 }
