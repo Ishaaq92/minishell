@@ -26,7 +26,8 @@ int	execute_redir(t_data *data, t_ast *node)
 		redir_output(data, node);
 	else if (node->type == IN_HEREDOC)
 		redir_heredoc(data, node);
-	execute_node(data, node->left);
+	if (node->left)
+		execute_node(data, node->left);
 	dup2(data->std_fd[0], STDIN_FILENO);
 	reset_redir(data);
 	if (node->type == IN_HEREDOC)
