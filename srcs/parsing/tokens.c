@@ -92,6 +92,7 @@ static void	handle_op(char **str, char **literal, t_token *token)
 
 // if a character is not a number or an operator or a space, it has to be a word
 // loop through the string until you find a breakpoint, a token or a space
+// TODO: is is_blank necessary? can you have tabs inside a prompt? or do you just check for space
 static void	handle_word(char **str, char **literal, t_token *token)
 {
 	char	*temp;

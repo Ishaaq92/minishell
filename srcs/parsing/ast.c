@@ -18,6 +18,7 @@
 static t_ast	*parse_logical(t_token **token, t_token **stop);
 static t_ast	*parse_pipe(t_token **token, t_token **stop);
 static t_ast	*parse_brackets(t_token **token, t_token **stop);
+static void		skip_braces(t_token **temp);
 
 // ast generation starts here
 // take the entire token list and pass start and end to parse_logical
@@ -25,6 +26,7 @@ static t_ast	*parse_brackets(t_token **token, t_token **stop);
 // nodes if they find a valid token
 // the search occurs in the following order:
 // logical > pipe > brackets > redir > commands
+// TODO: can you get rid of the end variable by passing the function directly?
 t_ast	*parse_tokens(t_token *head)
 {
 	t_token	*start;
@@ -39,25 +41,14 @@ t_ast	*parse_tokens(t_token *head)
 	return (ast_head);
 }
 
-void	skip_braces(t_token **temp)
-{
-	int		count;
-
-	count = 0;
-	while ((*temp) && (*temp)->prev)
-	{
-		if ((*temp)->type == RBRACE)
-			count++;
-		if ((*temp)->type == LBRACE)
-		{
-			count--;
-			if (count <= 0)
-				break ;
-		}
-		(*temp) = (*temp)->prev;
-	}
-}
-
+// parses token list in reverse order looking for logical nodes
+// reverse order is used to make sure execution behaves like bash
+// if you parse left to right, the logical operators on the left have
+// greater priority on the tree, which can cause the shell to abort early
+// in bash, logical operators only care about the preceding command
+// eg: echo c1 || echo c2 && echo c3 should print c1 AND c3
+// parsing left to right causes the shell to behave like this:
+// echo c1 || (echo c2 && echo c3)
 static t_ast	*parse_logical(t_token **token, t_token **stop)
 {
 	t_token	*start;
@@ -84,6 +75,31 @@ static t_ast	*parse_logical(t_token **token, t_token **stop)
 	return (parse_pipe(&start, stop));
 }
 
+// this helper function skips over brackets while parsing logical ops
+// the logical operators inside brackets have lower priority and will
+// be handled later by parse_brackets
+static void	skip_braces(t_token **temp)
+{
+	int		count;
+
+	count = 0;
+	while ((*temp) && (*temp)->prev)
+	{
+		if ((*temp)->type == RBRACE)
+			count++;
+		if ((*temp)->type == LBRACE)
+		{
+			count--;
+			if (count <= 0)
+				break ;
+		}
+		(*temp) = (*temp)->prev;
+	}
+}
+
+// once logical operators are sorted, look for pipes
+// this search is done left to right, which does not hinder the reverse
+// logical search 
 static t_ast	*parse_pipe(t_token **token, t_token **stop)
 {
 	t_token	*start;
@@ -106,13 +122,15 @@ static t_ast	*parse_pipe(t_token **token, t_token **stop)
 	return (parse_brackets(&start, stop));
 }
 
+// after pipes, begin looking for brackets
+// if a bracket is found, the inside content is sent to parse_logical
+// and treated the same way as logical operators outside brackets
+// TODO: handle nested brackets
 static t_ast	*parse_brackets(t_token **token, t_token **stop)
 {
 	t_token	*start;
 	t_token	*temp;
-	t_token	*lbrace;
 	t_token	*rbrace;
-	t_ast	*logical;
 
 	start = *token;
 	temp = *token;
@@ -120,7 +138,6 @@ static t_ast	*parse_brackets(t_token **token, t_token **stop)
 	{
 		if (temp->type == LBRACE)
 		{
-			lbrace = temp;
 			rbrace = temp;
 			while (rbrace->next->type != RBRACE)
 				rbrace = rbrace->next;

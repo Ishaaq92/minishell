@@ -12,39 +12,50 @@
 
 #include "../inc/minishell.h"
 
-static int		count_argc(t_token *node);
 static char		**parse_cmd_args(t_token *node, int argc);
+static int		count_argc(t_token *node);
 
-t_ast	*ast_new(t_token *token)
-{
-	t_ast	*new;
-
-	new = (t_ast *)malloc(sizeof(t_ast));
-	new->left = NULL;
-	new->right = NULL;
-	new->literal = NULL;
-	new->token = token;
-	new->type = token->type;
-	return (new);
-}
-
+// treat whatever is left after all operators are parsed as a command plus
+// arguments
 t_ast	*parse_cmd(t_token	**node)
 {
 	t_ast	*cmd;
-	int		argc;
 
 	if (node == NULL || (*node) == NULL)
 		return (NULL);
 	while ((*node)->type == LBRACE || (*node)->type == RBRACE)
 		(*node) = (*node)->next;
 	cmd = ast_new(*node);
-	argc = count_argc(*node);
-	cmd->literal = parse_cmd_args(*node, argc);
+	cmd->literal = parse_cmd_args(*node, count_argc(*node));
 	if (cmd->literal == NULL)
-		return (NULL);
+		return (free(cmd), NULL);
 	return (cmd);
 }
 
+// this helper function generates a double pointer array of strings which
+// are the command name followed by its arguments
+static char	**parse_cmd_args(t_token *node, int argc)
+{
+	t_token	*current;
+	char	**result;
+	int		i;
+
+	result = (char **) malloc(sizeof(char *) * (argc + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	current = node;
+	while (i < argc)
+	{
+		result[i++] = ft_strdup(current->literal);
+		current = current->next;
+	}
+	result[i] = NULL;
+	return (result);
+}
+
+// this helper function counts the arguments the command will have
+// based on how many tokens have the type WORD in a row
 static int	count_argc(t_token *node)
 {
 	t_token	*temp;
@@ -58,22 +69,4 @@ static int	count_argc(t_token *node)
 		count++;
 	}
 	return (count);
-}
-
-static char	**parse_cmd_args(t_token *node, int argc)
-{
-	t_token	*current;
-	char	**result;
-	int		i;
-
-	result = (char **) malloc(sizeof(char *) * (argc + 1));
-	i = 0;
-	current = node;
-	while (i < argc)
-	{
-		result[i++] = ft_strdup(current->literal);
-		current = current->next;
-	}
-	result[i] = NULL;
-	return (result);
 }

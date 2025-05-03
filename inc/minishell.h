@@ -129,12 +129,12 @@ char	*ft_strndup(const char *s, int n);
 t_ast	*parse_tokens(t_token *head);
 
 // ast_utils.c
+t_ast	*ast_new(t_token *token);
 void	print_ast(t_ast *ast, int i);
 void	free_ast(t_ast *ast);
 
 // ast_cmd.c
 t_ast	*parse_cmd(t_token **node);
-t_ast	*ast_new(t_token *token);
 
 // ast_redir.c
 t_ast	*parse_redir(t_token **token, t_token **stop);

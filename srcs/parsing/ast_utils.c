@@ -12,6 +12,20 @@
 
 #include "../inc/minishell.h"
 
+// malloc and initialises an ast node
+t_ast	*ast_new(t_token *token)
+{
+	t_ast	*new;
+
+	new = (t_ast *)malloc(sizeof(t_ast));
+	new->left = NULL;
+	new->right = NULL;
+	new->literal = NULL;
+	new->token = token;
+	new->type = token->type;
+	return (new);
+}
+
 void	free_ast(t_ast *ast)
 {
 	int	i;

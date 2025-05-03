@@ -18,6 +18,7 @@ TODO:
 2. Built in functions
 3. Parameter substitution with quote removal
 4. Signals
+5. Compiler flags, DO NOT FORGET
 */
 
 /*
