@@ -1,23 +1,22 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   bi_func.c										  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: ishaaq <ishaaq@student.42.fr>			  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/04/24 18:08:06 by isahmed		   #+#	#+#			 */
-/*   Updated: 2025/04/28 14:31:45 by ishaaq		   ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bi_func.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
+/*   Updated: 2025/05/06 14:53:23 by isahmed          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 // Functions to Build 
-// echo: NOT DONE
+// cd: NOT DONE
 // export: ALMOST DONE
 // exit: TESTING
-// unset: TESTING
-// cd: TESTING
+// echo: DONE
 // env: DONE
 // pwd: DONE
 
@@ -26,7 +25,6 @@ void	bi_echo(t_data *data, t_ast *node)
 	int		i;
 	char	**args;
 
-	// NEEDS QUOTE REMOVAL!
 	args = node->literal;
 	i = 1;
 	if (args == NULL)
@@ -90,7 +88,6 @@ void	bi_unset(t_data *data, char *str)
 // str can be in the form 'pwd="/home/tim"'
 void	bi_export(t_data *data, char *str)
 {
-	// Quote Removal.
 	append_node(&data->env_llst, &str, str);
 }
 

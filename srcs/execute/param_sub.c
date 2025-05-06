@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   param_sub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-30 16:20:59 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-30 16:20:59 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/30 16:20:59 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/06 15:40:05 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static char	*get_param_name(char *str)
 	int		i;
 
 	i = 0;
-	while (str[i] && !ft_strchr(" =\"\'\\", str[i]))
+	if (str[i] && str[i] == '?')
+		i++;
+	while (str[i] && ft_isalnum(str[i]))
 		i++;
 	return (ft_strndup(str, i));
 }
@@ -30,49 +32,56 @@ static char	*get_param_name(char *str)
 void	param_sub(t_data *data, char **str)
 {
 	int		i;
-	char	*param;
+	char	*key;
 
 	i = 0;
 	while (*str && (*str)[i])
 	{
+		if ((*str)[i] == '\'')
+		{
+			while ((*str)[i++] != '\'')
+				continue ;
+			i++;
+		}
 		if ((*str)[i] == '$')
 		{
-			if ((*str)[i + 1] == '?')
-			{
-				param = ft_itoa(data->exit_status);
-				perform_sub(data, str, i, param);
-				i++;
-				continue ;
-			}
-			param = get_param_name((*str) + i + 1);
-			perform_sub(data, str, i, param);
+			key = get_param_name((*str) + i + 1);
+			// printf("param = %s\n", key);
+			perform_sub(data, str, i, key);
 		}
 		i++;
 	}
 }
 
-static void	perform_sub(t_data *data, char **str, int i, char *param)
+static void	perform_sub(t_data *data, char **str, int i, char *key)
 {
 	char	*sub_value;
 	char	*result;
 	char	*temp;
 
 	result = NULL;
-	sub_value = value_envp(&data->env_llst, param);
+	if (*key == '?')
+		sub_value = ft_itoa(data->exit_status);
+	else
+		sub_value = value_envp(&data->env_llst, key);
+	// if (sub_value)
+	// {
+	result = ft_strndup((*str), i);
+	temp = result;
 	if (sub_value)
 	{
-		result = ft_strndup((*str), i - 1);
-		temp = result;
 		result = ft_strjoin(temp, sub_value);
 		free(temp);
-		copy_latter_half_of_string(&result, *str + ft_strlen(param) + i + 1);
 	}
+
+	copy_latter_half_of_string(&result, *str + ft_strlen(key) + i + 1);
+	// }
 	if (result)
 	{
 		free(*str);
 		*str = result;
 	}
-	free(param);
+	free(key);
 }
 
 static void	copy_latter_half_of_string(char **result, char *str)
