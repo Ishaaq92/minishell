@@ -122,6 +122,28 @@ static t_ast	*parse_pipe(t_token **token, t_token **stop)
 	return (parse_brackets(&start, stop));
 }
 
+t_token	*get_rbrace(t_token *lbrace)
+{
+	int		count;
+	t_token	*temp;
+
+	count = 0;
+	temp = lbrace;
+	while ((temp) && (temp)->next)
+	{
+		if ((temp)->type == LBRACE)
+			count++;
+		if ((temp)->type == RBRACE)
+		{
+			count--;
+			if (count <= 0)
+				return (temp);
+		}
+		(temp) = (temp)->next;
+	}
+	return (temp);
+}
+
 // after pipes, begin looking for brackets
 // if a bracket is found, the inside content is sent to parse_logical
 // and treated the same way as logical operators outside brackets
@@ -138,10 +160,8 @@ static t_ast	*parse_brackets(t_token **token, t_token **stop)
 	{
 		if (temp->type == LBRACE)
 		{
-			rbrace = temp;
-			while (rbrace->next->type != RBRACE)
-				rbrace = rbrace->next;
-			return (parse_logical(&temp->next, &rbrace));
+			rbrace = get_rbrace(temp);
+			return (parse_logical(&temp->next, &rbrace->prev));
 		}
 		(temp) = (temp)->next;
 	}
