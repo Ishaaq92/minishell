@@ -33,23 +33,25 @@ enum e_commands
 	EXIT
 };
 
-enum e_type
+typedef enum e_type
 {
 	LOGICAL_AND,
 	LOGICAL_OR,
-	REDIRECT_IN,
-	REDIRECT_OUT,
-	REDIRECT_APPEND,
-	REDIRECT_HEREDOC,
+	REDIR_IN,
+	REDIR_OUT,
+	OUT_APPEND,
+	IN_HEREDOC,
 	PIPE,
-	COMMAND,
+	WORD,
 	ARGS,
 	PATH,
+	LBRACE,
+	RBRACE,
 	ERROR,
-};
+}		t_type;
 
 // open_quote is used to mark the beginning of quoted text
-typedef	struct s_token
+typedef struct s_token
 {
 	char				*literal;
 	enum e_type			type;
@@ -66,7 +68,6 @@ typedef struct s_ast
 	t_token				*token;
 	struct s_ast		*left;
 	struct s_ast		*right;
-	struct s_ast		*parent;
 }						t_ast;
 
 // linked list to hold the environment variables unique to our shell
@@ -88,6 +89,7 @@ typedef struct s_data
 
 // "main" minishell.c
 t_data	*init_exec_data(char *line, char **envp);
+void	ft_perror(void);
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
@@ -99,12 +101,19 @@ void	print_tokens(t_token **head);
 t_token	*ft_lstnew(char *str);
 void	ft_lstadd_back(t_token **lst, t_token *new);
 void	ft_lstclear(t_token **lst);
+t_token	*ft_lstlast(t_token *lst);
 
 // tokens.c
-int	create_tokens(char *str, t_token **head);
+int		create_tokens(char *str, t_token **head);
+
+// tokens_utils.c
+int		is_op(char c);
+int		is_blank(char c);
+t_type	set_op_type(char *str);
+int		check_valid_order(t_token **head);
 
 // utils.c
-void    exit_cleanup(t_data *data);
+void	exit_cleanup(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 
 // parser.c
@@ -118,6 +127,8 @@ char	*ft_strndup(const char *s, int n);
 
 // ast.c
 t_ast	*parse_tokens(t_token *head);
+
+// ast_utils.c
 void	print_ast(t_ast *ast, int i);
 void	free_ast(t_ast *ast);
 
@@ -147,7 +158,7 @@ void	env_lstadd_back(t_envp **lst, t_envp *new);
 char	*value_envp(t_envp **lst, char *str);
 
 // cmd_path.c
-int		set_cmd_path(t_ast *node, t_envp *env_list);
+int		find_cmd_path(t_ast *node, t_envp *env_list);
 
 // exec.c
 int		execute_node(t_data *data, t_ast *node);
@@ -159,7 +170,10 @@ int		execute_pipe(t_data *data, t_ast *node);
 int		execute_redir(t_data *data, t_ast *node);
 
 // quote_removal.c
-void		remove_quotes(char *str);
+void	remove_quotes(char *str);
+
+// param_sub.c
+void	param_sub(t_data *data, char **str);
 
 // bi_func.c
 void	bi_pwd(t_data *data);
@@ -169,6 +183,5 @@ void	bi_export(t_data *data, char *str);
 void	bi_exit(t_data *data);
 void	bi_unset(t_data *data, char *str);
 void	bi_echo(t_data *data, t_ast *node);
-
 
 #endif

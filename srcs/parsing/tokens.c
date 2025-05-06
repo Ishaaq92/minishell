@@ -12,93 +12,87 @@
 
 #include "../inc/minishell.h"
 
-int	is_blank(char c)
-{
-	if (c == ' ' || (c <= '\r' && c >= '\t'))
-		return (1);
-	return (0);
-}
+static int	handle_quotes(char *str, int *i, t_token *token);
+static void	handle_op(char **str, char **literal, t_token *token);
+static void	handle_word(char **str, char **literal, t_token *token);
+static void	handle_num(char **str, char **literal, t_token *token);
 
-int	is_op(char c)
+// takes input as a string and loops through every character
+// if a character is an operator token or start of a word, begin tokenising it
+// at the end, check if a token was created, add it to linked list if it was
+int	create_tokens(char *str, t_token **head)
 {
-	if (c == '<' || c == '>' || \
-		c == '|' || \
-		c == '(' || c == ')' || \
-		c == '&')
-		return (1);
-	return (0);
-}
+	t_token		*token;
 
-int	handle_quotes(char *str, int *i, t_token *token)
-{
-	char	quote_char;
-	char	*temp;
-	int		open_quotes;
-
-	quote_char = str[*i];
-	open_quotes = 1;
-	if (quote_char == '\'' || quote_char == '\"')
+	while (*str)
 	{
-		(*i)++;
-		while (str[*i])
-		{
-			if (str[*i] == quote_char)
-			{
-				(*i)++;
-				open_quotes = 0;
-				break ;
-			}
-			(*i)++;
-		}
+		while (is_blank(*str))
+			str++;
+		token = ft_lstnew(NULL);
+		if (ft_isdigit(*str))
+			handle_num(&str, &token->literal, token);
+		else if (is_op(*str))
+			handle_op(&str, &token->literal, token);
+		else if (*str != '\0')
+			handle_word(&str, &token->literal, token);
+		if (!token->literal)
+			free(token);
+		else
+			ft_lstadd_back(head, token);
 	}
-	else if (quote_char == '\\')
-		(*i) += 2;
-	if (open_quotes)
-		return (1);
+	if (*head && check_valid_order(head))
+		return (printf("Invalid order of tokens\n"), 1);
 	return (0);
 }
 
-enum e_type		set_op_type(char *str)
-{
-	while (*str >= '0' && *str <= '9')
-		str++;	
-	if (!ft_strncmp("<<", str, 2))
-		return (REDIRECT_HEREDOC);
-	else if (!ft_strncmp(">>", str, 2))
-		return (REDIRECT_APPEND);
-	else if (!ft_strncmp("<", str, 1))
-		return (REDIRECT_IN);
-	else if (!ft_strncmp(">", str, 1))
-		return (REDIRECT_OUT);
-	else if (!ft_strncmp("||", str, 2))
-		return (LOGICAL_OR);
-	else if (!ft_strncmp("&&", str, 2))
-		return (LOGICAL_AND);
-	else if (!ft_strncmp("|", str, 1))
-		return (PIPE);
-	else
-		return (ERROR);
-}
-
-void	handle_op(char **str, char **literal, t_token *token)
+// a number can be part of a word or a redir operator
+// loop through the number, if its immediately followed by a redir token,
+// tokenise it as an operator
+// otherwise handle it as a 'word'
+static void	handle_num(char **str, char **literal, t_token *token)
 {
 	int		i;
 
 	i = 0;
-	while (ft_strchr("<>&|()", (*str)[i]))
+	while (ft_isdigit((*str)[i]))
+		i++;
+	if ((*str)[i] && ((*str)[i] != ' ') && ft_strchr("<>", (*str)[i]))
+	{
+		i++;
+		if ((*str)[i] && (*str)[i] == (*str)[i - 1])
+			i++;
+		*literal = ft_strndup(*str, i);
+		token->type = set_op_type(*literal);
+		(*str) += i;
+		return ;
+	}
+	handle_word(str, literal, token);
+}
+
+// if the current character is an operator token, begin the token
+// keep adding characters to the same token until the token is no longer valid
+// token ends when the character is no longer the same operator or is a space
+static void	handle_op(char **str, char **literal, t_token *token)
+{
+	int		i;
+
+	i = 0;
+	if (ft_strchr("<>&|", (*str)[i]))
 	{
 		i++;
 		if ((*str)[i] == (*str)[i - 1])
-			continue ;
-		else 
-			break ;
+			i++;
 	}
+	else if ((*str)[i] == '(' || (*str)[i] == ')')
+		i++;
 	*literal = ft_strndup(*str, i);
 	token->type = set_op_type(*literal);
 	(*str) += i;
 }
 
-void	handle_word(char **str, char **literal, t_token *token)
+// if a character is not a number or an operator or a space, it has to be a word
+// loop through the string until you find a breakpoint, a token or a space
+static void	handle_word(char **str, char **literal, t_token *token)
 {
 	char	*temp;
 	int		i;
@@ -113,72 +107,36 @@ void	handle_word(char **str, char **literal, t_token *token)
 		i++;
 	}
 	*literal = ft_strndup(*str, i);
-	token->type = COMMAND;
+	token->type = WORD;
 	(*str) += i;
 }
 
-void	handle_num(char **str, char **literal, t_token *token)
+// inside quotes, the spaces and operators do not break the token
+// store the quote character, and keep looping through until you find it again
+// in bash, multiple quotes are treated from left to right, not as nested group
+static int	handle_quotes(char *str, int *i, t_token *token)
 {
-	int		i;
+	char	quote_char;
+	char	*temp;
 
-	i = 0;
-	while ((*str)[i] >= '0' && (*str)[i] <= '9')
+	quote_char = str[*i];
+	token->open_quote = 1;
+	if (quote_char == '\'' || quote_char == '\"')
 	{
-		i++;
+		(*i)++;
+		while (str[*i])
+		{
+			if (str[(*i)] == quote_char)
+			{
+				token->open_quote = 0;
+				break ;
+			}
+			(*i)++;
+		}
 	}
-	if ((*str)[i] && ((*str)[i] != ' ') && ft_strchr("<>", (*str)[i]))
-	{
-		i++;
-		if ((*str)[i] && (*str)[i] == (*str)[i - 1])
-			i++;
-		*literal = ft_strndup(*str, i);
-		token->type = set_op_type(*literal);
-		(*str) += i;
-		return ;
-	}
-	handle_word(str, literal, token);
-}
-
-int	check_valid_order(t_token **head)
-{
-	t_token	*tmp;
-
-	tmp = *head;
-	if (tmp->type == LOGICAL_AND || tmp->type == LOGICAL_OR || tmp->type == PIPE)
+	else if (quote_char == '\\')
+		(*i) += 2;
+	if (token->open_quote)
 		return (1);
-	while (tmp)
-	{
-		if (tmp->next && tmp->type < 7 && tmp->next->type < 7)
-			return (1);
-		if (tmp->next == NULL && tmp->type < 7)
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-int	create_tokens(char *str, t_token **head)
-{
-	t_token *token;
-
-	while (*str)
-	{
-		while (is_blank(*str))
-			str++;
-		token = ft_lstnew(NULL);
-		if (*str >= '0' && *str <= '9')
-			handle_num(&str, &token->literal, token);
-		else if (*str && is_op(*str))
-			handle_op(&str, &token->literal, token);
-		else if (*str)
-			handle_word(&str, &token->literal, token);
-		if (!token->literal)
-			free(token);
-		else
-			ft_lstadd_back(head, token);
-	}
-	if (*head && check_valid_order(head) == 1)
-		printf("Invalid order of tokens\n");
-	print_tokens(head);
 	return (0);
 }

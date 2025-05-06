@@ -23,7 +23,6 @@ t_ast	*ast_new(t_token *token)
 	new->left = NULL;
 	new->right = NULL;
 	new->literal = NULL;
-	new->parent = NULL;
 	new->token = token;
 	new->type = token->type;
 	return (new);
@@ -34,8 +33,10 @@ t_ast	*parse_cmd(t_token	**node)
 	t_ast	*cmd;
 	int		argc;
 
-	if (node == NULL || *node == NULL)
+	if (node == NULL || (*node) == NULL)
 		return (NULL);
+	while ((*node)->type == LBRACE || (*node)->type == RBRACE)
+		(*node) = (*node)->next;
 	cmd = ast_new(*node);
 	argc = count_argc(*node);
 	cmd->literal = parse_cmd_args(*node, argc);
@@ -51,7 +52,7 @@ static int	count_argc(t_token *node)
 
 	count = 0;
 	temp = node;
-	while (temp && temp->type == COMMAND)
+	while (temp && temp->type == WORD)
 	{
 		temp = temp->next;
 		count++;

@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 16:17:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/25 17:37:41 by isahmed          ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   minishell.c										:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: isahmed <isahmed@student.42.fr>			+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2025/03/21 16:17:20 by isahmed		   #+#	#+#			 */
+/*   Updated: 2025/04/25 17:37:41 by isahmed		  ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -20,25 +20,45 @@ TODO:
 4. Signals
 */
 
+/*
+BUGS:
+1. Execution breaks when a bad command name is given; stop forking and execve if a bad name is given
+2. while validating the token list, also validate brackets and quotes
+*/
+
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
 
-int main(int ac, char *av[], char *envp[])
+void	ft_perror(void)
+{
+	perror("minishell: ");
+}
+
+void	custom_error(char *str, char *msg)
+{
+	write(2, "minishell: ", 7);
+	write(2, msg, ft_strlen(msg));
+	write(2, ": ", 2);
+	write(2, str, ft_strlen(str));
+	write(2, "\n", 1);
+}
+
+int	main(int ac, char *av[], char *envp[])
 {
 	char	*line;
 	t_data	*data;
 
 	handle_signals();
 	data = NULL;
-	while (42)		
+	while (42)
 	{
 		line = readline("Prompt: ");
 		if (line && *line)
-		{	
+		{
 			add_history(line);
 			data = init_exec_data(line, envp);
-			if (data->head == NULL)
-				continue;
+			if (data == NULL)
+				continue ;
 			printf("\n***COMMAND EXECUTION***\n");
 			if (data)
 				execute_node(data, data->head);
@@ -57,8 +77,11 @@ t_data	*init_exec_data(char *line, char **envp)
 	if (!data)
 		return (NULL);
 	data->token_list = NULL;
+	data->head = NULL;
 	printf("\n***TOKEN LIST***\n");
-	create_tokens(line, &(data->token_list));
+	if (create_tokens(line, &(data->token_list)) || data->token_list == NULL)
+		return (free_data(data), NULL);
+	print_tokens(&(data->token_list));
 	data->head = parse_tokens(data->token_list);
 	printf("\n*** AST TREE***\n");
 	print_ast(data->head, 3);
@@ -82,12 +105,12 @@ void	testing(t_envp **lst)
 {
 	t_envp	*env_list;
 	char	**env_array;
+	char	str[8] = "ISHAAQ\0";
 
 	env_list = *lst;
 	env_array = stitch_env(env_list);
-	char	str[8] = "ISHAAQ\0";
-    print_envp(lst);
-    printf("\n\n\n");
-	append_node(lst, env_array, str);
-    print_envp(lst);
+	print_envp(lst);
+	printf("\n\n\n");
+	// add_node(lst, env_array, str);
+	print_envp(lst);
 }

@@ -14,7 +14,7 @@
 
 void	print_tokens(t_token **head)
 {
-	t_token *temp;
+	t_token		*temp;
 
 	temp = *head;
 	printf("tokens: {");
@@ -78,4 +78,13 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 		tmp -> next = new;
 		new -> prev = tmp;
 	}
+}
+
+t_token	*ft_lstlast(t_token *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
 }

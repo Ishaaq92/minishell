@@ -12,12 +12,12 @@
 
 #include <minishell.h>
 
-void    exit_cleanup(t_data *data)
+void	exit_cleanup(t_data *data)
 {
 	free_ast(data->head);
 	del_lst(&data->env_llst);
 	del_array(data->envp);
-    exit(1);
+	exit(1);
 }
 
 int	ft_strcmp(char *s1, char *s2)

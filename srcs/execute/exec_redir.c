@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redir.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-04-30 16:21:28 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:28 by avalsang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
@@ -7,46 +18,52 @@ void	reset_redir(t_data *data);
 int		redir_output(t_data *data, t_ast *node);
 int		redir_heredoc(t_data *data, t_ast *node);
 
-int		execute_redir(t_data *data, t_ast *node)
+int	execute_redir(t_data *data, t_ast *node)
 {
-	// if fd is provided with the token atoi and set it as fd
-	if (node->type == REDIRECT_IN)
+	if (node->type == REDIR_IN)
 		redir_input(data, node);
-	else if (node->type == REDIRECT_OUT || node->type == REDIRECT_APPEND)
+	else if (node->type == REDIR_OUT || node->type == OUT_APPEND)
 		redir_output(data, node);
-	else if (node->type == REDIRECT_HEREDOC)
+	else if (node->type == IN_HEREDOC)
 		redir_heredoc(data, node);
 	execute_node(data, node->left);
 	dup2(data->std_fd[0], STDIN_FILENO);
 	reset_redir(data);
+	if (node->type == IN_HEREDOC)
+		unlink("temp");
 	return (0);
 }
 
-int		redir_heredoc(t_data *data, t_ast *node)
+// cat needs the fd to have RDONLY flag I think? look it up TODO
+int	redir_heredoc(t_data *data, t_ast *node)
 {
-	int		fd[2];
-	pid_t	pid;
+	int		temp_fd;
+	char	*buffer;
+	char	*eof;
 
-	if (pipe(fd) < 0)
-		; // pipe failed, print error
-	pid = fork();
-	if (pid < 0)
-		; // forking failed, print error
-	if (pid == 0)
+	temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	eof = node->right->token->literal;
+	if (temp_fd < 0)
+		ft_perror();
+	while (42)
 	{
-		// child
-		// need signals here
-		close(fd[0]);
-		
+		write(1, "> ", 2);
+		buffer = get_next_line(0);
+		if (buffer == NULL)
+			break ;
+		if (ft_strncmp(buffer, eof, ft_strlen(buffer) - 1) == 0)
+			break ;
+		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
 	}
-	else
-	{
-
-	}
-	return (0);	
+	(free(buffer));
+	close(temp_fd);
+	temp_fd = open("temp", O_RDONLY);
+	if (dup2(temp_fd, STDIN_FILENO))
+		;
+	return (0);
 }
 
-int		redir_output(t_data *data, t_ast *node)
+int	redir_output(t_data *data, t_ast *node)
 {
 	int		fd_newfile;
 	int		fd_redir;
@@ -56,22 +73,22 @@ int		redir_output(t_data *data, t_ast *node)
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = 1;
-	if (node->type == REDIRECT_OUT)
+	if (node->type == REDIR_OUT)
 		flag = O_TRUNC;
 	else
 		flag = O_APPEND;
-	fd_newfile = open(node->right->token->literal, O_CREAT | O_WRONLY | flag, 0666);
-	// printf("filename = %s, fd = %i\n", node->right->token->literal, fd_newfile);
+	fd_newfile = open(node->right->token->literal,
+			O_CREAT | O_WRONLY | flag, 0666);
 	if (fd_newfile < 0)
-		; // couldn't create a new file, return error
+		;
 	if (dup2(fd_newfile, fd_redir) == -1)
-		; // failed dup2, print error and exit
+		;
 	return (0);
 }
 
 // TODO: fix the line with three arrows, put the filename in a 
 // more accessible location
-int		redir_input(t_data *data, t_ast *node)
+int	redir_input(t_data *data, t_ast *node)
 {
 	int		fd_newfile;
 	int		fd_redir;
@@ -81,11 +98,10 @@ int		redir_input(t_data *data, t_ast *node)
 	else
 		fd_redir = 0;
 	fd_newfile = open(node->right->token->literal, O_RDONLY);
-	// printf("filename = %s, fd = %i\n", node->right->token->literal, fd_newfile);
 	if (fd_newfile < 0)
-		; // couldn't create a new file, return error
+		;
 	if (dup2(fd_newfile, fd_redir) == -1)
-		; // failed dup2, print error and exit
+		;
 	return (0);
 }
 
