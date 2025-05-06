@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   param_sub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-30 16:20:59 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-30 16:20:59 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/30 16:20:59 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/06 14:20:10 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ void	param_sub(t_data *data, char **str)
 	i = 0;
 	while (*str && (*str)[i])
 	{
+		if ((*str)[i++] == '\'')
+			while ((*str)[i++] != '\'')
+				continue ;
 		if ((*str)[i] == '$')
 		{
 			if ((*str)[i + 1] == '?')
