@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/06 14:22:43 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/06 14:23:32 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,7 @@ void	bi_unset(t_data *data, char *str)
 // str can be in the form 'pwd="/home/tim"'
 void	bi_export(t_data *data, char *str)
 {
-    // Quote Removal.
-    remove_quotes(str);
-    append_node(&data->env_llst, &str, str);
+	append_node(&data->env_llst, &str, str);
 }
 
 void	bi_exit(t_data *data)
