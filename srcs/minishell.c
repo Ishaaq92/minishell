@@ -21,11 +21,7 @@ TODO:
 5. Compiler flags, DO NOT FORGET
 */
 
-/*
-BUGS:
-1. Execution breaks when a bad command name is given; stop forking and execve if a bad name is given
-2. while validating the token list, also validate brackets and quotes
-*/
+
 
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
@@ -48,25 +44,38 @@ int	main(int ac, char *av[], char *envp[])
 {
 	char	*line;
 	t_data	*data;
+	int		exit_status;
 
 	handle_signals();
 	data = NULL;
-	while (42)
+	exit_status = 0;
+	if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
 	{
-		line = readline("Prompt: ");
-		if (line && *line)
+		data = init_exec_data(av[2], envp);
+		if (data)
 		{
-			add_history(line);
-			data = init_exec_data(line, envp);
-			if (data == NULL)
-				continue ;
-			printf("\n***COMMAND EXECUTION***\n");
-			if (data)
-				execute_node(data, data->head);
+			execute_node(data, data->head);
+			exit_status = data->exit_status;
 			free_data(data);
 		}
-		free(line);
+		return (WEXITSTATUS(exit_status));
 	}
+	// while (42)
+	// {
+	// 	line = readline("Prompt: ");
+	// 	if (line && *line)
+	// 	{
+	// 		add_history(line);
+	// 		data = init_exec_data(line, envp);
+	// 		if (data == NULL)
+	// 			continue ;
+	// 		// printf("\n***COMMAND EXECUTION***\n");
+	// 		if (data)
+	// 			execute_node(data, data->head);
+	// 		free_data(data);
+	// 	}
+	// 	free(line);
+	// }
 	return (0);
 }
 
@@ -79,13 +88,13 @@ t_data	*init_exec_data(char *line, char **envp)
 		return (NULL);
 	data->token_list = NULL;
 	data->head = NULL;
-	printf("\n***TOKEN LIST***\n");
+	// printf("\n***TOKEN LIST***\n");
 	if (create_tokens(line, &(data->token_list)) || data->token_list == NULL)
 		return (free_data(data), NULL);
-	print_tokens(&(data->token_list));
+	// print_tokens(&(data->token_list));
 	data->head = parse_tokens(data->token_list);
-	printf("\n*** AST TREE***\n");
-	print_ast(data->head, 3);
+	// printf("\n*** AST TREE***\n");
+	// print_ast(data->head, 3);
 	data->env_llst = set_envp(envp);
 	data->envp = stitch_env(data->env_llst);
 	data->exit_status = 0;

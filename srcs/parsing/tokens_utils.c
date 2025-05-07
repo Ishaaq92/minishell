@@ -71,7 +71,7 @@ int	check_valid_order(t_token **head)
 	while (tmp)
 	{
 		if (tmp->open_quote)
-			return (printf("missing quote\n"), 1);
+			return (ft_perror(), 1);
 		if (tmp->next && tmp->type < 7 && tmp->next->type < 7)
 			return (1);
 		if (tmp->next == NULL && tmp->type < 7)

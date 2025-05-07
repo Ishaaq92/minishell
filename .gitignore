@@ -9,3 +9,5 @@ README.md
 *.o
 
 big_infile
+
+minishell_tester/
