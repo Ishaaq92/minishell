@@ -21,9 +21,11 @@ static char	*get_param_name(char *str)
 	int		i;
 
 	i = 0;
-	if (str[i] && str[i] == '?')
-		i++;
-	while (str[i] && ft_isalnum(str[i]))
+	if (str[i] && (str[i] == '?'))
+		return (ft_strndup(str, 1));
+	else if (str[i] && (str[i] >= '0' && str[i] <= '9'))
+		return (ft_strndup(str, 1));
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	return (ft_strndup(str, i));
 }
@@ -64,7 +66,11 @@ void	param_sub(t_data *data, char **str)
 		if ((*str)[i] == '$')
 		{
 			key = get_param_name((*str) + i + 1);
-			perform_sub(data, str, i, key);
+			if (*key)
+				perform_sub(data, str, i, key);
+			else 
+				i++;
+			free(key);			
 			continue ;
 		}
 		i++;
@@ -95,7 +101,6 @@ static void	perform_sub(t_data *data, char **str, int i, char *key)
 		free(*str);
 		*str = result;
 	}
-	free(key);
 }
 
 static void	copy_latter_half_of_string(char **result, char *str)
