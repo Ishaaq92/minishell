@@ -21,8 +21,7 @@ TODO:
 5. Compiler flags, DO NOT FORGET
 */
 
-
-
+t_data	*init_exec_data(char *line, char **envp, int exit_status);
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
 
@@ -51,35 +50,35 @@ int	main(int ac, char *av[], char *envp[])
 	exit_status = 0;
 	if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
 	{
-		data = init_exec_data(av[2], envp);
+		data = init_exec_data(av[2], envp, exit_status);
 		if (data)
 		{
 			execute_node(data, data->head);
-			exit_status = data->exit_status;
+			exit_status = WEXITSTATUS(data->exit_status);
 			free_data(data);
 		}
 		return (WEXITSTATUS(exit_status));
 	}
-	// while (42)
-	// {
-	// 	line = readline("Prompt: ");
-	// 	if (line && *line)
-	// 	{
-	// 		add_history(line);
-	// 		data = init_exec_data(line, envp);
-	// 		if (data == NULL)
-	// 			continue ;
-	// 		// printf("\n***COMMAND EXECUTION***\n");
-	// 		if (data)
-	// 			execute_node(data, data->head);
-	// 		free_data(data);
-	// 	}
-	// 	free(line);
-	// }
-	return (0);
+	while (42)
+	{
+		line = readline("Prompt: ");
+		if (line && *line)
+		{
+			add_history(line);
+			data = init_exec_data(line, envp, exit_status);
+			if (data == NULL)
+				continue ;
+			if (data)
+				execute_node(data, data->head);
+			exit_status = WEXITSTATUS(data->exit_status);
+			free_data(data);
+		}
+		free(line);
+	}
+	return (exit_status);
 }
 
-t_data	*init_exec_data(char *line, char **envp)
+t_data	*init_exec_data(char *line, char **envp, int exit_status)
 {
 	t_data		*data;
 
@@ -97,11 +96,16 @@ t_data	*init_exec_data(char *line, char **envp)
 	// print_ast(data->head, 3);
 	data->env_llst = set_envp(envp);
 	data->envp = stitch_env(data->env_llst);
-	data->exit_status = 0;
+	data->exit_status = exit_status;
 	data->std_fd[0] = dup(STDIN_FILENO);
 	data->std_fd[1] = dup(STDOUT_FILENO);
 	data->std_fd[2] = dup(STDERR_FILENO);
 	return (data);
+}
+
+t_data	*reset_data_struct(t_data *data)
+{
+
 }
 
 void	free_data(t_data *data)

@@ -82,7 +82,6 @@ void	clean_args(t_data *data, t_ast *node)
 int	execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
-	int		test;
 
 	clean_args(data, node);
 	if (is_builtin(data, node) != 0)
@@ -91,13 +90,13 @@ int	execute_cmd(t_data *data, t_ast *node)
 	pid = fork();
 	if (pid == 0)
 	{
-		test = execve(node->literal[0], node->literal, data->envp);
-		printf("execve return = %i\n", test);
-		exit(1);
+		execve(node->literal[0], node->literal, data->envp);
+		exit(127);
 	}
 	else
 	{
 		waitpid(pid, &data->exit_status, 0);
+		printf("chidl exit status %i\n", WEXITSTATUS(data->exit_status));
 	}
-	return (WEXITSTATUS(data->exit_status));
+	return (data->exit_status);
 }
