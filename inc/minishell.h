@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/28 14:28:40 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/09 19:20:15 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,6 @@ int		check_valid_order(t_token **head);
 void	exit_cleanup(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 
-// parser.c
-void	parser(char *input, char *envp[]);
-
 // ft_split2.c
 char	**ft_split2(char *str, char *charset);
 
@@ -142,17 +139,18 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 // Execution
 
 // env_delete.c
-void	remove_node(t_envp **lst, char ***envp, char *var);
+void	remove_node(t_envp **lst, char *var);
 void	del_array(char **envp);
 void	del_lst(t_envp **lst);
 
 // env_create.c
+void	add_node(t_data *data, char *string);
 char	**stitch_env(t_envp *head);
 t_envp	*set_envp(char **envp);
-void	append_node(t_envp **lst, char **array, char *string);
 void	env_alter(t_data *data, char *key, char *value);
 
 // env_utils.c
+t_envp	*check_envp(t_data *data, char *key);
 void	print_envp(t_envp **lst);
 void	env_lstadd_back(t_envp **lst, t_envp *new);
 char	*value_envp(t_envp **lst, char *str);

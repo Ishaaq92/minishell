@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_delete.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:41:03 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/04/27 14:26:54 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/09 19:11:08 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	del_array(char **envp)
 }
 
 // Works but need to check effects on the array.
-void	remove_node(t_envp **lst, char ***envp, char *var)
+void	remove_node(t_envp **lst, char *var)
 {
 	t_envp	*curr;
 	t_envp	*prev;
@@ -64,6 +64,4 @@ void	remove_node(t_envp **lst, char ***envp, char *var)
 		prev = curr;
 		curr = curr->next;
 	}
-	del_array(*envp);
-	*envp = stitch_env(*lst);
 }

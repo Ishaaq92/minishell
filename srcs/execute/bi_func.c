@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/06 14:53:23 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/09 19:21:35 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,14 @@ void	bi_env(t_data *data)
 
 void	bi_unset(t_data *data, char *str)
 {
-	remove_node(&data->env_llst, &data->envp, str);
+	remove_node(&data->env_llst, str);
 }
 
 // str must be the full string eg. 'pwd=/home/tim'
 // str can be in the form 'pwd="/home/tim"'
 void	bi_export(t_data *data, char *str)
 {
-	append_node(&data->env_llst, &str, str);
+	add_node(data, str);
 }
 
 void	bi_exit(t_data *data)

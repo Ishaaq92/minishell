@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_create.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/28 14:19:56 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/09 19:21:01 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,17 @@ static t_envp		*env_add(void);
 int					ft_lstsize(t_envp *lst);
 
 // MUST INCLUDE FULL STRING: eg. 'PWD=/Users/tim'
-void	add_node(t_envp **lst, char **array, char *string)
+void	add_node(t_data *data, char *string)
 {
 	t_envp	*new;	
+	t_envp	*lst;
+	char	**array;
 
+	lst = data->env_llst;
+	array = data->envp;
 	new = env_add();
 	new ->literal = string;
-	env_lstadd_back(lst, new);
+	env_lstadd_back(&lst, new);
 	del_array(array);
 }
 
