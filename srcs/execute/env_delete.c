@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:41:03 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/05/09 19:11:08 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/09 21:47:27 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	del_lst(t_envp **lst)
 	while (curr != NULL)
 	{
 		tmp = curr->next;
-		free(curr->literal);
+		if (curr->literal)
+			free(curr->literal);
 		free(curr);
 		curr = tmp;
 	}
@@ -35,6 +36,8 @@ void	del_array(char **envp)
 {
 	int	i;
 
+	if (!envp)
+		return ;
 	i = 0;
 	while (envp[i] != 0)
 		free(envp[i++]);
