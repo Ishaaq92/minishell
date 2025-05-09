@@ -30,11 +30,9 @@ void	ft_perror(void)
 	perror("minishell: ");
 }
 
-void	custom_error(char *str, char *msg)
+void	custom_error(char *str)
 {
 	write(2, "minishell: ", 7);
-	write(2, msg, ft_strlen(msg));
-	write(2, ": ", 2);
 	write(2, str, ft_strlen(str));
 	write(2, "\n", 1);
 }
@@ -110,9 +108,10 @@ t_data	*reset_data_struct(t_data *data)
 
 void	free_data(t_data *data)
 {
-	ft_lstclear(&data->token_list);
-	free_ast(data->head);
-	free(data);
+	// ft_lstclear(&data->token_list);
+	// free_ast(data->head);
+	exit_cleanup(data);
+	// free(data);
 }
 
 void	testing(t_envp **lst)

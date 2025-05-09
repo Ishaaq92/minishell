@@ -20,6 +20,21 @@
 // env: DONE
 // pwd: DONE
 
+int	echo_args(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (str[i++] != '-')
+		return (1);
+	while (str[i] == 'n')
+		i++;
+	if (str[i] != '\0')
+		return (1);
+	return (0);
+}
+
+
 void	bi_echo(t_data *data, t_ast *node)
 {
 	int		i;
@@ -27,6 +42,8 @@ void	bi_echo(t_data *data, t_ast *node)
 
 	args = node->literal;
 	i = 1;
+	while (!echo_args(args[i]))
+		i++;
 	if (args == NULL)
 	{
 		printf("\n");
@@ -35,10 +52,11 @@ void	bi_echo(t_data *data, t_ast *node)
 	while (args[i] != NULL)
 	{
 		printf("%s", args[i++]);
-		if (args[i])
+		if (args[i] && *args[i])
 			printf(" ");
 	}
-	printf("\n");
+	if (echo_args(args[1]) == 1)
+		printf("\n");
 }
 
 int	bi_cd(t_data *data, t_ast *node)

@@ -22,7 +22,7 @@ void	exit_cleanup(t_data *data)
 	del_array(data->envp);
 	ft_lstclear(&data->token_list);
 	free(data);
-	exit(WEXITSTATUS(exit_status));
+	// exit(WEXITSTATUS(exit_status));
 }
 
 int	ft_strcmp(char *s1, char *s2)
