@@ -13,3 +13,9 @@
 11. 
 
 
+## Built-in bugs:
+1. echo: the -n flag itself is being printed when it shouldn't
+2. "echo -nn bonjour": should print "bonjour"(no newline)
+3. "echo -n -n -n bonjour": should only print "bonjour"
+4. 
+

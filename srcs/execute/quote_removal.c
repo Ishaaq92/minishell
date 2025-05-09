@@ -17,10 +17,9 @@ static void	collapse_quotes(char *str, int *i, char quote_char);
 void	remove_quotes(char *str)
 {
 	int		i;
-	int		end_quote;
 
-	i = -1;
-	while (str[++i])
+	i = 0;
+	while (str[i])
 	{
 		if (str[i] == '\'')
 			collapse_quotes(str, &i, str[i]);
@@ -28,6 +27,8 @@ void	remove_quotes(char *str)
 			collapse_quotes(str, &i, str[i]);
 		else if (str[i] == '\\')
 			ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
+		else
+			i++;
 	}
 }
 
@@ -38,5 +39,4 @@ static void	collapse_quotes(char *str, int *i, char quote_char)
 		(*i)++;
 	if (str[*i] != '\0')
 		ft_memmove(str + *i, str + *i + 1, ft_strlen(str + *i));
-	*i = -1;
 }

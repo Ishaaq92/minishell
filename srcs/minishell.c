@@ -57,7 +57,7 @@ int	main(int ac, char *av[], char *envp[])
 			exit_status = WEXITSTATUS(data->exit_status);
 			free_data(data);
 		}
-		return (WEXITSTATUS(exit_status));
+		return (exit_status);
 	}
 	while (42)
 	{

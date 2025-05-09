@@ -96,7 +96,7 @@ int	execute_cmd(t_data *data, t_ast *node)
 	else
 	{
 		waitpid(pid, &data->exit_status, 0);
-		printf("chidl exit status %i\n", WEXITSTATUS(data->exit_status));
+		// printf("chidl exit status %i\n", WEXITSTATUS(data->exit_status));
 	}
 	return (data->exit_status);
 }

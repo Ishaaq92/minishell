@@ -28,25 +28,34 @@ static char	*get_param_name(char *str)
 	return (ft_strndup(str, i));
 }
 
+void	skip_quotes(t_data *data, char **str, int *dquote, int *i)
+{
+	if ((*str)[*i] == '\"')
+		(*dquote)++;
+	if ((*str)[*i] == '\'')
+	{
+		(*i)++;
+		while ((*str)[(*i)] != '\'' && (*dquote % 2) == 0)
+			(*i)++;
+	}
+}
+
 // put me in coach
 void	param_sub(t_data *data, char **str)
 {
 	int		i;
+	int		dquote;
 	char	*key;
+	
 
 	i = 0;
+	dquote = 0;
 	while (*str && (*str)[i])
 	{
-		if ((*str)[i] == '\'')
-		{
-			while ((*str)[i++] != '\'')
-				continue ;
-			i++;
-		}
+		skip_quotes(data, str, &dquote, &i);
 		if ((*str)[i] == '$')
 		{
 			key = get_param_name((*str) + i + 1);
-			// printf("param = %s\n", key);
 			perform_sub(data, str, i, key);
 		}
 		i++;
@@ -64,8 +73,6 @@ static void	perform_sub(t_data *data, char **str, int i, char *key)
 		sub_value = ft_itoa(data->exit_status);
 	else
 		sub_value = value_envp(&data->env_llst, key);
-	// if (sub_value)
-	// {
 	result = ft_strndup((*str), i);
 	temp = result;
 	if (sub_value)
@@ -73,9 +80,7 @@ static void	perform_sub(t_data *data, char **str, int i, char *key)
 		result = ft_strjoin(temp, sub_value);
 		free(temp);
 	}
-
 	copy_latter_half_of_string(&result, *str + ft_strlen(key) + i + 1);
-	// }
 	if (result)
 	{
 		free(*str);
