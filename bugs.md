@@ -19,3 +19,6 @@
 3. "echo -n -n -n bonjour": should only print "bonjour"
 4. if one of the arguments in echo is blank, do not print anything
 
+
+## Stupid edge cases:
+1. "..": should have exit code 127, but instead gives exit code 126.

@@ -75,9 +75,12 @@ int	bi_cd(t_data *data, t_ast *node)
 		new_path = ft_strdup(node->literal[1]);
 	if (access(new_path, F_OK) == -1)
 	{
-		printf("minishell: cd: %s: No such file or directory\n", new_path);
+		// this was changed because printf prints to STDOUT, not STDERR
+		// printf("minishell: cd: %s: No such file or directory\n", new_path);
+		custom_error(node->literal[1], "No such file or directory");
 		if (new_path)
 			free(new_path);
+		data->exit_status = 1;
 		return (1);
 	}
 	old_path = getcwd(NULL, 0);

@@ -32,7 +32,7 @@ int	execute_redir(t_data *data, t_ast *node)
 	reset_redir(data);
 	if (node->type == IN_HEREDOC)
 		unlink("temp");
-	return (0);
+	return (data->exit_status);
 }
 
 // cat needs the fd to have RDONLY flag I think? look it up TODO
