@@ -19,7 +19,7 @@ void	del_lst(t_envp **lst)
 	t_envp	*curr;
 
 	curr = *lst;
-	while (curr->next != NULL)
+	while (curr != NULL)
 	{
 		tmp = curr->next;
 		if (curr->literal)
@@ -39,7 +39,7 @@ void	del_array(char **envp)
 	if (!envp)
 		return ;
 	i = 0;
-	while (envp[i] != 0)
+	while (envp[i] != NULL)
 		free(envp[i++]);
 	free(envp);
 }

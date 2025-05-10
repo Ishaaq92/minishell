@@ -25,9 +25,10 @@ void	add_node(t_data *data, char *string)
 	lst = data->env_llst;
 	array = data->envp;
 	new = env_add();
-	new ->literal = string;
+	new->literal = ft_strdup(string);
 	env_lstadd_back(&lst, new);
 	del_array(array);
+	data->envp = stitch_env(lst);
 }
 
 t_envp	*set_envp(char **envp)
