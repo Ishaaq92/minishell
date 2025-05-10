@@ -52,9 +52,9 @@ int	do_pipe_cmds(t_data *data, t_ast *node)
 		close(fd[1]);
 		if (dup2(fd[0], STDIN_FILENO) == -1)
 			;
-		execute_node(data, node->right);
+		data->exit_status = execute_node(data, node->right);
 		close(fd[0]);
-		waitpid(pid, &data->exit_status, 0);
+		waitpid(pid, NULL, 0);
 	}
-	exit(WEXITSTATUS(data->exit_status));
+	exit(data->exit_status);
 }
