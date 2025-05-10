@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:48:46 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/04/17 22:56:28 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/09 19:14:56 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,22 @@ char	*value_envp(t_envp **lst, char *str)
 		curr = curr->next;
 	}
 	return (NULL);
+}
+
+t_envp	*check_envp(t_data *data, char *key)
+{
+	t_envp	*curr;
+	int		len;
+
+	len = ft_strlen(key);	
+	curr = data->env_llst;
+	while (curr)
+	{
+		if (ft_strncmp(curr->literal, key, len) == 0 && curr->literal[len] == '=')
+			break ;
+		curr = curr->next;
+	}
+	if (curr == NULL)
+		return (NULL);
+	return (curr);
 }

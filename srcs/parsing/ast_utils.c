@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-30 14:31:02 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-30 14:31:02 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/30 14:31:02 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/09 21:45:34 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ void	free_ast(t_ast *ast)
 
 	if (ast == NULL)
 		return ;
-	free_ast(ast->left);
-	free_ast(ast->right);
+	if (ast->left)
+		free_ast(ast->left);
+	if (ast->right)
+		free_ast(ast->right);
 	i = 0;
 	while (ast->literal && ast->literal[i])
 	{

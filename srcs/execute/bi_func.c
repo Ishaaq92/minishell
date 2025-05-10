@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/06 14:53:23 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/09 22:58:42 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 // echo: DONE
 // env: DONE
 // pwd: DONE
+
+static void	swap_dir(t_data *data, t_ast *node);
 
 int	echo_args(char *str)
 {
@@ -59,22 +61,37 @@ void	bi_echo(t_data *data, t_ast *node)
 		printf("\n");
 }
 
+// check case with more than one argument passed into cd
 int	bi_cd(t_data *data, t_ast *node)
 {
-	char	*newdir;
-	char	*cwd;
-	int		i;
+	char	*new_path;
+	char	*old_path;
 
-	cwd = getcwd(NULL, 0);
-	if (chdir(node->literal[1]) == -1)
-		printf("Bad Path\n");
-	env_alter(data, "OLDPWD=", cwd);
-	free(cwd);
-	cwd = getcwd(NULL, 0);	
-	env_alter(data, "PWD=", cwd);
-	free(cwd);
+	if (node->literal[1] == NULL || ft_strcmp(node->literal[1], "~") == 0)
+		new_path = value_envp(&data->env_llst, "HOME");
+	else if (ft_strcmp(node->literal[1], "-") == 0)
+		return (swap_dir(data, node), 0);
+	else
+		new_path = ft_strdup(node->literal[1]);
+	if (access(new_path, F_OK) == -1)
+	{
+		printf("minishell: cd: %s: No such file or directory\n", new_path);
+		if (new_path)
+			free(new_path);
+		return (1);
+	}
+	old_path = getcwd(NULL, 0);
+	if (chdir(new_path) == -1)
+		return(printf("path failed!\n"), 1);
+	env_alter(data, "OLDPWD=", old_path);
+	if (!old_path)
+		free(old_path);
+	env_alter(data, "PWD=", new_path);
+	if (!new_path)
+		free(new_path);
 	return (0);
 }
+
 
 void	bi_pwd(t_data *data)
 {
@@ -99,17 +116,30 @@ void	bi_env(t_data *data)
 
 void	bi_unset(t_data *data, char *str)
 {
-	remove_node(&data->env_llst, &data->envp, str);
+	remove_node(&data->env_llst, str);
 }
 
 // str must be the full string eg. 'pwd=/home/tim'
 // str can be in the form 'pwd="/home/tim"'
 void	bi_export(t_data *data, char *str)
 {
-	add_node(&data->env_llst, &str, str);
+	add_node(data, str);
 }
 
 void	bi_exit(t_data *data)
 {
 	exit_cleanup(data);
+}
+
+static void	swap_dir(t_data *data, t_ast *node)
+{
+	char	*old_path;
+	char	*new_path;
+	
+	old_path = value_envp(&data->env_llst, "OLDPWD");
+	new_path = value_envp(&data->env_llst, "PWD");
+	env_alter(data, "OLDPWD=", new_path);
+	env_alter(data, "PWD=", old_path);
+	free(new_path);
+	free(old_path);
 }
