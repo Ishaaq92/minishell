@@ -106,7 +106,7 @@ void	bi_unset(t_data *data, char *str)
 // str can be in the form 'pwd="/home/tim"'
 void	bi_export(t_data *data, char *str)
 {
-	append_node(&data->env_llst, &str, str);
+	add_node(&data->env_llst, &str, str);
 }
 
 void	bi_exit(t_data *data)

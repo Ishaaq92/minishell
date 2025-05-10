@@ -147,9 +147,9 @@ void	del_array(char **envp);
 void	del_lst(t_envp **lst);
 
 // env_create.c
+void	add_node(t_envp **lst, char **array, char *string);
 char	**stitch_env(t_envp *head);
 t_envp	*set_envp(char **envp);
-void	append_node(t_envp **lst, char **array, char *string);
 void	env_alter(t_data *data, char *key, char *value);
 
 // env_utils.c

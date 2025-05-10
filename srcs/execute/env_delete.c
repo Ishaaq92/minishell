@@ -19,7 +19,7 @@ void	del_lst(t_envp **lst)
 	t_envp	*curr;
 
 	curr = *lst;
-	while (curr != NULL)
+	while (curr->next != NULL)
 	{
 		tmp = curr->next;
 		free(curr->literal);
