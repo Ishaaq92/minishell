@@ -21,7 +21,7 @@ TODO:
 5. Compiler flags, DO NOT FORGET
 */
 
-t_data	*init_exec_data(char *line, char **envp, int exit_status);
+t_data	*init_exec_data(char *line, char **envp, int *exit_status);
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
 
@@ -30,10 +30,12 @@ void	ft_perror(void)
 	perror("minishell: ");
 }
 
-void	custom_error(char *str)
+void	custom_error(char *str, char *msg)
 {
 	write(2, "minishell: ", 12);
 	write(2, str, ft_strlen(str));
+	write(2, ": ", 2);
+	write(2, msg, ft_strlen(msg));
 	write(2, "\n", 1);
 }
 
@@ -48,11 +50,11 @@ int	main(int ac, char *av[], char *envp[])
 	exit_status = 0;
 	if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
 	{
-		data = init_exec_data(av[2], envp, exit_status);
+		data = init_exec_data(av[2], envp, &exit_status);
 		if (data)
 		{
 			execute_node(data, data->head);
-			exit_status = WEXITSTATUS(data->exit_status);
+			exit_status = data->exit_status;
 			free_data(data);
 		}
 		return (exit_status);
@@ -63,12 +65,12 @@ int	main(int ac, char *av[], char *envp[])
 		if (line && *line)
 		{
 			add_history(line);
-			data = init_exec_data(line, envp, exit_status);
+			data = init_exec_data(line, envp, &exit_status);
 			if (data == NULL)
 				continue ;
 			if (data)
 				execute_node(data, data->head);
-			exit_status = WEXITSTATUS(data->exit_status);
+			exit_status = data->exit_status;
 			free_data(data);
 		}
 		free(line);
@@ -76,7 +78,7 @@ int	main(int ac, char *av[], char *envp[])
 	return (exit_status);
 }
 
-t_data	*init_exec_data(char *line, char **envp, int exit_status)
+t_data	*init_exec_data(char *line, char **envp, int *exit_status)
 {
 	t_data		*data;
 
@@ -87,14 +89,17 @@ t_data	*init_exec_data(char *line, char **envp, int exit_status)
 	data->head = NULL;
 	// printf("\n***TOKEN LIST***\n");
 	if (create_tokens(line, &(data->token_list)) || data->token_list == NULL)
+	{
+		*exit_status = 2;
 		return (free_data(data), NULL);
+	}
 	// print_tokens(&(data->token_list));
 	data->head = parse_tokens(data->token_list);
 	// printf("\n*** AST TREE***\n");
 	// print_ast(data->head, 3);
 	data->env_llst = set_envp(envp);
 	data->envp = stitch_env(data->env_llst);
-	data->exit_status = exit_status;
+	data->exit_status = *exit_status;
 	data->std_fd[0] = dup(STDIN_FILENO);
 	data->std_fd[1] = dup(STDOUT_FILENO);
 	data->std_fd[2] = dup(STDERR_FILENO);

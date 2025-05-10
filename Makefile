@@ -19,8 +19,9 @@ BINARY = minishell
 CFILES = minishell.c signals.c  \
 	parsing/ast.c parsing/ast_cmd.c parsing/ast_redir.c parsing/ast_utils.c \
 	parsing/linked_list.c parsing/tokens.c parsing/tokens_utils.c \
-	execute/env_delete.c execute/cmd_path.c execute/env_create.c execute/env_utils.c execute/bi_func.c\
+	execute/env_delete.c execute/cmd_path.c execute/env_create.c execute/env_utils.c execute/bi_func.c \
 	execute/exec.c execute/exec_pipe.c execute/exec_redir.c execute/quote_removal.c execute/param_sub.c \
+	execute/exec_cmd.c \
 	utils/ft_strndup.c utils/ft_split2.c utils/utils.c
 
 VPATH = $(SDIR)

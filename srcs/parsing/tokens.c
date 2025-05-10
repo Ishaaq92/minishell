@@ -41,7 +41,7 @@ int	create_tokens(char *str, t_token **head)
 			ft_lstadd_back(head, token);
 	}
 	if (*head && check_valid_order(head))
-		return (custom_error("syntax error"), 1);
+		return (custom_error("tokens", "syntax error"), 1);
 	return (0);
 }
 

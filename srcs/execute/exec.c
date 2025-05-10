@@ -14,7 +14,6 @@
 
 int		is_builtin(t_data *data, t_ast *node);
 int		execute_logical(t_data *data, t_ast *node);
-int		execute_cmd(t_data *data, t_ast *node);
 
 int	execute_node(t_data *data, t_ast *node)
 {
@@ -36,77 +35,5 @@ int	execute_logical(t_data *data, t_ast *node)
 		data->exit_status = execute_node(data, node->right);
 	else if (node->type == LOGICAL_OR && data->exit_status != 0)
 		data->exit_status = execute_node(data, node->right);
-	return (data->exit_status);
-}
-
-// TODO: change these numbers to macros
-int	is_builtin(t_data *data, t_ast *node)
-{
-	if (!node)
-		return (0);
-	else if (!ft_strcmp(node->literal[0], "echo"))
-		bi_echo(data, node);
-	else if (!ft_strcmp(node->literal[0], "cd"))
-		bi_cd(data, node);
-	else if (!ft_strcmp(node->literal[0], "pwd"))
-		bi_pwd(data);
-	else if (!ft_strcmp(node->literal[0], "export"))
-		bi_export(data, node->literal[0]);
-	else if (!ft_strcmp(node->literal[0], "unset"))
-		bi_unset(data, node->literal[0]);
-	else if (!ft_strcmp(node->literal[0], "env"))
-		bi_env(data);
-	else if (!ft_strcmp(node->literal[0], "exit"))
-		bi_exit(data);
-	else
-		return (0);
-	return (1);
-}
-
-void	clean_args(t_data *data, t_ast *node)
-{
-	int		i;
-
-	i = 0;
-	if (node->type == WORD)
-	{
-		while (node->literal[i])
-		{
-			param_sub(data, &node->literal[i]);
-			remove_quotes(node->literal[i]);
-			i++;
-		}
-	}
-}
-
-int	execute_cmd(t_data *data, t_ast *node)
-{
-	pid_t	pid;
-	DIR		*dir;
-
-	clean_args(data, node);
-	if (is_builtin(data, node))
-		return (data->exit_status);
-	if (find_cmd_path(node, data->env_llst))
-	{
-		if (ft_strchr(node->literal[0], '/'))
-			custom_error("No such file or directory\n");
-		else
-			custom_error("command not found\n");
-		return (127);
-	}
-	pid = fork();
-	if (pid == 0)
-	{
-		dir = opendir(node->literal[0]);
-		if (dir)
-			(custom_error("Is a directory\n"), closedir(dir), exit(126));
-		execve(node->literal[0], node->literal, stitch_env(data->env_llst));
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		waitpid(pid, &data->exit_status, 0);
-	}
 	return (data->exit_status);
 }

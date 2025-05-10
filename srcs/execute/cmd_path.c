@@ -40,7 +40,7 @@ int	find_cmd_path(t_ast *node, t_envp *env_list)
 		free(test_path);
 		i++;
 	}
-	return (perror(node->literal[0]), free_paths(paths), 1);
+	return (free_paths(paths), 1);
 }
 
 static char	**get_pathlist(t_envp *env_list)

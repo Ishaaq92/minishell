@@ -91,7 +91,7 @@ typedef struct s_data
 
 // "main" minishell.c
 void	ft_perror(void);
-void	custom_error(char *str);
+void	custom_error(char *str, char *msg);
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
@@ -168,6 +168,9 @@ int		execute_pipe(t_data *data, t_ast *node);
 
 // exec_redir.c
 int		execute_redir(t_data *data, t_ast *node);
+
+// exec_cmd.c
+int		execute_cmd(t_data *data, t_ast *node);
 
 // quote_removal.c
 void	remove_quotes(char *str);
