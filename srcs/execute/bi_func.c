@@ -43,14 +43,14 @@ void	bi_echo(t_data *data, t_ast *node)
 	char	**args;
 
 	args = node->literal;
-	i = 1;
-	while (!echo_args(args[i]))
-		i++;
-	if (args == NULL)
+	if (args == NULL || args[1] == NULL)
 	{
 		printf("\n");
 		return ;
 	}
+	i = 1;
+	while (args[i] && !echo_args(args[i]))
+		i++;
 	while (args[i] != NULL)
 	{
 		printf("%s", args[i++]);
