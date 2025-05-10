@@ -21,6 +21,8 @@
 # include <readline/history.h>
 # include <fcntl.h>
 # include <sys/wait.h> // for wait functions
+#include <sys/types.h>
+#include <dirent.h> // for opendir
 
 enum e_commands
 {

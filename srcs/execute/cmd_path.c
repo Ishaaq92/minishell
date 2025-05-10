@@ -22,7 +22,7 @@ int	find_cmd_path(t_ast *node, t_envp *env_list)
 	char	**paths;
 	int		i;
 
-	if (access(node->literal[0], F_OK) == 0)
+	if (access(node->literal[0], X_OK) == 0)
 		return (0);
 	paths = get_pathlist(env_list);
 	i = 0;

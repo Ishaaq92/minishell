@@ -32,7 +32,7 @@ void	ft_perror(void)
 
 void	custom_error(char *str)
 {
-	write(2, "minishell: ", 7);
+	write(2, "minishell: ", 12);
 	write(2, str, ft_strlen(str));
 	write(2, "\n", 1);
 }

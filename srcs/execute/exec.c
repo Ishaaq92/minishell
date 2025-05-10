@@ -82,21 +82,31 @@ void	clean_args(t_data *data, t_ast *node)
 int	execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
+	DIR		*dir;
 
 	clean_args(data, node);
-	if (is_builtin(data, node) != 0)
-		return (0);
-	find_cmd_path(node, data->env_llst);
+	if (is_builtin(data, node))
+		return (data->exit_status);
+	if (find_cmd_path(node, data->env_llst))
+	{
+		if (ft_strchr(node->literal[0], '/'))
+			custom_error("No such file or directory\n");
+		else
+			custom_error("command not found\n");
+		return (127);
+	}
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(node->literal[0], node->literal, data->envp);
-		exit(127);
+		dir = opendir(node->literal[0]);
+		if (dir)
+			(custom_error("Is a directory\n"), closedir(dir), exit(126));
+		execve(node->literal[0], node->literal, stitch_env(data->env_llst));
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
 		waitpid(pid, &data->exit_status, 0);
-		// printf("chidl exit status %i\n", WEXITSTATUS(data->exit_status));
 	}
 	return (data->exit_status);
 }
