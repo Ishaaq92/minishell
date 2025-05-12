@@ -81,7 +81,7 @@ int	redir_output(t_data *data, t_ast *node)
 	fd_newfile = open(node->right->token->literal,
 			O_CREAT | O_WRONLY | flag, 0666);
 	if (fd_newfile < 0)
-		;
+		custom_error(node->right->token->literal, "No such file or directory");;
 	if (dup2(fd_newfile, fd_redir) == -1)
 		;
 	return (0);
@@ -94,13 +94,13 @@ int	redir_input(t_data *data, t_ast *node)
 	int		fd_newfile;
 	int		fd_redir;
 
-	if (ft_isdigit(node->token->literal[0]))
+	if (ft_isdigit(*node->token->literal))
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = 0;
 	fd_newfile = open(node->right->token->literal, O_RDONLY);
 	if (fd_newfile < 0)
-		;
+		custom_error(node->right->token->literal, "No such file or directory");
 	if (dup2(fd_newfile, fd_redir) == -1)
 		;
 	return (0);

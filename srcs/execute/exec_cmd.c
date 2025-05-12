@@ -53,9 +53,9 @@ int	execute_cmd(t_data *data, t_ast *node)
 	if (find_cmd_path(node, data->env_llst))
 	{
 		if (ft_strchr(node->literal[0], '/'))
-			custom_error(node->literal[0], "No such file or directory\n");
+			custom_error(node->literal[0], "No such file or directory");
 		else
-			custom_error(node->literal[0], "command not found\n");
+			custom_error(node->literal[0], "command not found");
 		return (127);
 	}
 	pid = fork();

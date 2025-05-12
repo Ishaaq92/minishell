@@ -1,24 +1,31 @@
 ## Tester feedback:
 
-1. Execution breaks when a bad command name is given; stop forking and execve if a bad name is given
-2. while validating the token list, also validate brackets
-3. wrong exit codes: 139 for bad syntax (?), 127 for bad command name
-4. make sure you're treating single and double quotes appropriately for parameter sub
-5. cd followed by blank is incorrect > needs to go to $HOME right
-6. cd followed by bad path needs to return exit code 1, and remove the "Bad Path" message
-7. "echo oui | echo non | echo something | grep oui": this should return 1, not zero
-8. "unset TES\T" leads to seg fault. Possibly due to quote removal?
-9. export needs to return exit code 1 in a bunch of scenarios
-10. exit needs to return the exit status provided as argument, and that argument needs to be checked for valid input (no negatives, no alpha, etc)
-11. 
+1. while validating the token list, also validate brackets
+4. cd followed by blank needs to use $HOME env var
+5. "unset TES\T" leads to syntax error. quote removal function?
+6. export needs to return exit code 1 for bad inputs, like TES!T=123
+7. whatever changes made to export also apply to unset
+8. exit needs to return the exit status provided as argument, and that argument needs to be checked for valid input (no negatives, no alpha, etc)'
+9. bash shell level is 3, ours is 2. idk
 
 
 ## Built-in bugs:
-1. echo: the -n flag itself is being printed when it shouldn't
-2. "echo -nn bonjour": should print "bonjour"(no newline)
-3. "echo -n -n -n bonjour": should only print "bonjour"
-4. if one of the arguments in echo is blank, do not print anything
-
+1. exit 0 0: segfaults, also exit code should be 1
+2. exit -1: code should be 255
+3. exit wrong, exit --0: exit code is 2 because arg is NaN
+4. env | grep "_=": bash returns _=/usr/bin/env, what should minishell return?
+5. 
 
 ## Stupid edge cases:
-1. "..": should have exit code 127, but instead gives exit code 126.
+..
+- should have exit code 127, but instead gives exit code 126.
+
+echo aaa "" | cat -e
+- should print a space after aaa
+
+
+
+
+## Tester links
+
+https://github.com/thallard/minishell_tester

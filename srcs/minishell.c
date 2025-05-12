@@ -48,9 +48,41 @@ int	main(int ac, char *av[], char *envp[])
 	handle_signals();
 	data = NULL;
 	exit_status = 0;
-	if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
+	// if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
+	// if (ac > 1)
+	// {
+	// 	data = init_exec_data(ft_strtrim(get_next_line(fileno(stdin)), "\n"), envp, &exit_status);
+	// 	if (data)
+	// 	{
+	// 		execute_node(data, data->head);
+	// 		exit_status = data->exit_status;
+	// 		free_data(data);
+	// 	}
+	// 	return (exit_status);
+	// }
+	if (isatty(fileno(stdin)))
 	{
-		data = init_exec_data(av[2], envp, &exit_status);
+		while (42)
+		{
+			line = readline("Prompt: ");
+			if (line && *line)
+			{
+				add_history(line);
+				data = init_exec_data(line, envp, &exit_status);
+				if (data == NULL)
+					continue ;
+				if (data)
+					execute_node(data, data->head);
+				exit_status = data->exit_status;
+				free_data(data);
+			}
+			free(line);
+		}
+	}
+	else
+	{
+		line = get_next_line(fileno(stdin));
+		data = init_exec_data(ft_strtrim(line, "\n"), envp, &exit_status);
 		if (data)
 		{
 			execute_node(data, data->head);
@@ -59,22 +91,7 @@ int	main(int ac, char *av[], char *envp[])
 		}
 		return (exit_status);
 	}
-	while (42)
-	{
-		line = readline("Prompt: ");
-		if (line && *line)
-		{
-			add_history(line);
-			data = init_exec_data(line, envp, &exit_status);
-			if (data == NULL)
-				continue ;
-			if (data)
-				execute_node(data, data->head);
-			exit_status = data->exit_status;
-			free_data(data);
-		}
-		free(line);
-	}
+	
 	return (exit_status);
 }
 
@@ -87,12 +104,14 @@ t_data	*init_exec_data(char *line, char **envp, int *exit_status)
 		return (NULL);
 	data->token_list = NULL;
 	data->head = NULL;
-	// printf("\n***TOKEN LIST***\n");
+	data->envp = NULL;
+	data->env_llst = NULL;
 	if (create_tokens(line, &(data->token_list)) || data->token_list == NULL)
 	{
 		*exit_status = 2;
 		return (free_data(data), NULL);
 	}
+	// printf("\n***TOKEN LIST***\n");
 	// print_tokens(&(data->token_list));
 	data->head = parse_tokens(data->token_list);
 	// printf("\n*** AST TREE***\n");

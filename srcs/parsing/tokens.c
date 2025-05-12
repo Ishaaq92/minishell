@@ -82,6 +82,8 @@ static void	handle_op(char **str, char **literal, t_token *token)
 		i++;
 		if ((*str)[i] == (*str)[i - 1])
 			i++;
+		// while (ft_isdigit((*str)[i]))
+		// 	i++;
 	}
 	else if ((*str)[i] == '(' || (*str)[i] == ')')
 		i++;

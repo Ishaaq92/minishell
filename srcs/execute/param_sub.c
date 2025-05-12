@@ -56,7 +56,6 @@ void	param_sub(t_data *data, char **str)
 	int		dquote;
 	char	*key;
 	
-
 	i = 0;
 	dquote = 0;
 	while (*str && (*str)[i])
@@ -66,10 +65,12 @@ void	param_sub(t_data *data, char **str)
 		if ((*str)[i] == '$')
 		{
 			key = get_param_name((*str) + i + 1);
-			if (*key)
-				perform_sub(data, str, i, key);
-			else 
+			if (!*key && dquote % 2 != 0)
+			{
 				i++;
+				continue ;
+			}
+			perform_sub(data, str, i, key);
 			free(key);			
 			continue ;
 		}
@@ -93,7 +94,7 @@ static void	perform_sub(t_data *data, char **str, int i, char *key)
 	if (sub_value)
 	{
 		result = ft_strjoin(temp, sub_value);
-		free(temp);
+		(free(temp), free(sub_value));
 	}
 	copy_latter_half_of_string(&result, *str + ft_strlen(key) + i + 1);
 	if (result)
