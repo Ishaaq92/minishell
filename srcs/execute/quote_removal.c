@@ -26,7 +26,10 @@ void	remove_quotes(char *str)
 		else if (str[i] == '\"')
 			collapse_quotes(str, &i, str[i]);
 		else if (str[i] == '\\')
+		{
 			ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
+			i++;
+		}
 		else
 			i++;
 	}

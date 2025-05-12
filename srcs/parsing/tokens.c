@@ -123,9 +123,9 @@ static int	handle_quotes(char *str, int *i, t_token *token)
 	char	*temp;
 
 	quote_char = str[*i];
-	token->open_quote = 1;
 	if (quote_char == '\'' || quote_char == '\"')
 	{
+		token->open_quote = 1;
 		(*i)++;
 		while (str[*i])
 		{
@@ -138,7 +138,7 @@ static int	handle_quotes(char *str, int *i, t_token *token)
 		}
 	}
 	else if (quote_char == '\\')
-		(*i) += 2;
+		(*i) += 1;
 	if (token->open_quote)
 		return (1);
 	return (0);

@@ -32,6 +32,11 @@ static char	*get_param_name(char *str)
 
 int	skip_quotes(t_data *data, char **str, int *dquote, int *i)
 {
+	if ((*str)[*i] == '\\')
+	{
+		(*i) += 2;
+		return (1);
+	}
 	if ((*str)[*i] == '\"')
 	{
 		(*dquote)++;
@@ -65,7 +70,7 @@ void	param_sub(t_data *data, char **str)
 		if ((*str)[i] == '$')
 		{
 			key = get_param_name((*str) + i + 1);
-			if (!*key && dquote % 2 != 0)
+			if (!*key && (!(*str)[i + 1] || dquote % 2 != 0))
 			{
 				i++;
 				continue ;

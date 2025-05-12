@@ -23,7 +23,8 @@
 echo aaa "" | cat -e
 - should print a space after aaa
 
-
+/bin/echo $USER$TESTNOTFOUND$HOME$
+- the last dollar sign should be printed, but its skipped
 
 
 ## Tester links
