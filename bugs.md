@@ -26,6 +26,18 @@ echo aaa "" | cat -e
 /bin/echo $USER$TESTNOTFOUND$HOME$
 - the last dollar sign should be printed, but its skipped
 
+/bin/echo 42 > tmp_redir_out 42
+- tester says stdout is wrong compared to bash, but I can't see why. Looks correct afaik
+
+/bin/echo 42 > /dev/null > /dev/null > /dev/null > /dev/null > tmp_redir_out
+- same thing, stdout wrong. No idea why, looks good to me
+
+< out
+- bash has exit code 0 according to tester, idk why. Should maybe just ignore
+
+
+
+
 
 ## Tester links
 

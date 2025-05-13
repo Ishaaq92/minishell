@@ -171,6 +171,7 @@ int		execute_redir(t_data *data, t_ast *node);
 
 // exec_cmd.c
 int		execute_cmd(t_data *data, t_ast *node);
+void	clean_args(t_data *data, t_ast *node);
 
 // quote_removal.c
 void	remove_quotes(char *str);

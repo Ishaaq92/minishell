@@ -20,13 +20,19 @@ int		redir_heredoc(t_data *data, t_ast *node);
 
 int	execute_redir(t_data *data, t_ast *node)
 {
+	// clean_args(data, node);
+	if (node->type != IN_HEREDOC)
+	{
+		param_sub(data, &node->right->token->literal);
+		remove_quotes(node->right->token->literal);
+	}
 	if (node->type == REDIR_IN)
-		redir_input(data, node);
+		data->exit_status = redir_input(data, node);
 	else if (node->type == REDIR_OUT || node->type == OUT_APPEND)
-		redir_output(data, node);
+		data->exit_status = redir_output(data, node);
 	else if (node->type == IN_HEREDOC)
-		redir_heredoc(data, node);
-	if (node->left)
+		data->exit_status = redir_heredoc(data, node);
+	if (node->left && data->exit_status == 0)
 		execute_node(data, node->left);
 	dup2(data->std_fd[0], STDIN_FILENO);
 	reset_redir(data);
@@ -56,8 +62,7 @@ int	redir_heredoc(t_data *data, t_ast *node)
 			break ;
 		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
 	}
-	(free(buffer));
-	close(temp_fd);
+	(free(buffer), close(temp_fd));
 	temp_fd = open("temp", O_RDONLY);
 	if (dup2(temp_fd, STDIN_FILENO))
 		;
@@ -81,7 +86,10 @@ int	redir_output(t_data *data, t_ast *node)
 	fd_newfile = open(node->right->token->literal,
 			O_CREAT | O_WRONLY | flag, 0666);
 	if (fd_newfile < 0)
-		custom_error(node->right->token->literal, "No such file or directory");;
+	{
+		custom_error(node->right->token->literal, "No such file or directory");
+		return (1);
+	}
 	if (dup2(fd_newfile, fd_redir) == -1)
 		;
 	return (0);
@@ -100,7 +108,10 @@ int	redir_input(t_data *data, t_ast *node)
 		fd_redir = 0;
 	fd_newfile = open(node->right->token->literal, O_RDONLY);
 	if (fd_newfile < 0)
+	{
 		custom_error(node->right->token->literal, "No such file or directory");
+		return (1);
+	}
 	if (dup2(fd_newfile, fd_redir) == -1)
 		;
 	return (0);
