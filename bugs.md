@@ -6,8 +6,6 @@
 6. export needs to return exit code 1 for bad inputs, like TES!T=123
 7. whatever changes made to export also apply to unset
 8. exit needs to return the exit status provided as argument, and that argument needs to be checked for valid input (no negatives, no alpha, etc)'
-9. bash shell level is 3, ours is 2. idk
-
 
 ## Built-in bugs:
 1. exit 0 0: segfaults, also exit code should be 1
@@ -23,8 +21,9 @@
 echo aaa "" | cat -e
 - should print a space after aaa
 
-/bin/echo $USER$TESTNOTFOUND$HOME$
-- the last dollar sign should be printed, but its skipped
+ls|cat Makefile|cat<<asd>out
+'$USER'
+- parameter substitution in heredoc happens even if in quotes...
 
 /bin/echo 42 > tmp_redir_out 42
 - tester says stdout is wrong compared to bash, but I can't see why. Looks correct afaik
@@ -32,13 +31,21 @@ echo aaa "" | cat -e
 /bin/echo 42 > /dev/null > /dev/null > /dev/null > /dev/null > tmp_redir_out
 - same thing, stdout wrong. No idea why, looks good to me
 
-< out
-- bash has exit code 0 according to tester, idk why. Should maybe just ignore
+/bin/env | grep "_="
 
+cd "$H"O"ME"/Desktop/
+echo $?
+echo $?
+- typing echo $? twice doesn't change second exit code to 0
 
+/$NOVAR
+- behaves weirdly, need to investigate
 
+'''''''''''''''' echo ok
+- should treat '' as a command
 
+echo $/ $/ 
+- should output $/ $/
 
 ## Tester links
-
-https://github.com/thallard/minishell_tester
+https://github.com/zstenger93/42_minishell_tester

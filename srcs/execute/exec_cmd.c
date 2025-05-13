@@ -78,9 +78,9 @@ static void	exec_child(char **cmd, t_envp *env_list)
 	dir = opendir(cmd[0]);
 	envp = stitch_env(env_list);
 	if (!envp)
-		(custom_error("malloc: ", "memory allocation failed\n"), exit(EXIT_FAILURE));
+		(custom_error("malloc", "memory allocation failed"), exit(EXIT_FAILURE));
 	if (dir)
-		(custom_error(cmd[0], "Is a directory\n"), closedir(dir), exit(126));
+		(custom_error(cmd[0], "Is a directory"), closedir(dir), exit(126));
 	execve(cmd[0], cmd, envp);
 	exit(EXIT_FAILURE);
 }

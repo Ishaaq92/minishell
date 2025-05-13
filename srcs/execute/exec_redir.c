@@ -50,12 +50,13 @@ int	redir_heredoc(t_data *data, t_ast *node)
 
 	temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	eof = node->right->token->literal;
+	remove_quotes(eof);
 	if (temp_fd < 0)
 		ft_perror();
 	while (42)
 	{
-		write(1, "> ", 2);
-		buffer = get_next_line(0);
+		write(data->std_fd[STDOUT_FILENO], "> ", 2);
+		buffer = get_next_line(data->std_fd[STDIN_FILENO]);
 		if (buffer == NULL)
 			break ;
 		if (ft_strncmp(buffer, eof, ft_strlen(buffer) - 1) == 0)
