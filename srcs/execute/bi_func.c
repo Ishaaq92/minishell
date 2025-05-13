@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/09 22:58:42 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/13 18:18:11 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,14 @@ int	echo_args(char *str)
 }
 
 
-void	bi_echo(t_data *data, t_ast *node)
+int	bi_echo(t_data *data, t_ast *node)
 {
 	int		i;
 	char	**args;
 
 	args = node->literal;
 	if (args == NULL || args[1] == NULL)
-	{
-		printf("\n");
-		return ;
-	}
+		return (printf("\n"), 0);
 	i = 1;
 	while (args[i] && !echo_args(args[i]))
 		i++;
@@ -59,6 +56,7 @@ void	bi_echo(t_data *data, t_ast *node)
 	}
 	if (echo_args(args[1]) == 1)
 		printf("\n");
+	return (0);
 }
 
 // check case with more than one argument passed into cd
@@ -75,9 +73,7 @@ int	bi_cd(t_data *data, t_ast *node)
 		new_path = ft_strdup(node->literal[1]);
 	if (access(new_path, F_OK) == -1)
 	{
-		// this was changed because printf prints to STDOUT, not STDERR
-		// printf("minishell: cd: %s: No such file or directory\n", new_path);
-		custom_error(node->literal[1], "No such file or directory");
+		cd_custom_error(node->literal[1], "No such file or directory");
 		if (new_path)
 			free(new_path);
 		data->exit_status = 1;
@@ -96,7 +92,7 @@ int	bi_cd(t_data *data, t_ast *node)
 }
 
 
-void	bi_pwd(t_data *data)
+int	bi_pwd(t_data *data)
 {
 	char	*pwd;
 
@@ -105,7 +101,7 @@ void	bi_pwd(t_data *data)
 	free(pwd);
 }
 
-void	bi_env(t_data *data)
+int	bi_env(t_data *data)
 {
 	char	**env;
 	int		i;
@@ -117,20 +113,41 @@ void	bi_env(t_data *data)
 	data->exit_status = 0;
 }
 
-void	bi_unset(t_data *data, char *str)
+int	bi_unset(t_data *data, t_ast *node)
 {
-	remove_node(&data->env_llst, str);
+	remove_node(&data->env_llst, node->literal[0]);
 }
 
 // str must be the full string eg. 'pwd=/home/tim'
 // str can be in the form 'pwd="/home/tim"'
-void	bi_export(t_data *data, char *str)
+int	bi_export(t_data *data, t_ast *node)
 {
-	add_node(data, str);
+	add_node(data, node->literal[0]);
 }
 
-void	bi_exit(t_data *data)
+int	bi_exit(t_data *data, t_ast *node)
 {
+	char	**args;
+	int		code;
+	int		i;	
+	int		j;	
+	
+	i = 0;
+	code = 0;
+	args = node->literal;
+	while (args && args[0] && args[++i] != NULL)
+	{
+		j = 0;
+		while (args[i][j] && ft_isdigit(args[i][j]) != 0)
+			j++;
+		if (i == 0 && args[i][j] != '\0')
+			return (custom_error("exit","numeric argument required"), 2);
+		else if (i == 0 && args[i][j] == '\0' && j < 11)
+			code = ft_atoi(args[i]);
+	}
+	if (i > 2)
+		return (custom_error("exit","too many arguments"), 2);
+	data->exit_status = code;
 	exit_cleanup(data);
 }
 
