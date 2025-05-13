@@ -54,7 +54,7 @@ int	do_pipe_cmds(t_data *data, t_ast *node)
 			;
 		data->exit_status = execute_node(data, node->right);
 		close(fd[0]);
-		waitpid(pid, NULL, 0);
+		// waitpid(pid, NULL, 0);
 	}
 	exit(data->exit_status);
 }
