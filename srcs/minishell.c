@@ -60,6 +60,8 @@ int	main(int ac, char *av[], char *envp[])
 	// 	}
 	// 	return (exit_status);
 	// }
+	int fd = 0;
+
 	if (isatty(fileno(stdin)))
 	{
 		while (42)
@@ -80,18 +82,21 @@ int	main(int ac, char *av[], char *envp[])
 		}
 	}
 	else
-	{
+	{	
 		line = get_next_line(fileno(stdin));
-		data = init_exec_data(ft_strtrim(line, "\n"), envp, &exit_status);
-		if (data)
+		while (line)
 		{
-			execute_node(data, data->head);
-			exit_status = data->exit_status;
-			free_data(data);
+			data = init_exec_data(ft_strtrim(line, "\n"), envp, &exit_status);
+			if (data)
+			{
+				execute_node(data, data->head);
+				exit_status = data->exit_status;
+				free_data(data);
+				free(line);
+			}
+			line = get_next_line(fileno(stdin));
 		}
-		return (exit_status);
 	}
-	
 	return (exit_status);
 }
 
