@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/13 17:49:21 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/13 20:11:27 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,9 @@ typedef struct s_data
 
 // "main" minishell.c
 void	ft_perror(void);
-int	custom_error(char *str, char *msg);
-int	cd_custom_error(char *str, char *msg);
+int		custom_error(char *str, char *msg);
+int		cd_custom_error(char *str, char *msg);
+void	free_data(t_data *data);
 
 // Handling Signals
 void	handle_ctrl_c(int sig);

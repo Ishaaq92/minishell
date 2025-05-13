@@ -149,10 +149,12 @@ t_data	*reset_data_struct(t_data *data)
 
 void	free_data(t_data *data)
 {
-	// ft_lstclear(&data->token_list);
-	// free_ast(data->head);
-	exit_cleanup(data);
-	// free(data);
+	free_ast(data->head);
+	del_lst(&data->env_llst);
+	del_array(data->envp);
+	ft_lstclear(&data->token_list);
+	free(data);
+	// exit_cleanup(data);
 }
 
 void	testing(t_envp **lst)
