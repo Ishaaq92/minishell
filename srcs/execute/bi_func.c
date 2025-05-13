@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/13 18:18:11 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/13 19:00:50 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,9 +140,9 @@ int	bi_exit(t_data *data, t_ast *node)
 		j = 0;
 		while (args[i][j] && ft_isdigit(args[i][j]) != 0)
 			j++;
-		if (i == 0 && args[i][j] != '\0')
+		if (i == 1 && args[i][j] != '\0')
 			return (custom_error("exit","numeric argument required"), 2);
-		else if (i == 0 && args[i][j] == '\0' && j < 11)
+		else if (i == 1 && args[i][j] == '\0' && j < 11)
 			code = ft_atoi(args[i]);
 	}
 	if (i > 2)
