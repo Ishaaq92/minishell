@@ -30,13 +30,25 @@ void	ft_perror(void)
 	perror("minishell: ");
 }
 
-void	custom_error(char *str, char *msg)
+int	cd_custom_error(char *str, char *msg)
+{
+	write(2, "minishell: ", 12);
+	write(2, "cd: ", 4);
+	write(2, str, ft_strlen(str));
+	write(2, ": ", 2);
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+	return (0);
+}
+
+int	custom_error(char *str, char *msg)
 {
 	write(2, "minishell: ", 12);
 	write(2, str, ft_strlen(str));
 	write(2, ": ", 2);
 	write(2, msg, ft_strlen(msg));
 	write(2, "\n", 1);
+	return (0);
 }
 
 int	main(int ac, char *av[], char *envp[])

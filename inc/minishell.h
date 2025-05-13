@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/09 19:20:15 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/13 17:49:21 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ typedef struct s_data
 
 // "main" minishell.c
 void	ft_perror(void);
-void	custom_error(char *str, char *msg);
+int	custom_error(char *str, char *msg);
+int	cd_custom_error(char *str, char *msg);
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
@@ -180,12 +181,12 @@ void	remove_quotes(char *str);
 void	param_sub(t_data *data, char **str);
 
 // bi_func.c
-void	bi_pwd(t_data *data);
-int		bi_cd(t_data *data, t_ast *node);
-void	bi_env(t_data *data);
-void	bi_export(t_data *data, char *str);
-void	bi_exit(t_data *data);
-void	bi_unset(t_data *data, char *str);
-void	bi_echo(t_data *data, t_ast *node);
+int	bi_pwd(t_data *data);
+int	bi_cd(t_data *data, t_ast *node);
+int	bi_env(t_data *data);
+int	bi_export(t_data *data, t_ast *node);
+int	bi_exit(t_data *data, t_ast *node);
+int	bi_unset(t_data *data, t_ast *node);
+int	bi_echo(t_data *data, t_ast *node);
 
 #endif

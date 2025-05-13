@@ -9,19 +9,19 @@ int	is_builtin(t_data *data, t_ast *node)
 	if (!node)
 		return (0);
 	else if (!ft_strcmp(node->literal[0], "echo"))
-		bi_echo(data, node);
+		data->exit_status = bi_echo(data, node);
 	else if (!ft_strcmp(node->literal[0], "cd"))
-		bi_cd(data, node);
+		data->exit_status = bi_cd(data, node);
 	else if (!ft_strcmp(node->literal[0], "pwd"))
-		bi_pwd(data);
+		data->exit_status = bi_pwd(data);
 	else if (!ft_strcmp(node->literal[0], "export"))
-		bi_export(data, node->literal[0]);
+		data->exit_status = bi_export(data, node);
 	else if (!ft_strcmp(node->literal[0], "unset"))
-		bi_unset(data, node->literal[0]);
+		data->exit_status = bi_unset(data, node);
 	else if (!ft_strcmp(node->literal[0], "env"))
-		bi_env(data);
+		data->exit_status = bi_env(data);
 	else if (!ft_strcmp(node->literal[0], "exit"))
-		bi_exit(data);
+		data->exit_status = bi_exit(data, node);
 	else
 		return (0);
 	return (1);

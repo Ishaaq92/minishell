@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:00:15 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/06 14:53:33 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/13 18:55:42 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exit_cleanup(t_data *data)
 	del_array(data->envp);
 	ft_lstclear(&data->token_list);
 	free(data);
-	// exit(WEXITSTATUS(exit_status));
+	exit(exit_status);
 }
 
 int	ft_strcmp(char *s1, char *s2)
