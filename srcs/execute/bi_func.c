@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/13 19:00:50 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/13 19:05:22 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	bi_exit(t_data *data, t_ast *node)
 			code = ft_atoi(args[i]);
 	}
 	if (i > 2)
-		return (custom_error("exit","too many arguments"), 2);
+		return (custom_error("exit","too many arguments"), 1);
 	data->exit_status = code;
 	exit_cleanup(data);
 }
