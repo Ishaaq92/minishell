@@ -12,11 +12,10 @@
 
 #include "../inc/minishell.h"
 
-static char	*get_param_name(char *str);
 static void	copy_latter_half_of_string(char **result, char *str);
 static void	perform_sub(t_data *data, char **str, int i, char *param);
 
-static char	*get_param_name(char *str)
+char	*get_param_name(char *str)
 {
 	int		i;
 

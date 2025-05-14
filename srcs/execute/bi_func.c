@@ -118,11 +118,76 @@ int	bi_unset(t_data *data, t_ast *node)
 	remove_node(&data->env_llst, node->literal[0]);
 }
 
+// export prints env with no args, each line preceded by "declare -x "
+// to test, output bash and minishell into files, and use this cmd
+//  sort ms.txt bash.txt | uniq -u 
+void	export_empty_arg(t_data *data, t_ast *node)
+{
+	t_envp	*current;
+	char	*key;
+	char	*value;
+
+	current = data->env_llst;
+	while (current)
+	{
+		key = get_param_name(current->literal);
+		value = value_envp(&data->env_llst, key);
+		printf("declare -x %s", key);
+		if (ft_strchr(current->literal, '='))
+			printf("=\"%s\"", value);
+		printf("\n");
+		(free(key), free(value));
+		current = current->next;
+	}
+}
+
+int	is_key_valid(char *key)
+{
+	int		i;
+
+	if (!ft_isalpha(key[0]))
+		return (custom_error(key, "idk, look it up"), 1);
+	i = 0;
+	while (key[i])
+	{
+		if (ft_isalnum(key[i]) && key[i] != '_')
+			return (custom_error(key, "idk"), 1);
+		i++;
+	}
+	return (0);
+}
+
 // str must be the full string eg. 'pwd=/home/tim'
 // str can be in the form 'pwd="/home/tim"'
 int	bi_export(t_data *data, t_ast *node)
 {
-	add_node(data, node->literal[0]);
+	int		i;
+	char	*key;
+	t_envp	*existing;
+
+	if (node->literal[1] == NULL)
+		return (export_empty_arg(data, node), 0);
+	existing = check_envp(data, key);
+	i = 1;
+	while (node->literal[i])
+	{
+		key = get_param_name(node->literal[i]);
+		if (!strchr(node->literal[1], '='))
+		{
+			if (is_key_valid(key))
+				return (free(key), 1);
+			else if (existing)
+			{
+				free(existing->literal);
+				existing->literal = ft_strdup(node->literal[i]);
+			}
+			i++;
+			continue ;
+		}
+		add_node(data, node->literal[i]);
+		i++;
+	}
+	return (free(key), 0);
 }
 
 int	bi_exit(t_data *data, t_ast *node)
