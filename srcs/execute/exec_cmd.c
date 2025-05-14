@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:07:45 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/13 19:07:50 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/14 17:06:18 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	clean_args(t_data *data, t_ast *node)
 	{
 		while (node->literal[i])
 		{
+			// wildcards(data);
 			param_sub(data, &node->literal[i]);
 			remove_quotes(node->literal[i]);
 			i++;
