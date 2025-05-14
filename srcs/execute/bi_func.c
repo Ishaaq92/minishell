@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 15:35:32 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:50:03 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	echo_args(char *str)
 		return (1);
 	return (0);
 }
-
 
 int	bi_echo(t_data *data, t_ast *node)
 {
@@ -108,6 +107,8 @@ int	bi_env(t_data *data)
 	int		i;
 
 	i = 0;
+	del_array(data->envp);
+	data->envp = stitch_env(data->env_llst);
 	env = data->envp;
 	while (env[i] != NULL)
 		printf("%s\n", env[i++]);
@@ -117,7 +118,7 @@ int	bi_env(t_data *data)
 
 int	bi_unset(t_data *data, t_ast *node)
 {
-	remove_node(&data->env_llst, node->literal[0]);
+	remove_node(data, node->literal[1]);
 	return (0);
 }
 

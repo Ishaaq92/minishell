@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/13 20:11:27 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/14 15:44:56 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 // Execution
 
 // env_delete.c
-void	remove_node(t_envp **lst, char *var);
+void	remove_node(t_data *data, char *var);
 void	del_array(char **envp);
 void	del_lst(t_envp **lst);
 

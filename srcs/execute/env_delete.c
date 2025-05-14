@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_delete.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:41:03 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/05/09 21:47:27 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/14 15:45:05 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,19 @@ void	del_array(char **envp)
 }
 
 // Works but need to check effects on the array.
-void	remove_node(t_envp **lst, char *var)
+void	remove_node(t_data *data, char *var)
 {
 	t_envp	*curr;
 	t_envp	*prev;
-
-	curr = *lst;
+	
+	curr = data->env_llst;
 	prev = NULL;
 	while (curr != NULL)
 	{
 		if (ft_strncmp(var, curr->literal, ft_strlen(var)) == 0)
 		{
 			if (prev == NULL)
-				*lst = curr->next;
+				curr = curr->next;
 			else
 				prev->next = curr->next;
 			free(curr->literal);
