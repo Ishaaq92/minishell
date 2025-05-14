@@ -83,7 +83,6 @@ typedef struct s_data
 {
 	t_envp				*env_llst;
 	t_token				*token_list;
-	char				**envp;
 	t_ast				*head;
 	int					exit_status;
 	int					std_fd[3];
@@ -148,7 +147,7 @@ void	del_array(char **envp);
 void	del_lst(t_envp **lst);
 
 // env_create.c
-void	add_node(t_data *data, char *string);
+int		add_node(t_data *data, char *string);
 char	**stitch_env(t_envp *head);
 t_envp	*set_envp(char **envp);
 void	env_alter(t_data *data, char *key, char *value);

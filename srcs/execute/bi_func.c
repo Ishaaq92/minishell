@@ -103,13 +103,16 @@ int	bi_pwd(t_data *data)
 
 int	bi_env(t_data *data)
 {
-	char	**env;
 	int		i;
+	t_envp	*temp;
 
 	i = 0;
-	env = data->envp;
-	while (env[i] != NULL)
-		printf("%s\n", env[i++]);
+	temp = data->env_llst;
+	while (temp != NULL)
+	{
+		printf("%s\n", temp->literal);
+		temp = temp->next;
+	}
 	data->exit_status = 0;
 }
 
@@ -146,15 +149,34 @@ int	is_key_valid(char *key)
 	int		i;
 
 	if (!ft_isalpha(key[0]))
-		return (custom_error(key, "idk, look it up"), 1);
+		return (custom_error(key, "not a valid identifier"), 1);
 	i = 0;
-	while (key[i])
+	while (key[i] && key[i] != '=')
 	{
-		if (ft_isalnum(key[i]) && key[i] != '_')
-			return (custom_error(key, "idk"), 1);
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (custom_error(key, "not a valid identifier"), 1);
 		i++;
 	}
 	return (0);
+}
+
+void	add_update_env(t_data *data, t_ast *node, int i)
+{
+	char	*key;
+	t_envp	*existing;
+
+	key = get_param_name(node->literal[i]);
+	existing = check_envp(data, key);
+	if (!ft_strchr(node->literal[i], '='))
+	{
+		if (existing)
+		{
+			free(existing->literal);
+			existing->literal = ft_strdup(node->literal[i]);
+		}
+	}
+	add_node(data, node->literal[i]);
+	free(key);
 }
 
 // str must be the full string eg. 'pwd=/home/tim'
@@ -162,32 +184,21 @@ int	is_key_valid(char *key)
 int	bi_export(t_data *data, t_ast *node)
 {
 	int		i;
-	char	*key;
-	t_envp	*existing;
+	int		error;
 
 	if (node->literal[1] == NULL)
 		return (export_empty_arg(data, node), 0);
-	existing = check_envp(data, key);
 	i = 1;
+	error = 0;
 	while (node->literal[i])
 	{
-		key = get_param_name(node->literal[i]);
-		if (!strchr(node->literal[1], '='))
-		{
-			if (is_key_valid(key))
-				return (free(key), 1);
-			else if (existing)
-			{
-				free(existing->literal);
-				existing->literal = ft_strdup(node->literal[i]);
-			}
-			i++;
-			continue ;
-		}
-		add_node(data, node->literal[i]);
+		if (is_key_valid(node->literal[i]))
+			error = 1;
+		else
+			add_update_env(data, node, i);
 		i++;
 	}
-	return (free(key), 0);
+	return (error);
 }
 
 int	bi_exit(t_data *data, t_ast *node)
