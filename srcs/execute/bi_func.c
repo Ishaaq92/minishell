@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_func.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/13 19:05:22 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/14 15:35:32 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	bi_pwd(t_data *data)
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
 	free(pwd);
+	return (0);
 }
 
 int	bi_env(t_data *data)
@@ -111,18 +112,22 @@ int	bi_env(t_data *data)
 	while (env[i] != NULL)
 		printf("%s\n", env[i++]);
 	data->exit_status = 0;
+	return (0);
 }
 
 int	bi_unset(t_data *data, t_ast *node)
 {
 	remove_node(&data->env_llst, node->literal[0]);
+	return (0);
 }
 
 // str must be the full string eg. 'pwd=/home/tim'
 // str can be in the form 'pwd="/home/tim"'
 int	bi_export(t_data *data, t_ast *node)
 {
-	add_node(data, node->literal[0]);
+	// TODO: Check if env var name is befitting
+	add_node(data, node->literal[1]);
+	return (0);
 }
 
 int	bi_exit(t_data *data, t_ast *node)
@@ -149,6 +154,8 @@ int	bi_exit(t_data *data, t_ast *node)
 		return (custom_error("exit","too many arguments"), 1);
 	data->exit_status = code;
 	exit_cleanup(data);
+	// Will never return 0
+	return (0);
 }
 
 static void	swap_dir(t_data *data, t_ast *node)

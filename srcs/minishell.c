@@ -142,10 +142,10 @@ t_data	*init_exec_data(char *line, char **envp, int *exit_status)
 	return (data);
 }
 
-t_data	*reset_data_struct(t_data *data)
-{
+// t_data	*reset_data_struct(t_data *data)
+// {
 
-}
+// }
 
 void	free_data(t_data *data)
 {

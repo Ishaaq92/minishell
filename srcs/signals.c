@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:21:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/13 16:42:26 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/14 15:31:29 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_ctrl_c(int sig)
 {
 	(void)sig;
 	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
