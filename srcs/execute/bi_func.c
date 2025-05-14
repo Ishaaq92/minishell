@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 16:04:52 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/14 16:46:03 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	bi_cd(t_data *data, t_ast *node)
 		new_path = ft_strdup(node->literal[1]);
 	if (access(new_path, F_OK) == -1)
 	{
-		cd_custom_error(node->literal[1], "No such file or directory");
+		bi_custom_error("cd", node->literal[1], "No such file or directory");
 		if (new_path)
 			free(new_path);
 		data->exit_status = 1;
@@ -89,7 +89,6 @@ int	bi_cd(t_data *data, t_ast *node)
 		free(new_path);
 	return (0);
 }
-
 
 int	bi_pwd(t_data *data)
 {
@@ -128,11 +127,16 @@ int	bi_export(t_data *data, t_ast *node)
 {
 	// TODO: Check if env var name is befitting
 	char	*var;
+	int		i;
 
+	i = 1;
 	var = node->literal[1];
 	if (!ft_isalpha(var[0]) && var[0] != '_')
+		return (bi_custom_error("export", var, "not an identifier"), 1);
+	while (ft_isalnum(var[i]) || var[i] == '_' || var[i] == '=')
+		i ++;
+	if (var[i] != '\0')
 		return (custom_error("export", "not an identifier"), 1);
-
 	add_node(data, node->literal[1]);
 	return (0);
 }

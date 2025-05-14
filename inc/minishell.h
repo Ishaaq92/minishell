@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 15:44:56 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/14 16:40:11 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ typedef struct s_data
 // "main" minishell.c
 void	ft_perror(void);
 int		custom_error(char *str, char *msg);
-int		cd_custom_error(char *str, char *msg);
+int		bi_custom_error(char * func, char *str, char *msg);
 void	free_data(t_data *data);
 
 // Handling Signals
