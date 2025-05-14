@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 17:17:05 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:20:16 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,7 @@
 // env: DONE
 
 static void	swap_dir(t_data *data, t_ast *node);
-
-int	echo_args(char *str)
-{
-	int		i;
-
-	i = 0;
-	if (str[i++] != '-')
-		return (1);
-	while (str[i] == 'n')
-		i++;
-	if (str[i] != '\0')
-		return (1);
-	return (0);
-}
+int			echo_args(char *str);
 
 int	bi_echo(t_data *data, t_ast *node)
 {
@@ -89,7 +76,6 @@ int	bi_cd(t_data *data, t_ast *node)
 	return (0);
 }
 
-
 static void	swap_dir(t_data *data, t_ast *node)
 {
 	char	*old_path;
@@ -101,4 +87,18 @@ static void	swap_dir(t_data *data, t_ast *node)
 	env_alter(data, "PWD=", old_path);
 	free(new_path);
 	free(old_path);
+}
+
+int	echo_args(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (str[i++] != '-')
+		return (1);
+	while (str[i] == 'n')
+		i++;
+	if (str[i] != '\0')
+		return (1);
+	return (0);
 }

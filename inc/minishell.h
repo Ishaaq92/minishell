@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 16:40:11 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/14 18:17:41 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,9 @@ int		execute_redir(t_data *data, t_ast *node);
 // exec_cmd.c
 int		execute_cmd(t_data *data, t_ast *node);
 void	clean_args(t_data *data, t_ast *node);
+
+// wildcards.c
+void    wildcards(t_data *data, t_ast *node);
 
 // quote_removal.c
 void	remove_quotes(char *str);
