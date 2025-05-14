@@ -6,7 +6,7 @@
 /*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 15:50:03 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/14 16:04:52 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	bi_env(t_data *data)
 	del_array(data->envp);
 	data->envp = stitch_env(data->env_llst);
 	env = data->envp;
-	while (env[i] != NULL)
+	while (env && env[i] != NULL)
 		printf("%s\n", env[i++]);
 	data->exit_status = 0;
 	return (0);
@@ -127,6 +127,12 @@ int	bi_unset(t_data *data, t_ast *node)
 int	bi_export(t_data *data, t_ast *node)
 {
 	// TODO: Check if env var name is befitting
+	char	*var;
+
+	var = node->literal[1];
+	if (!ft_isalpha(var[0]) && var[0] != '_')
+		return (custom_error("export", "not an identifier"), 1);
+
 	add_node(data, node->literal[1]);
 	return (0);
 }
