@@ -8,6 +8,7 @@
 8. unset doesn't seem to work at all atm
 9. exit needs to return the exit status provided as argument, and that argument needs to be checked for valid input (no negatives, no alpha, etc)'
 10. export test+=: do we need to support this bs
+11. parameter substitution where a value has spaces in it needs to be split into separate tokens eg: export T="-n test1 -n test 2" echo $T
 
 ## Built-in bugs:
 1. exit 0 0: segfaults, also exit code should be 1
@@ -60,7 +61,7 @@ https://github.com/zstenger93/42_minishell_tester
 - 11: echo missing space bug
 - 12-15: heredoc
 - 25-31: export again
-- 43-58: more export
+- 46: seems to be fine? export T=e E=c S=h L=o L=ok, $T$E$S$L
 - 70-77: more export
 - 89: export again
 - 101: empty string being ignored and not treated as a command

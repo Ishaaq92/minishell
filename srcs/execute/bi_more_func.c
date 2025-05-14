@@ -88,15 +88,13 @@ void	add_update_env(t_data *data, t_ast *node, int i)
 
 	key = get_param_name(node->literal[i]);
 	existing = check_envp(data, key);
-	if (!ft_strchr(node->literal[i], '='))
+	if (existing && ft_strchr(node->literal[i], '='))
 	{
-		if (existing)
-		{
 			free(existing->literal);
 			existing->literal = ft_strdup(node->literal[i]);
-		}
 	}
-	add_node(data, node->literal[i]);
+	else
+		add_node(data, node->literal[i]);
 	free(key);
 }
 

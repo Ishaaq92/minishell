@@ -27,6 +27,8 @@ int	echo_args(char *str)
 	int		i;
 
 	i = 0;
+	if (!ft_strcmp("", str))
+		return (1);
 	if (str[i] == '-' && !str[i + 1])
 		return (1);
 	if (str[i++] != '-')
@@ -52,7 +54,7 @@ int	bi_echo(t_data *data, t_ast *node)
 	while (args[i] != NULL)
 	{
 		printf("%s", args[i++]);
-		if (args[i] && *args[i])
+		if (args[i])
 			printf(" ");
 	}
 	if (echo_args(args[1]) == 1)
