@@ -24,16 +24,16 @@ int	bi_pwd(t_data *data)
 
 int	bi_env(t_data *data)
 {
-	char	**env;
 	int		i;
+	t_envp	*temp;
 
 	i = 0;
-	del_array(data->envp);
-	data->envp = stitch_env(data->env_llst);
-	env = data->envp;
-	while (env && env[i] != NULL)
-		printf("%s\n", env[i++]);
-	data->exit_status = 0;
+	temp = data->env_llst;
+	while (temp != NULL)
+	{
+		printf("%s\n", temp->literal);
+		temp = temp->next;
+	}
 	return (0);
 }
 
@@ -43,23 +43,83 @@ int	bi_unset(t_data *data, t_ast *node)
 	return (0);
 }
 
+// export prints env with no args, each line preceded by "declare -x "
+// to test, output bash and minishell into files, and use this cmd
+//  sort ms.txt bash.txt | uniq -u 
+void	export_empty_arg(t_data *data, t_ast *node)
+{
+	t_envp	*current;
+	char	*key;
+	char	*value;
+
+	current = data->env_llst;
+	while (current)
+	{
+		key = get_param_name(current->literal);
+		value = value_envp(&data->env_llst, key);
+		printf("declare -x %s", key);
+		if (ft_strchr(current->literal, '='))
+			printf("=\"%s\"", value);
+		printf("\n");
+		(free(key), free(value));
+		current = current->next;
+	}
+}
+int	is_key_valid(char *key)
+{
+	int		i;
+
+	if (!ft_isalpha(key[0]))
+		return (custom_error(key, "not a valid identifier"), 1);
+	i = 0;
+	while (key[i] && key[i] != '=')
+	{
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (custom_error(key, "not a valid identifier"), 1);
+		i++;
+	}
+	return (0);
+}
+
+void	add_update_env(t_data *data, t_ast *node, int i)
+{
+	char	*key;
+	t_envp	*existing;
+
+	key = get_param_name(node->literal[i]);
+	existing = check_envp(data, key);
+	if (!ft_strchr(node->literal[i], '='))
+	{
+		if (existing)
+		{
+			free(existing->literal);
+			existing->literal = ft_strdup(node->literal[i]);
+		}
+	}
+	add_node(data, node->literal[i]);
+	free(key);
+}
+
 // str must be the full string eg. 'pwd=/home/tim'
 // str can be in the form 'pwd="/home/tim"'
 int	bi_export(t_data *data, t_ast *node)
 {
-	char	*var;
 	int		i;
+	int		error;
 
+	if (node->literal[1] == NULL)
+		return (export_empty_arg(data, node), 0);
 	i = 1;
-	var = node->literal[1];
-	if (!ft_isalpha(var[0]) && var[0] != '_')
-		return (bi_custom_error("export", var, "not an identifier"), 1);
-	while (ft_isalnum(var[i]) || var[i] == '_' || var[i] == '=')
-		i ++;
-	if (var[i] != '\0')
-		return (custom_error("export", "not an identifier"), 1);
-	add_node(data, node->literal[1]);
-	return (0);
+	error = 0;
+	while (node->literal[i])
+	{
+		if (is_key_valid(node->literal[i]))
+			error = 1;
+		else
+			add_update_env(data, node, i);
+		i++;
+	}
+	return (error);
 }
 
 int	bi_exit(t_data *data, t_ast *node)

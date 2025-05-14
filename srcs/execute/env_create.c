@@ -16,19 +16,20 @@ static t_envp		*env_add(void);
 int					ft_lstsize(t_envp *lst);
 
 // MUST INCLUDE FULL STRING: eg. 'PWD=/Users/tim'
-void	add_node(t_data *data, char *string)
+int	add_node(t_data *data, char *string)
 {
 	t_envp	*new;	
 	t_envp	*lst;
-	char	**array;
+	// char	**array;
 
 	lst = data->env_llst;
-	array = data->envp;
+	// array = data->envp;
 	new = env_add();
 	new->literal = ft_strdup(string);
 	env_lstadd_back(&lst, new);
-	del_array(array);
-	data->envp = stitch_env(lst);
+	// del_array(array);
+	// data->envp = stitch_env(lst);
+	return (0);
 }
 
 t_envp	*set_envp(char **envp)
@@ -69,8 +70,8 @@ void	env_alter(t_data *data, char *key, char *value)
 		return ;
 	free(curr->literal);
 	curr ->literal = ft_strjoin(key, value);
-	free(data->envp);
-	data->envp = stitch_env(data->env_llst);
+	// free(data->envp);
+	// data->envp = stitch_env(data->env_llst);
 }
 
 static t_envp	*env_add(void)
