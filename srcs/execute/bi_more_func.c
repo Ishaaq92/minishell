@@ -69,7 +69,7 @@ int	is_key_valid(char *key)
 {
 	int		i;
 
-	if (!ft_isalpha(key[0]))
+	if (!ft_isalpha(key[0]) && key[0] != '_')
 		return (custom_error(key, "not a valid identifier"), 1);
 	i = 0;
 	while (key[i] && key[i] != '=')
@@ -122,6 +122,25 @@ int	bi_export(t_data *data, t_ast *node)
 	return (error);
 }
 
+/* // str must be the full string eg. 'pwd=/home/tim'
+// str can be in the form 'pwd="/home/tim"'
+int	bi_export(t_data *data, t_ast *node)
+{
+	char	*var;
+	int		i;
+
+	i = 1;
+	var = node->literal[1];
+	if (!ft_isalpha(var[0]) && var[0] != '_')
+		return (bi_custom_error("export", var, "not an identifier"), 1);
+	while (ft_isalnum(var[i]) || var[i] == '_' || var[i] == '=')
+		i ++;
+	if (var[i] != '\0')
+		return (custom_error("export", "not an identifier"), 1);
+	add_node(data, node->literal[1]);
+	return (0);
+}
+ */
 int	bi_exit(t_data *data, t_ast *node)
 {
 	char	**args;

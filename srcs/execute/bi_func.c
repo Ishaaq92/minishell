@@ -27,6 +27,8 @@ int	echo_args(char *str)
 	int		i;
 
 	i = 0;
+	if (str[i] == '-' && !str[i + 1])
+		return (1);
 	if (str[i++] != '-')
 		return (1);
 	while (str[i] == 'n')

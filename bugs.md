@@ -7,6 +7,7 @@
 7. whatever changes made to export also apply to unset
 8. unset doesn't seem to work at all atm
 9. exit needs to return the exit status provided as argument, and that argument needs to be checked for valid input (no negatives, no alpha, etc)'
+10. export test+=: do we need to support this bs
 
 ## Built-in bugs:
 1. exit 0 0: segfaults, also exit code should be 1
@@ -69,12 +70,13 @@ https://github.com/zstenger93/42_minishell_tester
 - 1: tests the ~ expansion, ignore it
 - 47, 52: missing a space at the end
 - 73: echo - prints nothing
-- 122: cd - segfaults, should print OLDPWD I think
+- 122, 132: cd - segfaults, should print OLDPWD I think
 - 123: no idea, works fine I think
 - 124: cd echo echo should say too many args
 - 128, 130-132: tests the ~ expansion, ignore it
 - 140: tests an env option, ignore it
-- 147-205: export bugs...
+- 165, 170: ignore, filing it under unsupported
+- 200: export +=...
 - the rest: unset and exit bugs, mostly error codes
 
 ### Pipelines
