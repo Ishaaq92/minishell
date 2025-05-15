@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:21:34 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/05/15 19:07:30 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/15 19:18:31 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,16 @@ static int	check_sequence(char *d_name, char *prefix, char *suffix);
 int			count_files(char *prefix, char *suffix);
 void	join_list(t_token *args, t_token *wild);
 void	ft_lstdelone(t_token *args);
+int	validate_file(t_token *args, t_token **wild_args);
 
 
 void    wildcards(t_data *data)
 {
-	// char    **args;
 	char	*prefix;
 	char	*suffix;
 	t_token		*args;
 	t_token		*wild_args;
 	t_token		*temp;
-	t_token		*temp2;
 	int     i;
 	int     j;
 
@@ -36,28 +35,34 @@ void    wildcards(t_data *data)
 	wild_args = NULL;
 	while (args)
 	{
-		j = 0;
-		suffix = ft_strchr(args->literal, '*');
-		if (!suffix)
+		if (validate_file(args, &wild_args) == 1)
 		{
-			args = args->next;
+			args = args ->next;
 			continue ;
-		}
-		while (args->literal[j] != '*')
-			j++;
-		prefix = ft_strndup(args->literal, j++);
-		suffix = ft_strdup(++suffix);
-		print_files(prefix, suffix, &wild_args);
+		}	
 		join_list(args, wild_args);
 		temp = args;
-		// args->next = wild_args;
-		// wild_args->prev = args;
-		// temp2 = ft_lstlast(args);
-		// temp2->next = temp;
-		// temp->prev = temp;
 		args = args->next;
 		ft_lstdelone(temp);
 	}
+}
+
+int	validate_file(t_token *args, t_token **wild_args)
+{
+	int		j;
+	char	*suffix;
+	char	*prefix;
+
+	j = 0;
+	suffix = ft_strchr(args->literal, '*');
+	if (!suffix)
+		return (1);
+	while (args->literal[j] != '*')
+		j++;
+	prefix = ft_strndup(args->literal, j++);
+	suffix = ft_strdup(++suffix);
+	print_files(prefix, suffix, wild_args);
+	return (0);
 }
 
 void	join_list(t_token *args, t_token *wild)
