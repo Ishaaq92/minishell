@@ -72,6 +72,9 @@ int	check_valid_order(t_token **head)
 	{
 		if (tmp->open_quote)
 			return (ft_perror(), 1);
+		if (tmp->type > 1 && tmp->type < 6)
+			if (tmp->next->type != WORD)
+				return (1);
 		// commented out because "echo <123 <456" 
 		// if (tmp->next && tmp->type < 7 && tmp->next->type < 7)
 		// 	return (1);
