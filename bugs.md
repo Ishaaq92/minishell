@@ -11,7 +11,8 @@
 ## Built-in bugs:
 1. exit -1: code should be 255
 2. exit wrong, exit --0: exit code is correctly set to 2, but you need to exit
-3. echo strips whitespace in bash, but we can probably ignore this
+3. echo strips whitespace in bash
+4. segfaults after unset PATH
 
 ## Stupid edge cases:
 ..
@@ -77,27 +78,21 @@ https://github.com/zstenger93/42_minishell_tester
 
 ### Variables
 - 5-7, 13, 14: export bugs
-- 41, 42: $PWD is not updated by cd
-- 43 and the rest: export bugs
+- 44-58: variable splitting
 
 ### Correction
 - 2: should exit 127 instead of 126
 - 19: exit "" should exit with 2 instead of 0
-- 45: echo "" '' should print one space
-- 82: export USER= is a valid command and should replace USER with a blank value
-- 83-92: export is not working as intended
-- 95, 96: unset errors
+- 93: unset no arg segfault
 - 104: when cd'ing into a folder without permissions, match error output to bash
-- 114: complex command, but I think its just the export that's not working
 
 ### Path fails
 - unset problems
 
 ### syntax errors
 - 8: the ~ expansion which we do not need to support
-- 15, 16: should have exit code 127 instead of 126
+- 14: inputting . on its own
 - 20-22: working as intended through terminal, not working for tester only
-- 40-43: it tests the 'noclobber' operator setting which isn't supported. Effectively, don't overwrite the file if it already exists
 
 ### Go wild section
 - 10: how the bash command interacts with your tokens

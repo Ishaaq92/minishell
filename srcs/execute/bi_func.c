@@ -83,7 +83,7 @@ int	bi_cd(t_data *data, t_ast *node)
 	}
 	old_path = getcwd(NULL, 0);
 	if (chdir(new_path) == -1)
-		return(printf("path failed!\n"), 1);
+		return(bi_custom_error("cd", node->literal[1], "Permission denied"), 1);
 	env_alter(data, "OLDPWD=", old_path);
 	if (!old_path)
 		free(old_path);

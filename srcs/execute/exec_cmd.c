@@ -62,8 +62,19 @@ int	execute_cmd(t_data *data, t_ast *node)
 	clean_args(data, node);
 	if (is_builtin(data, node))
 		return (data->exit_status);
-	if (find_cmd_path(node, data->env_llst))
+	if (!ft_strcmp(node->literal[0], ".."))
+		return (custom_error(node->literal[0], "command not found"), 127);
+	else if (!ft_strncmp(node->literal[0], "./", 2) || node->literal[0][0] == '/')
 	{
+		if (access(node->literal[0], F_OK))
+			return (custom_error(node->literal[0], "No such file or directory"), 127);
+		if (access(node->literal[0], X_OK))
+			return (custom_error(node->literal[0], "Permission denied"), 126);
+	}
+	else if (find_cmd_path(node, data->env_llst))
+	{
+		// if (!access(node->literal[0], F_OK) && access(node->literal[0], X_OK))
+		// 	return (custom_error(node->literal[0], "Permission denied"), 126);
 		if (ft_strchr(node->literal[0], '/'))
 			custom_error(node->literal[0], "No such file or directory");
 		else
