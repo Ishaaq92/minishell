@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:21:34 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/05/15 19:18:31 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/15 19:25:26 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ void	join_list(t_token *args, t_token *wild);
 void	ft_lstdelone(t_token *args);
 int	validate_file(t_token *args, t_token **wild_args);
 
-
 void    wildcards(t_data *data)
 {
-	char	*prefix;
-	char	*suffix;
 	t_token		*args;
 	t_token		*wild_args;
 	t_token		*temp;
@@ -62,7 +59,7 @@ int	validate_file(t_token *args, t_token **wild_args)
 	prefix = ft_strndup(args->literal, j++);
 	suffix = ft_strdup(++suffix);
 	print_files(prefix, suffix, wild_args);
-	return (0);
+	return (free(prefix), free(suffix), 0);
 }
 
 void	join_list(t_token *args, t_token *wild)
@@ -79,6 +76,7 @@ void	join_list(t_token *args, t_token *wild)
 		temp->prev = wild_args_last;
 	
 }
+
 void	ft_lstdelone(t_token *args)
 {
 	t_token	*temp;
@@ -140,6 +138,7 @@ int count_files(char *prefix, char *suffix)
 	printf("%d", count);
 	return(count);
 }
+
 static int	check_sequence(char *d_name, char *prefix, char *suffix)
 {
 	int	len;
