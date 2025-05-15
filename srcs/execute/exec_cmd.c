@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:07:45 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 17:58:41 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/15 18:08:54 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	clean_args(t_data *data, t_ast *node)
 	i = 0;
 	if (node->type == WORD)
 	{
-		wildcards(data,node);
 		while (node->literal[i])
 		{
 			param_sub(data, &node->literal[i]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_func.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/15 16:35:32 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/15 16:51:01 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,4 @@ static void	swap_dir(t_data *data, t_ast *node)
 	env_alter(data, "PWD=", old_path);
 	free(new_path);
 	free(old_path);
-}
-
-int	echo_args(char *str)
-{
-	int		i;
-
-	i = 0;
-	if (str[i++] != '-')
-		return (1);
-	while (str[i] == 'n')
-		i++;
-	if (str[i] != '\0')
-		return (1);
-	return (0);
 }

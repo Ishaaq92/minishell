@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 18:17:41 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/15 18:08:34 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ int		execute_cmd(t_data *data, t_ast *node);
 void	clean_args(t_data *data, t_ast *node);
 
 // wildcards.c
-void    wildcards(t_data *data, t_ast *node);
+void    wildcards(t_data *data);
 
 // quote_removal.c
 void	remove_quotes(char *str);
