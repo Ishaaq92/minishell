@@ -43,7 +43,12 @@ int	bi_env(t_data *data)
 
 int	bi_unset(t_data *data, t_ast *node)
 {
-	remove_node(data, node->literal[1]);
+	int		i;
+
+	i = 0;
+	while (node->literal[++i])
+		if (node->literal[i])
+			remove_node(data, node->literal[i]);
 	return (0);
 }
 
