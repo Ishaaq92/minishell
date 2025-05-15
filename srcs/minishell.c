@@ -21,7 +21,7 @@ TODO:
 5. Compiler flags, DO NOT FORGET
 */
 
-t_data	*init_exec_data(char *line, char **envp, int *exit_status);
+t_data	*init_exec_data(char *line, char **envp, int *status, t_envp *env_llst);
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
 
@@ -54,108 +54,107 @@ int	custom_error(char *str, char *msg)
 
 int	main(int ac, char *av[], char *envp[])
 {
-    char	*line;
-    t_data	*data;
-    int		exit_status;
+	char	*line;
+	t_data	*data;
+	int		exit_status;
+	t_envp	*env_llst;
 
-    handle_signals();
-    data = NULL;
-    exit_status = 0;
-    // if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
-    // if (ac > 1)
-    // {
-    // 	data = init_exec_data(ft_strtrim(get_next_line(fileno(stdin)), "\n"), envp, &exit_status);
-    // 	if (data)
-    // 	{
-    // 		execute_node(data, data->head);
-    // 		exit_status = data->exit_status;
-    // 		free_data(data);
-    // 	}
-    // 	return (exit_status);
-    // }
-    int fd = 0;
+	handle_signals();
+	data = NULL;
+	env_llst = NULL;
+	exit_status = 0;
+	// if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
+	// if (ac > 1)
+	// {
+	// 	data = init_exec_data(ft_strtrim(get_next_line(fileno(stdin)), "\n"), envp, &exit_status);
+	// 	if (data)
+	// 	{
+	// 		execute_node(data, data->head);
+	// 		exit_status = data->exit_status;
+	// 		free_data(data);
+	// 	}
+	// 	return (exit_status);
+	// }
+	int fd = 0;
 
-    if (isatty(fileno(stdin)))
-    {
-        while (42)
-        {
-            line = readline("Prompt: ");
-            if (line && *line)
-            {
-                add_history(line);
-                data = init_exec_data(line, envp, &exit_status);
-                if (data == NULL)
-                    continue ;
-                if (data)
-                    execute_node(data, data->head);
-                exit_status = data->exit_status;
-                free_data(data);
-            }
-            free(line);
-        }
-    }
-    else
-    {	
-        line = get_next_line(fileno(stdin));
-        while (line)
-        {
-            data = init_exec_data(ft_strtrim(line, "\n"), envp, &exit_status);
-            if (data)
-            {
-                execute_node(data, data->head);
-                exit_status = data->exit_status;
-                free_data(data);
-                free(line);
-            }
-            line = get_next_line(fileno(stdin));
-        }
-    }
-    return (exit_status);
+	if (isatty(fileno(stdin)))
+	{
+		env_llst = set_envp(envp);
+		while (42)
+		{
+			line = readline("Prompt: ");
+			if (line && *line)
+			{
+				add_history(line);
+				data = init_exec_data(line, envp, &exit_status, env_llst);
+				if (data == NULL)
+					continue ;
+				if (data)
+					execute_node(data, data->head);
+				exit_status = data->exit_status;
+				env_llst = data->env_llst;
+				free_data(data);
+			}
+			free(line);
+		}
+	}
+	// tester only
+	else
+	{	
+		env_llst = set_envp(envp);
+		line = get_next_line(fileno(stdin));
+		while (line)
+		{
+			data = init_exec_data(ft_strtrim(line, "\n"), envp, &exit_status, env_llst);
+			if (data)
+			{
+				execute_node(data, data->head);
+				exit_status = data->exit_status;
+				env_llst = data->env_llst;
+				free_data(data);
+				free(line);
+			}
+			line = get_next_line(fileno(stdin));
+		}
+	}
+	return (del_lst(&env_llst), exit_status);
 }
 
-t_data	*init_exec_data(char *line, char **envp, int *exit_status)
+t_data	*init_exec_data(char *line, char **envp, int *exit_status, t_envp *env_llst)
 {
     t_data		*data;
 
-    data = (t_data *) malloc(sizeof(t_data));
-    if (!data)
-        return (NULL);
-    data->token_list = NULL;
-    data->head = NULL;
-    data->envp = NULL;
-    data->env_llst = NULL;
-    if (create_tokens(line, &(data->token_list)) || data->token_list == NULL)
-    {
-        *exit_status = 2;
-        return (free_data(data), NULL);
-    }
-    // printf("\n***TOKEN LIST***\n");
-    // print_tokens(&(data->token_list));
-    data->head = parse_tokens(data->token_list);
-    // printf("\n*** AST TREE***\n");
-    // print_ast(data->head, 3);
-    data->env_llst = set_envp(envp);
-    data->envp = stitch_env(data->env_llst);
-    data->exit_status = *exit_status;
-    data->std_fd[0] = dup(STDIN_FILENO);
-    data->std_fd[1] = dup(STDOUT_FILENO);
-    data->std_fd[2] = dup(STDERR_FILENO);
-    return (data);
+	data = (t_data *) malloc(sizeof(t_data));
+	if (!data)
+		return (NULL);
+	data->token_list = NULL;
+	data->head = NULL;
+	data->env_llst = NULL;
+	if (create_tokens(line, &(data->token_list)) || data->token_list == NULL)
+	{
+		*exit_status = 2;
+		return (free_data(data), NULL);
+	}
+	// printf("\n***TOKEN LIST***\n");
+	// print_tokens(&(data->token_list));
+	data->head = parse_tokens(data->token_list);
+	// printf("\n*** AST TREE***\n");
+	// print_ast(data->head, 3);
+	data->env_llst = env_llst;
+	data->exit_status = *exit_status;
+	data->std_fd[0] = dup(STDIN_FILENO);
+	data->std_fd[1] = dup(STDOUT_FILENO);
+	data->std_fd[2] = dup(STDERR_FILENO);
+	return (data);
 }
-
-// t_data	*reset_data_struct(t_data *data)
-// {
-
-// }
 
 void	free_data(t_data *data)
 {
-    free_ast(data->head);
-    del_lst(&data->env_llst);
-    del_array(data->envp);
-    ft_lstclear(&data->token_list);
-    free(data);
-    // exit_cleanup(data);
+	free_ast(data->head);
+	// del_lst(&data->env_llst);
+	ft_lstclear(&data->token_list);
+	free(data);
+	// exit_cleanup(data);
 }
 
 void	testing(t_envp **lst)

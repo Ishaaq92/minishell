@@ -68,3 +68,4 @@ void	remove_node(t_data *data, char *var)
 		curr = curr->next;
 	}
 }
+
