@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   bi_more_func.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:16:31 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/05/14 17:17:39 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/15 19:35:46 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static void	export_empty_arg(t_data *data, t_ast *node);
+static void	export_empty_arg(t_data *data);
 static int	is_key_valid(char *key);
 static void	add_update_env(t_data *data, t_ast *node, int i);
 
@@ -20,6 +20,7 @@ int	bi_pwd(t_data *data)
 {
 	char	*pwd;
 
+	(void) data;
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
 	free(pwd);
@@ -28,10 +29,8 @@ int	bi_pwd(t_data *data)
 
 int	bi_env(t_data *data)
 {
-	int		i;
 	t_envp	*temp;
 
-	i = 0;
 	temp = data->env_llst;
 	while (temp != NULL)
 	{
@@ -60,7 +59,7 @@ int	bi_export(t_data *data, t_ast *node)
 	int		error;
 
 	if (node->literal[1] == NULL)
-		return (export_empty_arg(data, node), 0);
+		return (export_empty_arg(data), 0);
 	i = 1;
 	error = 0;
 	while (node->literal[i])
@@ -77,7 +76,7 @@ int	bi_export(t_data *data, t_ast *node)
 // export prints env with no args, each line preceded by "declare -x "
 // to test, output bash and minishell into files, and use this cmd
 //  sort ms.txt bash.txt | uniq -u 
-static void	export_empty_arg(t_data *data, t_ast *node)
+static void	export_empty_arg(t_data *data)
 {
 	t_envp	*current;
 	char	*key;

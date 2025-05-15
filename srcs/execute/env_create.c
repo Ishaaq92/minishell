@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/09 19:21:01 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/15 19:33:11 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	add_node(t_data *data, char *string)
 t_envp	*set_envp(char **envp)
 {
 	size_t		i;
-	int			sep;
 	t_envp		*env_new;
 	t_envp		*head;
 

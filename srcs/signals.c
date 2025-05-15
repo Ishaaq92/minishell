@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 14:21:20 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/14 15:31:29 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/15 19:31:46 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	handle_ctrl_c(int sig)
 
 void	handle_ctrl_z(int sig)
 {
+	(void) sig;
 	write(1, "Control Z was inputed\n", 23);
 	write(1, "exit\n", 5);
 	// exit_cleanup(NULL);

@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/15 16:51:01 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/15 19:34:25 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // export: ALMOST DONE
 // env: DONE
 
-static void	swap_dir(t_data *data, t_ast *node);
+static void	swap_dir(t_data *data);
 
 int	echo_args(char *str)
 {
@@ -45,6 +45,7 @@ int	bi_echo(t_data *data, t_ast *node)
 	int		i;
 	char	**args;
 
+	(void) data;
 	args = node->literal;
 	if (args == NULL || args[1] == NULL)
 		return (printf("\n"), 0);
@@ -71,7 +72,7 @@ int	bi_cd(t_data *data, t_ast *node)
 	if (node->literal[1] == NULL || ft_strcmp(node->literal[1], "~") == 0)
 		new_path = value_envp(&data->env_llst, "HOME");
 	else if (ft_strcmp(node->literal[1], "-") == 0)
-		return (swap_dir(data, node), 0);
+		return (swap_dir(data), 0);
 	else
 		new_path = ft_strdup(node->literal[1]);
 	if (access(new_path, F_OK) == -1)
@@ -93,7 +94,7 @@ int	bi_cd(t_data *data, t_ast *node)
 	return (0);
 }
 
-static void	swap_dir(t_data *data, t_ast *node)
+static void	swap_dir(t_data *data)
 {
 	char	*old_path;
 	char	*new_path;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-15 17:35:43 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-15 17:35:43 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/15 17:35:43 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/15 19:32:51 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,8 @@ int	find_cmd_path(t_ast *node, t_envp *env_list)
 
 static char	**get_pathlist(t_envp *env_list)
 {
-	int		i;
 	char	**result;
 
-	i = 0;
 	if (env_list == NULL)
 		return (NULL);
 	while (env_list && ft_strncmp(env_list->literal, "PATH=", 5) != 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-30 16:21:33 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-30 16:21:33 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/30 16:21:33 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/15 19:38:26 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,21 @@ int	do_pipe_cmds(t_data *data, t_ast *node)
 	pid_t		pid;
 
 	if (pipe(fd) == -1)
-		;
+		return (1);
 	pid = fork();
 	if (pid == 0)
 	{
 		close(fd[0]);
-		if (dup2(fd[1], STDOUT_FILENO) == -1)
-			;
+		// if (dup2(fd[1], STDOUT_FILENO) == -1)
+		// 	;
 		execute_node(data, node->left);
 		close(fd[1]);
 	}
 	else
 	{
 		close(fd[1]);
-		if (dup2(fd[0], STDIN_FILENO) == -1)
-			;
+		// if (dup2(fd[0], STDIN_FILENO) == -1)
+		// 	;
 		data->exit_status = execute_node(data, node->right);
 		close(fd[0]);
 		// waitpid(pid, NULL, 0);

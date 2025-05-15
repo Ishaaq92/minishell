@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:40:37 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/25 16:52:45 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/15 19:32:33 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ static void	handle_op(char **str, char **literal, t_token *token)
 // TODO: is is_blank necessary? can you have tabs inside a prompt? or do you just check for space
 static void	handle_word(char **str, char **literal, t_token *token)
 {
-	char	*temp;
 	int		i;
 
 	i = 0;
@@ -120,7 +119,6 @@ static void	handle_word(char **str, char **literal, t_token *token)
 static int	handle_quotes(char *str, int *i, t_token *token)
 {
 	char	quote_char;
-	char	*temp;
 
 	quote_char = str[*i];
 	if (quote_char == '\'' || quote_char == '\"')

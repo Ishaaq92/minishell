@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+         #
+#    By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:52:30 by isahmed           #+#    #+#              #
-#    Updated: 2025/05/14 17:56:23 by ishaaq           ###   ########.fr        #
+#    Updated: 2025/05/15 19:27:52 by isahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -Iinc -ILibft/ -g
+CFLAGS = -Iinc -ILibft/ -Wall -Wextra -Werror -g
 CC = gcc
 ODIR = objs
 SDIR = srcs

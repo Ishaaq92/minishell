@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:21:34 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/05/15 19:25:26 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/15 19:42:45 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ void    wildcards(t_data *data)
 	t_token		*args;
 	t_token		*wild_args;
 	t_token		*temp;
-	int     i;
-	int     j;
 
-	i = 0;
 	args = data->token_list;
 	wild_args = NULL;
 	while (args)
@@ -80,9 +77,7 @@ void	join_list(t_token *args, t_token *wild)
 void	ft_lstdelone(t_token *args)
 {
 	t_token	*temp;
-	t_token	*free_temp;
 
-	free_temp = args;
 	temp = args->prev;
 	temp->next = args->next;
 	temp->next->prev = args->prev;
@@ -122,7 +117,6 @@ int count_files(char *prefix, char *suffix)
 {
 	DIR				*d;
 	struct dirent	*dir;
-	char			**array;
 	int				count;
 
 	d = opendir(".");

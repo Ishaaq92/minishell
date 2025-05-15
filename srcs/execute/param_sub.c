@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:59 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/06 15:40:05 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/15 19:41:26 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ char	*get_param_name(char *str)
 
 int	skip_quotes(t_data *data, char **str, int *dquote, int *i)
 {
+	(void)data;	
 	if ((*str)[*i] == '\\')
 	{
 		(*i) += 2;

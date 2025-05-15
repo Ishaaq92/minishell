@@ -21,7 +21,7 @@ TODO:
 5. Compiler flags, DO NOT FORGET
 */
 
-t_data	*init_exec_data(char *line, char **envp, int *status, t_envp *env_llst);
+t_data	*init_exec_data(char *line, int *exit_status, t_envp *env_llst);
 void	free_data(t_data *data);
 void	testing(t_envp **lst);
 
@@ -63,6 +63,8 @@ int	main(int ac, char *av[], char *envp[])
 	data = NULL;
 	env_llst = NULL;
 	exit_status = 0;
+	(void) ac;
+	(void) av;
 	// if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
 	// if (ac > 1)
 	// {
@@ -75,7 +77,7 @@ int	main(int ac, char *av[], char *envp[])
 	// 	}
 	// 	return (exit_status);
 	// }
-	int fd = 0;
+	// int fd = 0;
 
 	if (isatty(fileno(stdin)))
 	{
@@ -86,7 +88,7 @@ int	main(int ac, char *av[], char *envp[])
 			if (line && *line)
 			{
 				add_history(line);
-				data = init_exec_data(line, envp, &exit_status, env_llst);
+				data = init_exec_data(line, &exit_status, env_llst);
 				if (data == NULL)
 					continue ;
 				if (data)
@@ -105,7 +107,7 @@ int	main(int ac, char *av[], char *envp[])
 		line = get_next_line(fileno(stdin));
 		while (line)
 		{
-			data = init_exec_data(ft_strtrim(line, "\n"), envp, &exit_status, env_llst);
+			data = init_exec_data(ft_strtrim(line, "\n"), &exit_status, env_llst);
 			if (data)
 			{
 				execute_node(data, data->head);
@@ -120,7 +122,7 @@ int	main(int ac, char *av[], char *envp[])
 	return (del_lst(&env_llst), exit_status);
 }
 
-t_data	*init_exec_data(char *line, char **envp, int *exit_status, t_envp *env_llst)
+t_data	*init_exec_data(char *line, int *exit_status, t_envp *env_llst)
 {
     t_data		*data;
 
@@ -156,18 +158,4 @@ void	free_data(t_data *data)
 	ft_lstclear(&data->token_list);
 	free(data);
 	// exit_cleanup(data);
-}
-
-void	testing(t_envp **lst)
-{
-    t_envp	*env_list;
-    char	**env_array;
-    char	str[8] = "ISHAAQ\0";
-
-    env_list = *lst;
-    env_array = stitch_env(env_list);
-    print_envp(lst);
-    printf("\n\n\n");
-    // add_node(lst, env_array, str);
-    print_envp(lst);
 }

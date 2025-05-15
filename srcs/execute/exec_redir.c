@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-30 16:21:28 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-30 16:21:28 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/30 16:21:28 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/15 19:41:01 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ int	redir_heredoc(t_data *data, t_ast *node)
 	}
 	(free(buffer), close(temp_fd));
 	temp_fd = open("temp", O_RDONLY);
-	if (dup2(temp_fd, STDIN_FILENO))
-		;
+	if (dup2(temp_fd, STDIN_FILENO) == -1)
+		return (1);
 	return (0);
 }
 
@@ -76,6 +76,7 @@ int	redir_output(t_data *data, t_ast *node)
 	int		fd_redir;
 	int		flag;
 
+	(void) data;	
 	if (ft_isdigit(node->token->literal[0]))
 		fd_redir = ft_atoi(node->token->literal);
 	else
@@ -92,7 +93,7 @@ int	redir_output(t_data *data, t_ast *node)
 		return (1);
 	}
 	if (dup2(fd_newfile, fd_redir) == -1)
-		;
+		return (1);
 	return (0);
 }
 
@@ -103,6 +104,7 @@ int	redir_input(t_data *data, t_ast *node)
 	int		fd_newfile;
 	int		fd_redir;
 
+	(void) data;
 	if (ft_isdigit(*node->token->literal))
 		fd_redir = ft_atoi(node->token->literal);
 	else
@@ -114,7 +116,7 @@ int	redir_input(t_data *data, t_ast *node)
 		return (1);
 	}
 	if (dup2(fd_newfile, fd_redir) == -1)
-		;
+		return (1);
 	return (0);
 }
 
