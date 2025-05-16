@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:21:34 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/05/15 19:42:45 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/16 12:01:46 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int print_files(char *prefix, char *suffix, t_token **wild_args);
+int 		print_files(char *prefix, char *suffix, t_token **wild_args);
 static int	check_sequence(char *d_name, char *prefix, char *suffix);
 int			count_files(char *prefix, char *suffix);
-void	join_list(t_token *args, t_token *wild);
-void	ft_lstdelone(t_token *args);
-int	validate_file(t_token *args, t_token **wild_args);
+void		join_list(t_token *args, t_token *wild);
+void		ft_lstdelone(t_token *args);
+int			validate_file(t_token *args, t_token **wild_args);
 
 void    wildcards(t_data *data)
 {
@@ -94,7 +94,6 @@ void	ft_lstdelone(t_token *args)
 	free(args);
 }
 
-
 int print_files(char *prefix, char *suffix, t_token **wild_args) 
 {
 	DIR				*d;
@@ -152,14 +151,7 @@ static int	check_sequence(char *d_name, char *prefix, char *suffix)
 	s_len = ft_strlen(suffix);
 	if (p_len + s_len > len)
 		return (1);
-	if (ft_strncmp(d_name, prefix, p_len) != 0)
-	{
+	if (ft_strncmp(d_name, prefix, p_len) != 0 || ft_strcmp(&d_name[len - s_len], suffix) != 0)
 		return (1);
-	}
-	if (ft_strcmp(&d_name[len - s_len], suffix) != 0)
-	{
-		// printf("no match between %s and %s\n", &d_name[len-s_len], suffix);
-		return (1);
-	}
 	return (0);
 }

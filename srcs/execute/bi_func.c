@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_func.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/15 19:34:25 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/16 12:14:45 by ishaaq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ static void	swap_dir(t_data *data)
 	
 	old_path = value_envp(&data->env_llst, "OLDPWD");
 	new_path = value_envp(&data->env_llst, "PWD");
+	if (old_path)
+		chdir(old_path);
 	env_alter(data, "OLDPWD=", new_path);
 	env_alter(data, "PWD=", old_path);
 	free(new_path);
