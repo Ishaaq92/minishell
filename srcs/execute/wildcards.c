@@ -37,7 +37,8 @@ void    wildcards(t_data *data)
 		join_list(args, wild_args);
 		temp = args;
 		args = args->next;
-		ft_lstdelone(temp);
+		if (wild_args)
+			ft_lstdelone(temp);
 	}
 }
 
@@ -66,11 +67,14 @@ void	join_list(t_token *args, t_token *wild)
 
 	temp = args->next;
 	args->next = wild;
-	wild->prev = args;
-	wild_args_last = ft_lstlast(wild);
-	wild_args_last->next = temp;
-	if (temp)
-		temp->prev = wild_args_last;
+	if (wild)
+	{
+		wild->prev = args;
+		wild_args_last = ft_lstlast(wild);
+		wild_args_last->next = temp;
+		if (temp)
+			temp->prev = wild_args_last;
+	}
 	
 }
 
@@ -78,9 +82,13 @@ void	ft_lstdelone(t_token *args)
 {
 	t_token	*temp;
 
+	
 	temp = args->prev;
 	temp->next = args->next;
-	temp->next->prev = args->prev;
+	if (temp->next)
+	{
+		temp->next->prev = args->prev;
+	}
 	if (args->literal)
 		free(args->literal);
 	free(args);
@@ -106,7 +114,7 @@ int print_files(char *prefix, char *suffix, t_token **wild_args)
 			new = ft_lstnew(ft_strdup(dir->d_name));
 			ft_lstadd_back(wild_args, new);
 			new->type = WORD;
-			printf("%s\n", dir->d_name);
+			// printf("%s\n", dir->d_name);
 		}
 	}
 	closedir(d);

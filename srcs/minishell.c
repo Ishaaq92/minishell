@@ -139,7 +139,7 @@ t_data	*init_exec_data(char *line, int *exit_status, t_envp *env_llst)
 	}
 	// printf("\n***TOKEN LIST***\n");
 	wildcards(data);
-	print_tokens(&(data->token_list));
+	// print_tokens(&(data->token_list));
 	data->head = parse_tokens(data->token_list);
 	// printf("\n*** AST TREE***\n");
 	// print_ast(data->head, 3);

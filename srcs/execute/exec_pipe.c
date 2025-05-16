@@ -42,16 +42,16 @@ int	do_pipe_cmds(t_data *data, t_ast *node)
 	if (pid == 0)
 	{
 		close(fd[0]);
-		// if (dup2(fd[1], STDOUT_FILENO) == -1)
-		// 	;
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+			return (perror("dup2 failed"), 1);
 		execute_node(data, node->left);
 		close(fd[1]);
 	}
 	else
 	{
 		close(fd[1]);
-		// if (dup2(fd[0], STDIN_FILENO) == -1)
-		// 	;
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+			return (perror("dup2 failed"), 1);
 		data->exit_status = execute_node(data, node->right);
 		close(fd[0]);
 		// waitpid(pid, NULL, 0);

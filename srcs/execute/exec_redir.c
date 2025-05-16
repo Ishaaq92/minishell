@@ -34,7 +34,8 @@ int	execute_redir(t_data *data, t_ast *node)
 		data->exit_status = redir_heredoc(data, node);
 	if (node->left && data->exit_status == 0)
 		execute_node(data, node->left);
-	dup2(data->std_fd[0], STDIN_FILENO);
+	if (dup2(data->std_fd[0], STDIN_FILENO) == -1)
+		return (perror("dup2 failed"), 1);
 	reset_redir(data);
 	if (node->type == IN_HEREDOC)
 		unlink("temp");
@@ -66,7 +67,7 @@ int	redir_heredoc(t_data *data, t_ast *node)
 	(free(buffer), close(temp_fd));
 	temp_fd = open("temp", O_RDONLY);
 	if (dup2(temp_fd, STDIN_FILENO) == -1)
-		return (1);
+		return (perror("dup2 failed"), 1);
 	return (0);
 }
 
@@ -88,12 +89,9 @@ int	redir_output(t_data *data, t_ast *node)
 	fd_newfile = open(node->right->token->literal,
 			O_CREAT | O_WRONLY | flag, 0666);
 	if (fd_newfile < 0)
-	{
-		custom_error(node->right->token->literal, "No such file or directory");
-		return (1);
-	}
+		return (custom_error(node->right->token->literal, "No such file or directory"), 1);
 	if (dup2(fd_newfile, fd_redir) == -1)
-		return (1);
+		return (perror("dup2 failed"), 1);
 	return (0);
 }
 
@@ -116,7 +114,7 @@ int	redir_input(t_data *data, t_ast *node)
 		return (1);
 	}
 	if (dup2(fd_newfile, fd_redir) == -1)
-		return (1);
+		return (perror("dup2 failed"), 1);
 	return (0);
 }
 
