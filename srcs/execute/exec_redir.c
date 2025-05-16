@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:21:28 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/15 19:41:01 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/16 17:09:39 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	redir_output(t_data *data, t_ast *node)
 	}
 	if (dup2(fd_newfile, fd_redir) == -1)
 		return (1);
+	close(fd_newfile);
 	return (0);
 }
 
