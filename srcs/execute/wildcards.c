@@ -17,7 +17,7 @@ static int	check_sequence(char *d_name, char *prefix, char *suffix);
 int			count_files(char *prefix, char *suffix);
 void		join_list(t_token *args, t_token *wild);
 void		ft_lstdelone(t_token *args);
-int			validate_file(t_token *args, t_token **wild_args);
+int			get_wildcard_args(t_token *args, t_token **wild_args);
 
 void    wildcards(t_data *data)
 {
@@ -29,7 +29,7 @@ void    wildcards(t_data *data)
 	wild_args = NULL;
 	while (args)
 	{
-		if (validate_file(args, &wild_args) == 1)
+		if (get_wildcard_args(args, &wild_args) != 0)
 		{
 			args = args ->next;
 			continue ;
@@ -38,11 +38,39 @@ void    wildcards(t_data *data)
 		temp = args;
 		args = args->next;
 		if (wild_args)
+		{
 			ft_lstdelone(temp);
+			wild_args = NULL;
+		}
 	}
 }
 
-int	validate_file(t_token *args, t_token **wild_args)
+void	join_list(t_token *args, t_token *wild)
+{
+	t_token		*temp;
+	t_token		*wild_args_last;
+
+	if (wild)
+	{
+		temp = args->prev;
+		temp->next = wild;
+		wild->prev = temp;
+		wild_args_last = ft_lstlast(wild);
+		wild_args_last->next = args->next;
+		temp = args->next;
+		if (temp)
+			temp->prev = wild_args_last;
+	}
+}
+
+void	ft_lstdelone(t_token *args)
+{
+	if (args->literal)
+		free(args->literal);
+	free(args);
+}
+
+int	get_wildcard_args(t_token *args, t_token **wild_args)
 {
 	int		j;
 	char	*suffix;
@@ -58,40 +86,6 @@ int	validate_file(t_token *args, t_token **wild_args)
 	suffix = ft_strdup(++suffix);
 	print_files(prefix, suffix, wild_args);
 	return (free(prefix), free(suffix), 0);
-}
-
-void	join_list(t_token *args, t_token *wild)
-{
-	t_token		*temp;
-	t_token		*wild_args_last;
-
-	temp = args->next;
-	args->next = wild;
-	if (wild)
-	{
-		wild->prev = args;
-		wild_args_last = ft_lstlast(wild);
-		wild_args_last->next = temp;
-		if (temp)
-			temp->prev = wild_args_last;
-	}
-	
-}
-
-void	ft_lstdelone(t_token *args)
-{
-	t_token	*temp;
-
-	
-	temp = args->prev;
-	temp->next = args->next;
-	if (temp->next)
-	{
-		temp->next->prev = args->prev;
-	}
-	if (args->literal)
-		free(args->literal);
-	free(args);
 }
 
 int print_files(char *prefix, char *suffix, t_token **wild_args) 
@@ -136,7 +130,7 @@ int count_files(char *prefix, char *suffix)
 			count ++;
 	}
 	closedir(d);
-	printf("%d", count);
+	// printf("%d", count);
 	return(count);
 }
 
