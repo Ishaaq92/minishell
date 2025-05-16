@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_func.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/16 12:14:45 by ishaaq           ###   ########.fr       */
+/*   Updated: 2025/05/16 17:04:53 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,10 @@ int	bi_cd(t_data *data, t_ast *node)
 	if (chdir(new_path) == -1)
 		return(bi_custom_error("cd", node->literal[1], "Permission denied"), 1);
 	env_alter(data, "OLDPWD=", old_path);
-	if (!old_path)
+	if (old_path)
 		free(old_path);
 	env_alter(data, "PWD=", new_path);
-	if (!new_path)
+	if (new_path)
 		free(new_path);
 	return (0);
 }

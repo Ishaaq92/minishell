@@ -6,7 +6,7 @@
 #    By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:52:30 by isahmed           #+#    #+#              #
-#    Updated: 2025/05/15 19:27:52 by isahmed          ###   ########.fr        #
+#    Updated: 2025/05/16 17:05:45 by isahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ OBJECTS = $(CFILES:$(SDIR)/%.c=$(ODIR)/%.o)
 all: $(BINARY) 
 
 v valgrind: $(BINARY)
-	valgrind --suppressions=debugging/rl.supp --leak-check=full --show-leak-kinds=all --log-file=debugging/valgrind.txt ./minishell
+	valgrind --suppressions=debugging/rl.supp --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
 
 DIRS = $(ODIR)
 

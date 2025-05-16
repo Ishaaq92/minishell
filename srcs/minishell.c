@@ -192,7 +192,7 @@ t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 	// printf("\n***TOKEN LIST***\n");
 	clean_args(data);
 	wildcards(data);
-	// print_tokens(&(data->token_list));
+	// print_tokens(& 	(data->token_list));
 	data->head = parse_tokens(data->token_list);
 	// printf("\n*** AST TREE***\n");
 	// print_ast(data->head, 3);
@@ -200,6 +200,9 @@ t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 	data->std_fd[0] = dup(STDIN_FILENO);
 	data->std_fd[1] = dup(STDOUT_FILENO);
 	data->std_fd[2] = dup(STDERR_FILENO);
+	// close(data->std_fd[0]);
+	// close(data->std_fd[1]);
+	// close(data->std_fd[2]);
 	return (data);
 }
 
