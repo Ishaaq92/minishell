@@ -38,57 +38,6 @@ int	is_builtin(t_data *data, t_ast *node)
 	return (1);
 }
 
-void	clean_args(t_data *data)
-{
-	t_token	*temp;
-	t_token	*list;
-
-	temp = data->token_list;
-	list = NULL;
-	while (temp)
-	{
-		if (temp->type == WORD)
-			if (temp->literal)
-			{
-				if (ft_strchr(temp->literal, '$'))
-				{
-					param_sub(data, &temp->literal);
-					create_tokens(temp->literal, &list);
-					t_token		*temp3;
-
-					temp3 = list;
-					while (temp3)
-					{
-						temp3->type = WORD;
-						temp3 = temp3->next;
-					}
-					if (list->next)
-					{
-						t_token	*temp2;
-						t_token	*list_last;
-
-						temp2 = temp->prev;
-						if (temp2)
-							temp2->next = list;
-						else
-							data->token_list = list;
-						list->prev = temp2;
-						list_last = ft_lstlast(list);
-						list_last->next = temp->next;
-						temp2 = temp->next;
-						if (temp2)
-							temp2->prev = list_last;
-						ft_lstdelone(temp);
-						temp = list;
-					}
-				}
-				remove_quotes(temp->literal);
-			}
-		temp = temp->next;
-		list = NULL;
-	}
-}
-
 int	execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
@@ -107,8 +56,6 @@ int	execute_cmd(t_data *data, t_ast *node)
 	}
 	else if (find_cmd_path(node, data->env_llst))
 	{
-		// if (!access(node->literal[0], F_OK) && access(node->literal[0], X_OK))
-		// 	return (custom_error(node->literal[0], "Permission denied"), 126);
 		if (ft_strchr(node->literal[0], '/'))
 			custom_error(node->literal[0], "No such file or directory");
 		else

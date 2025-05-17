@@ -141,6 +141,9 @@ t_ast	*parse_cmd(t_token **node);
 // ast_redir.c
 t_ast	*parse_redir(t_token **token, t_token **stop);
 
+// clean_args.c
+void	clean_args(t_data *data);
+
 // Execution
 
 // env_delete.c
