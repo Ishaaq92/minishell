@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   minishell.c										:+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: isahmed <isahmed@student.42.fr>			+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/03/21 16:17:20 by isahmed		   #+#	#+#			 */
-/*   Updated: 2025/04/25 17:37:41 by isahmed		  ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-05-17 13:52:48 by avalsang          #+#    #+#             */
+/*   Updated: 2025-05-17 13:52:48 by avalsang         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -52,7 +52,18 @@ int	custom_error(char *str, char *msg)
     return (0);
 }
 
-# define BLUE "\e[0;34m"
+
+char	*exit_colour(int exit_status)
+{
+	if (!exit_status)
+		return (ft_strdup("\001\e[0;92m\002[ "));
+	else if (exit_status == 1)
+		return (ft_strdup("\001\e[0;91m\002[ "));
+	else if (exit_status == 139)
+		return (ft_strdup("\001\e[0;95m\002[ "));
+	else
+		return (ft_strdup("\001\e[0;93m\002[ "));
+}
 
 // char	*join_and_free(char **s1, char **s2)
 // {
@@ -60,44 +71,50 @@ int	custom_error(char *str, char *msg)
 // 	char	*result;
 
 // 	len = ft_strlen(*s1) + ft_strlen(*s2);
-// 	result = malloc()
-// 	return (result);
+// 	// result = malloc()
+// 	// return (result);
 // }
 
-char	*exit_colour(int exit_status)
+char	*set_prompt(int n, ...)
 {
-	if (!exit_status)
-		return (ft_strdup("\001\e[1;34m\002[ "));
-	else if (exit_status == 1)
-		return (ft_strdup("\001\e[1;31m\002[ "));
-	else if (exit_status == 139)
-		return (ft_strdup("\001\e[1;35m\002[ "));
-	else
-		return (ft_strdup("\001\e[1;33m\002[ "));
+	va_list		args;
+	char		*temp;
+	char		*arg;
+	char		*result;
+	int			i;
+
+	i = 0;
+	va_start(args, n);
+	result = ft_strdup("");
+	while (i++ < n)
+	{
+		arg = (char *)va_arg(args, char *);
+		temp = result;
+		result = ft_strjoin(temp, arg);
+		free(temp);
+	}
+	return (va_end(args), result);
 }
+
+# define BLUE "\001\e[0;94m\002"
 
 char	*get_prompt(t_envp *env, int exit_status)
 {
-	char	*prompt;
-	char	*temp;
-	char	*temp2;
+	char	*colour;
+	char	*exit_str;
+	char	*pwd;
+	char	*result;
 
-	temp = exit_colour(exit_status);
-	temp2 = ft_itoa(exit_status);
-	prompt = ft_strjoin(temp, temp2);
-	free(temp), free(temp2);
-	temp = prompt;
-	prompt = ft_strjoin(temp, " ]\001\e[0m\002 \001\e[1;36m\002");
-	free(temp);
+	colour = exit_colour(exit_status);
+	exit_str = ft_itoa(exit_status);
 	while (ft_strncmp("PWD=", env->literal, 4))
 		env = env->next;
 	if (env)
-		temp2 = ft_strjoin(env->literal + 4, "\001\e[0m\002: ");
+		pwd = ft_strjoin(env->literal + 4, "\001\e[0m\002: ");
 	else
-		temp2 = ft_strjoin("~", "\001\e[0m\002: ");
-	temp = prompt;
-	prompt = ft_strjoin(temp, temp2);
-	return (free(temp), free(temp2), prompt);
+		pwd = ft_strdup("~\001\e[0m\002: ");
+	result = set_prompt(4, colour, exit_str, " ]\001\e[0m\002 {BLUE}", pwd);
+	return (free(colour), free(exit_str), free(pwd), result);
 }
 
 int	main(int ac, char *av[], char *envp[])
@@ -134,7 +151,10 @@ int	main(int ac, char *av[], char *envp[])
 		while (42)
 		{
 			prompt = get_prompt(env_llst, exit_status);
+			(void)prompt;
+			rl_end = 10;
 			line = readline(prompt);
+			printf("rlpoint %i\n", rl_mark);
 			if (line && *line)
 			{
 				add_history(line);
