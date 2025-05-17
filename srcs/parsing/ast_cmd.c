@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 static char		**parse_cmd_args(t_token *node, int argc);
 static int		count_argc(t_token *node);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 // Note that deleting the lst will delete the envp array.
 void	del_lst(t_envp **lst)

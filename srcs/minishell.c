@@ -10,81 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
-/*
-TODO:
-1. Exit status
-2. Built in functions
-3. Parameter substitution with quote removal
-4. Signals
-5. Compiler flags, DO NOT FORGET
-*/
-
-t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst);
+static t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst);
 void	free_data(t_data *data);
-void	testing(t_envp **lst);
-
-void	ft_perror(void)
-{
-    perror("minishell: ");
-}
-
-int	bi_custom_error(char * func, char *str, char *msg)
-{
-    write(2, "minishell: ", 12);
-    write(2, func, ft_strlen(func));
-    write(2, ": ", 2);
-    write(2, str, ft_strlen(str));
-    write(2, ": ", 2);
-    write(2, msg, ft_strlen(msg));
-    write(2, "\n", 1);
-    return (0);
-}
-
-int	custom_error(char *str, char *msg)
-{
-    write(2, "minishell: ", 12);
-    write(2, str, ft_strlen(str));
-    write(2, ": ", 2);
-    write(2, msg, ft_strlen(msg));
-    write(2, "\n", 1);
-    return (0);
-}
-
-
-char	*exit_colour(int exit_status)
-{
-	if (!exit_status)
-		return (ft_strdup("\001\e[0;92m\002[ "));
-	else if (exit_status == 1)
-		return (ft_strdup("\001\e[0;91m\002[ "));
-	else if (exit_status == 139)
-		return (ft_strdup("\001\e[0;95m\002[ "));
-	else
-		return (ft_strdup("\001\e[0;93m\002[ "));
-}
-
-char	*get_prompt(int exit_status)
-{
-	char	*prompt;
-	char	*temp;
-	char	*temp2;
-	char	*pwd;
-
-	temp = exit_colour(exit_status);
-	temp2 = ft_itoa(exit_status);
-	prompt = ft_strjoin(temp, temp2);
-	free(temp), free(temp2);
-	temp = prompt;
-	prompt = ft_strjoin(temp, " ]\001\e[0m\002 \001\e[0;94m\002");
-	free(temp);
-	pwd = getcwd(NULL, 0);
-	temp2 = ft_strjoin(ft_strrchr(pwd, '/'), "\001\e[0m\002: ");
-	temp = prompt;
-	prompt = ft_strjoin(temp, temp2);
-	return (free(temp), free(temp2), free(pwd), prompt);
-}
 
 int	main(int ac, char *av[], char *envp[])
 {
@@ -100,19 +29,6 @@ int	main(int ac, char *av[], char *envp[])
 	exit_status = 0;
 	(void) ac;
 	(void) av;
-	// if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
-	// if (ac > 1)
-	// {
-	// 	data = init_exec_data(ft_strtrim(get_next_line(fileno(stdin)), "\n"), envp, &exit_status);
-	// 	if (data)
-	// 	{
-	// 		execute_node(data, data->head);
-	// 		exit_status = data->exit_status;
-	// 		free_data(data);
-	// 	}
-	// 	return (exit_status);
-	// }
-	// int fd = 0;
 	if (isatty(fileno(stdin)))
 	{
 		env_llst = set_envp(envp);
@@ -158,7 +74,7 @@ int	main(int ac, char *av[], char *envp[])
 	return (del_lst(&env_llst), exit_status);
 }
 
-t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
+static t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 {
     t_data		*data;
 
@@ -199,3 +115,17 @@ void	free_data(t_data *data)
 	free(data);
 	// exit_cleanup(data);
 }
+
+	// if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
+	// if (ac > 1)
+	// {
+	// 	data = init_exec_data(ft_strtrim(get_next_line(fileno(stdin)), "\n"), envp, &exit_status);
+	// 	if (data)
+	// 	{
+	// 		execute_node(data, data->head);
+	// 		exit_status = data->exit_status;
+	// 		free_data(data);
+	// 	}
+	// 	return (exit_status);
+	// }
+	// int fd = 0;

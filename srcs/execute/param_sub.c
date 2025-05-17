@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 static void	copy_latter_half_of_string(char **result, char *str);
 static void	perform_sub(t_data *data, char **str, int i, char *param);
+static int	skip_quotes(char **str, int *dquote, int *i);
 
 char	*get_param_name(char *str)
 {
@@ -27,30 +28,6 @@ char	*get_param_name(char *str)
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	return (ft_strndup(str, i));
-}
-
-int	skip_quotes(char **str, int *dquote, int *i)
-{
-	if ((*str)[*i] == '\\')
-	{
-		(*i) += 2;
-		return (1);
-	}
-	if ((*str)[*i] == '\"')
-	{
-		(*dquote)++;
-		(*i)++;
-		return (1);
-	}
-	else if ((*str)[*i] == '\'' && (*dquote % 2) == 0)
-	{
-		(*i)++;
-		while ((*str)[*i] && (*str)[(*i)] != '\'')
-			(*i)++;
-		(*i)++;
-		return (1);
-	}
-	return (0);
 }
 
 // put me in coach
@@ -80,6 +57,30 @@ void	param_sub(t_data *data, char **str)
 		}
 		i++;
 	}
+}
+
+static int	skip_quotes(char **str, int *dquote, int *i)
+{
+	if ((*str)[*i] == '\\')
+	{
+		(*i) += 2;
+		return (1);
+	}
+	if ((*str)[*i] == '\"')
+	{
+		(*dquote)++;
+		(*i)++;
+		return (1);
+	}
+	else if ((*str)[*i] == '\'' && (*dquote % 2) == 0)
+	{
+		(*i)++;
+		while ((*str)[*i] && (*str)[(*i)] != '\'')
+			(*i)++;
+		(*i)++;
+		return (1);
+	}
+	return (0);
 }
 
 static void	perform_sub(t_data *data, char **str, int i, char *key)

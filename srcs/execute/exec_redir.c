@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 int		execute_redir(t_data *data, t_ast *node);
 int		redir_input(t_data *data, t_ast *node);
@@ -52,7 +52,7 @@ int	redir_heredoc(t_data *data, t_ast *node)
 	eof = node->right->token->literal;
 	remove_quotes(eof);
 	if (temp_fd < 0)
-		ft_perror();
+		perror("heredoc failed to create a temp file\n");
 	while (42)
 	{
 		write(data->std_fd[STDOUT_FILENO], "> ", 2);

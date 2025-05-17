@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 static t_ast	*create_redir_node(t_token *start, t_token **stop, t_token *temp, t_token *next_token);
 static t_ast	*parse_redir2(t_token **token, t_token **stop);

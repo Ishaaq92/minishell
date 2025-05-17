@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 // https://www.chidiwilliams.com/posts/on-recursive-descent-and-pratt-parsing
 // https://www.rioki.org/2016/04/18/recusive-descent-parser.html

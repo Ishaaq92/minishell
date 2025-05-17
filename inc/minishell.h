@@ -90,9 +90,6 @@ typedef struct s_data
 }						t_data;
 
 // "main" minishell.c
-void	ft_perror(void);
-int		custom_error(char *str, char *msg);
-int		bi_custom_error(char * func, char *str, char *msg);
 void	free_data(t_data *data);
 
 // Handling Signals
@@ -101,7 +98,6 @@ void	handle_ctrl_z(int sig);
 void	handle_signals(void);
 
 // linked_list.c
-void	print_tokens(t_token **head);
 t_token	*ft_lstnew(char *str);
 void	ft_lstadd_back(t_token **lst, t_token *new);
 void	ft_lstclear(t_token **lst);
@@ -119,6 +115,11 @@ int		check_valid_order(t_token **head);
 // utils.c
 void	exit_cleanup(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
+int		custom_error(char *str, char *msg);
+int		bi_custom_error(char * func, char *str, char *msg);
+
+// prompt.c
+char	*get_prompt(int exit_status);
 
 // ft_split2.c
 char	**ft_split2(char *str, char *charset);
@@ -195,5 +196,8 @@ int	bi_export(t_data *data, t_ast *node);
 int	bi_exit(t_data *data, t_ast *node);
 int	bi_unset(t_data *data, t_ast *node);
 int	bi_echo(t_data *data, t_ast *node);
+
+// debug.c
+void	print_tokens(t_token **head);
 
 #endif

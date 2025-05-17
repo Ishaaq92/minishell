@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "../../inc/minishell.h"
 
 void	exit_cleanup(t_data *data)
 {
@@ -30,4 +30,26 @@ int	ft_strcmp(char *s1, char *s2)
 	while (s1[i] == s2[i] && (s1[i] != '\0' || s2[i] != '\0'))
 		i++;
 	return (s1[i] - s2[i]);
+}
+
+int	bi_custom_error(char * func, char *str, char *msg)
+{
+    write(STDERR_FILENO, "minishell: ", 12);
+    write(STDERR_FILENO, func, ft_strlen(func));
+    write(STDERR_FILENO, ": ", 2);
+    write(STDERR_FILENO, str, ft_strlen(str));
+    write(STDERR_FILENO, ": ", 2);
+    write(STDERR_FILENO, msg, ft_strlen(msg));
+    write(STDERR_FILENO, "\n", 1);
+    return (0);
+}
+
+int	custom_error(char *str, char *msg)
+{
+    write(STDERR_FILENO, "minishell: ", 12);
+    write(STDERR_FILENO, str, ft_strlen(str));
+    write(STDERR_FILENO, ": ", 2);
+    write(STDERR_FILENO, msg, ft_strlen(msg));
+    write(STDERR_FILENO, "\n", 1);
+    return (0);
 }

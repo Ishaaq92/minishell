@@ -62,13 +62,6 @@ void	join_list(t_token *args, t_token *wild)
 	}
 }
 
-void	ft_lstdelone(t_token *args)
-{
-	if (args->literal)
-		free(args->literal);
-	free(args);
-}
-
 int	get_wildcard_args(t_token *args, t_token **wild_args)
 {
 	int		j;

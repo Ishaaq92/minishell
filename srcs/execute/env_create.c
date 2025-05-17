@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 static t_envp		*env_add(void);
 int					ft_lstsize(t_envp *lst);

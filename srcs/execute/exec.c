@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 int		is_builtin(t_data *data, t_ast *node);
 int		execute_logical(t_data *data, t_ast *node);

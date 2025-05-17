@@ -10,37 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
-
-void	print_tokens(t_token **head)
-{
-	t_token		*temp;
-
-	temp = *head;
-	printf("tokens: {");
-	while (temp != NULL)
-	{
-		printf("%s[%i], ", temp->literal, temp->type);
-		temp = temp->next;
-	}
-	printf("}\n");
-}
-
-void	ft_lstclear(t_token **lst)
-{
-	t_token	*tmp;
-
-	if (lst)
-	{
-		while (*lst)
-		{
-			tmp = (*lst)->next;
-			free((*lst)->literal);
-			free((*lst));
-			(*lst) = tmp;
-		}
-	}
-}
+#include "../../inc/minishell.h"
 
 t_token	*ft_lstnew(char *str)
 {
@@ -87,4 +57,27 @@ t_token	*ft_lstlast(t_token *lst)
 	while (lst->next)
 		lst = lst->next;
 	return (lst);
+}
+
+void	ft_lstclear(t_token **lst)
+{
+	t_token	*tmp;
+
+	if (lst)
+	{
+		while (*lst)
+		{
+			tmp = (*lst)->next;
+			free((*lst)->literal);
+			free((*lst));
+			(*lst) = tmp;
+		}
+	}
+}
+
+void	ft_lstdelone(t_token *args)
+{
+	if (args->literal)
+		free(args->literal);
+	free(args);
 }

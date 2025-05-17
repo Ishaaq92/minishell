@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 static char	*get_test_path(char *path, char *cmd_name);
 static void	free_paths(char **paths);
