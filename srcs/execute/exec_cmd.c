@@ -41,17 +41,51 @@ int	is_builtin(t_data *data, t_ast *node)
 void	clean_args(t_data *data)
 {
 	t_token	*temp;
+	t_token	*list;
 
 	temp = data->token_list;
+	list = NULL;
 	while (temp)
 	{
 		if (temp->type == WORD)
 			if (temp->literal)
 			{
-				param_sub(data, &temp->literal);
+				if (ft_strchr(temp->literal, '$'))
+				{
+					param_sub(data, &temp->literal);
+					create_tokens(temp->literal, &list);
+					t_token		*temp3;
+
+					temp3 = list;
+					while (temp3)
+					{
+						temp3->type = WORD;
+						temp3 = temp3->next;
+					}
+					if (list->next)
+					{
+						t_token	*temp2;
+						t_token	*list_last;
+
+						temp2 = temp->prev;
+						if (temp2)
+							temp2->next = list;
+						else
+							data->token_list = list;
+						list->prev = temp2;
+						list_last = ft_lstlast(list);
+						list_last->next = temp->next;
+						temp2 = temp->next;
+						if (temp2)
+							temp2->prev = list_last;
+						ft_lstdelone(temp);
+						temp = list;
+					}
+				}
 				remove_quotes(temp->literal);
 			}
 		temp = temp->next;
+		list = NULL;
 	}
 }
 

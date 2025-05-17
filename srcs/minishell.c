@@ -147,7 +147,7 @@ int	main(int ac, char *av[], char *envp[])
 				env_llst = data->env_llst;
 				free_data(data);
 			}
-			free(line);
+			free(line), free(prompt);
 		}
 	}
 	// tester only

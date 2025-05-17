@@ -177,6 +177,7 @@ void	clean_args(t_data *data);
 
 // wildcards.c
 void    wildcards(t_data *data);
+void	ft_lstdelone(t_token *args);
 
 // quote_removal.c
 void	remove_quotes(char *str);

@@ -91,7 +91,6 @@ int	check_brackets(t_token **head)
 	open_brackets = 0;
 	while (temp)
 	{
-		
 		if (temp->type == LBRACE)
 		{
 			open_brackets++;

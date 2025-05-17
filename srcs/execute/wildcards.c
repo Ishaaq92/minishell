@@ -16,7 +16,6 @@ int 		print_files(char *prefix, char *suffix, t_token **wild_args);
 static int	check_sequence(char *d_name, char *prefix, char *suffix);
 int			count_files(char *prefix, char *suffix);
 void		join_list(t_token *args, t_token *wild);
-void		ft_lstdelone(t_token *args);
 int			get_wildcard_args(t_token *args, t_token **wild_args);
 
 void    wildcards(t_data *data)

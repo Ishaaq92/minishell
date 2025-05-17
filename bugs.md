@@ -97,3 +97,9 @@ https://github.com/zstenger93/42_minishell_tester
 ### Go wild section
 - 10: how the bash command interacts with your tokens
 - 12: unset not accepting multiple arguments
+
+## Edge cases that made me lose my sanity
+ export x="echo hi | echo bye"
+ $x
+output: hi | echo bye
+
