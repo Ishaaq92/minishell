@@ -40,19 +40,6 @@ int	is_builtin(t_data *data, t_ast *node)
 
 void	clean_args(t_data *data)
 {
-	// int		i;
-
-	// i = 0;
-	// if (token->type == WORD)
-	// {
-	// 	while (node->literal[i])
-	// 	{
-	// 		param_sub(data, &node->literal[i]);
-	// 		remove_quotes(node->literal[i]);
-	// 		i++;
-	// 	}
-	// }
-
 	t_token	*temp;
 
 	temp = data->token_list;
@@ -61,7 +48,7 @@ void	clean_args(t_data *data)
 		if (temp->type == WORD)
 			if (temp->literal)
 			{
-				// param_sub(data, &temp->literal);
+				param_sub(data, &temp->literal);
 				remove_quotes(temp->literal);
 			}
 		temp = temp->next;
@@ -72,7 +59,7 @@ int	execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
 
-	// clean_args(data, node);
+	clean_args(data);
 	if (is_builtin(data, node))
 		return (data->exit_status);
 	if (!ft_strcmp(node->literal[0], ".."))

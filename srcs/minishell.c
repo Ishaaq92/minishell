@@ -67,13 +67,13 @@ int	custom_error(char *str, char *msg)
 char	*exit_colour(int exit_status)
 {
 	if (!exit_status)
-		return (ft_strdup("\e[1;34m[ "));
+		return (ft_strdup("\001\e[1;34m\002[ "));
 	else if (exit_status == 1)
-		return (ft_strdup("\e[1;31m[ "));
+		return (ft_strdup("\001\e[1;31m\002[ "));
 	else if (exit_status == 139)
-		return (ft_strdup("\e[1;35m[ "));
+		return (ft_strdup("\001\e[1;35m\002[ "));
 	else
-		return (ft_strdup("\e[1;33m[ "));
+		return (ft_strdup("\001\e[1;33m\002[ "));
 }
 
 char	*get_prompt(t_envp *env, int exit_status)
@@ -87,14 +87,14 @@ char	*get_prompt(t_envp *env, int exit_status)
 	prompt = ft_strjoin(temp, temp2);
 	free(temp), free(temp2);
 	temp = prompt;
-	prompt = ft_strjoin(temp, " ]\e[0m \e[1;36m");
+	prompt = ft_strjoin(temp, " ]\001\e[0m\002 \001\e[1;36m\002");
 	free(temp);
 	while (ft_strncmp("PWD=", env->literal, 4))
 		env = env->next;
 	if (env)
-		temp2 = ft_strjoin(env->literal + 4, "\e[0m: ");
+		temp2 = ft_strjoin(env->literal + 4, "\001\e[0m\002: ");
 	else
-		temp2 = ft_strjoin("~", "\e[0m: ");
+		temp2 = ft_strjoin("~", "\001\e[0m\002: ");
 	temp = prompt;
 	prompt = ft_strjoin(temp, temp2);
 	return (free(temp), free(temp2), prompt);
@@ -183,13 +183,13 @@ t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 	data->token_list = NULL;
 	data->head = NULL;
 	data->env_llst = env_llst;
-	param_sub(data, line);
 	if (create_tokens(*line, &(data->token_list)) || data->token_list == NULL)
 	{
 		*exit_status = 2;
 		return (free_data(data), NULL);
 	}
 	// printf("\n***TOKEN LIST***\n");
+	param_sub(data, line);
 	clean_args(data);
 	wildcards(data);
 	// print_tokens(& 	(data->token_list));

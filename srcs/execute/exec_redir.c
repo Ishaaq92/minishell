@@ -20,7 +20,6 @@ int		redir_heredoc(t_data *data, t_ast *node);
 
 int	execute_redir(t_data *data, t_ast *node)
 {
-	// clean_args(data, node);
 	if (node->type != IN_HEREDOC)
 	{
 		param_sub(data, &node->right->token->literal);
