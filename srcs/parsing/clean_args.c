@@ -31,8 +31,8 @@ void	clean_args(t_data *data)
 					param_sub(data, &current->literal);
 					create_tokens(current->literal, &list);
 					update_tokens(data, current, list);
-					ft_lstdelone(current);
-					current = list;
+											ft_lstdelone(current);
+						current = list;
 				}
 				remove_quotes(current->literal);
 			}
@@ -41,6 +41,12 @@ void	clean_args(t_data *data)
 	}
 }
 
+// this function will handle the newly created linked list of tokens from 
+// param_sub
+// first it will set all tokens inside it to WORD, so tokens like ">" or "|" are
+// handled as words, not operators, like bash
+// then, if list->next exists, meaning the token was split into chunks and isn't
+// just one single token after substitution, attach the list
 static void	update_tokens(t_data *data, t_token *current, t_token *list)
 {
 	t_token		*temp;
@@ -52,7 +58,7 @@ static void	update_tokens(t_data *data, t_token *current, t_token *list)
 		temp->type = WORD;
 		temp = temp->next;
 	}
-	if (list->next)
+	if (list && list->next)
 	{
 		temp = current->prev;
 		if (temp)

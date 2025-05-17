@@ -36,6 +36,7 @@ int	main(int ac, char *av[], char *envp[])
 		{
 			prompt = get_prompt(exit_status);
 			line = readline(prompt);
+			free(prompt);
 			if (line && *line)
 			{
 				add_history(line);
@@ -48,7 +49,7 @@ int	main(int ac, char *av[], char *envp[])
 				env_llst = data->env_llst;
 				free_data(data);
 			}
-			free(line), free(prompt);
+			free(line);
 		}
 	}
 	// tester only

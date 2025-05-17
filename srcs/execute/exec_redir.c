@@ -41,14 +41,13 @@ int	execute_redir(t_data *data, t_ast *node)
 	return (data->exit_status);
 }
 
-// cat needs the fd to have RDONLY flag I think? look it up TODO
-int	redir_heredoc(t_data *data, t_ast *node)
+int	redir_heredoc2(t_data *data, t_ast *node)
 {
 	int		temp_fd;
 	char	*buffer;
 	char	*eof;
 
-	temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC | O_RDONLY, 0666);
 	eof = node->right->token->literal;
 	remove_quotes(eof);
 	if (temp_fd < 0)
@@ -57,17 +56,39 @@ int	redir_heredoc(t_data *data, t_ast *node)
 	{
 		write(data->std_fd[STDOUT_FILENO], "> ", 2);
 		buffer = get_next_line(data->std_fd[STDIN_FILENO]);
-		if (buffer == NULL)
-			break ;
-		if (ft_strncmp(buffer, eof, ft_strlen(buffer) - 1) == 0)
+		if (buffer && buffer[0] != '\n'
+			&& !ft_strncmp(buffer, eof, ft_strlen(buffer) - 1))
 			break ;
 		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
 	}
 	(free(buffer), close(temp_fd));
+	return (0);
+}
+
+// cat needs the fd to have RDONLY flag I think? look it up TODO
+int	redir_heredoc(t_data *data, t_ast *node)
+{
+	int		fd[2];
+	pid_t	pid;
+	int		temp_fd;
+
+	if (pipe(fd) == -1)
+		perror("uh oh");
+	pid = fork();
+	if (pid < 0)
+		perror("also uh oh");
+	if (pid == 0)
+	{
+		redir_heredoc2(data, node);
+		exit(55);
+	}
+	waitpid(pid, NULL, 0);
+	// close(fd[0]);
 	temp_fd = open("temp", O_RDONLY);
 	if (dup2(temp_fd, STDIN_FILENO) == -1)
 		return (perror("dup2 failed"), 1);
 	return (0);
+	
 }
 
 int	redir_output(t_data *data, t_ast *node)
