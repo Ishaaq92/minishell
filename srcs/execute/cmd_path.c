@@ -77,6 +77,8 @@ static void	free_paths(char **paths)
 	int		i;
 
 	i = 0;
+	if (!paths)
+		return ;
 	while (paths[i])
 		free(paths[i++]);
 	free(paths);
