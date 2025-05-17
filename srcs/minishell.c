@@ -65,56 +65,25 @@ char	*exit_colour(int exit_status)
 		return (ft_strdup("\001\e[0;93m\002[ "));
 }
 
-// char	*join_and_free(char **s1, char **s2)
-// {
-// 	int		len;
-// 	char	*result;
-
-// 	len = ft_strlen(*s1) + ft_strlen(*s2);
-// 	// result = malloc()
-// 	// return (result);
-// }
-
-char	*set_prompt(int n, ...)
+char	*get_prompt(int exit_status)
 {
-	va_list		args;
-	char		*temp;
-	char		*arg;
-	char		*result;
-	int			i;
-
-	i = 0;
-	va_start(args, n);
-	result = ft_strdup("");
-	while (i++ < n)
-	{
-		arg = (char *)va_arg(args, char *);
-		temp = result;
-		result = ft_strjoin(temp, arg);
-		free(temp);
-	}
-	return (va_end(args), result);
-}
-
-# define BLUE "\001\e[0;94m\002"
-
-char	*get_prompt(t_envp *env, int exit_status)
-{
-	char	*colour;
-	char	*exit_str;
+	char	*prompt;
+	char	*temp;
+	char	*temp2;
 	char	*pwd;
-	char	*result;
 
-	colour = exit_colour(exit_status);
-	exit_str = ft_itoa(exit_status);
-	while (ft_strncmp("PWD=", env->literal, 4))
-		env = env->next;
-	if (env)
-		pwd = ft_strjoin(env->literal + 4, "\001\e[0m\002: ");
-	else
-		pwd = ft_strdup("~\001\e[0m\002: ");
-	result = set_prompt(4, colour, exit_str, " ]\001\e[0m\002 {BLUE}", pwd);
-	return (free(colour), free(exit_str), free(pwd), result);
+	temp = exit_colour(exit_status);
+	temp2 = ft_itoa(exit_status);
+	prompt = ft_strjoin(temp, temp2);
+	free(temp), free(temp2);
+	temp = prompt;
+	prompt = ft_strjoin(temp, " ]\001\e[0m\002 \001\e[0;94m\002");
+	free(temp);
+	pwd = getcwd(NULL, 0);
+	temp2 = ft_strjoin(ft_strrchr(pwd, '/'), "\001\e[0m\002: ");
+	temp = prompt;
+	prompt = ft_strjoin(temp, temp2);
+	return (free(temp), free(temp2), free(pwd), prompt);
 }
 
 int	main(int ac, char *av[], char *envp[])
@@ -144,17 +113,13 @@ int	main(int ac, char *av[], char *envp[])
 	// 	return (exit_status);
 	// }
 	// int fd = 0;
-
 	if (isatty(fileno(stdin)))
 	{
 		env_llst = set_envp(envp);
 		while (42)
 		{
-			prompt = get_prompt(env_llst, exit_status);
-			(void)prompt;
-			rl_end = 10;
+			prompt = get_prompt(exit_status);
 			line = readline(prompt);
-			printf("rlpoint %i\n", rl_mark);
 			if (line && *line)
 			{
 				add_history(line);
