@@ -49,15 +49,19 @@ void	remove_node(t_data *data, char *var)
 {
 	t_envp	*curr;
 	t_envp	*prev;
+	int		len;
 	
 	curr = data->env_llst;
 	prev = NULL;
+	len = ft_strlen(var);
+	if (!len)
+		return ;
 	while (curr != NULL)
 	{
 		if (ft_strncmp(var, curr->literal, ft_strlen(var)) == 0)
 		{
 			if (prev == NULL)
-				curr = curr->next;
+				data->env_llst = curr->next;
 			else
 				prev->next = curr->next;
 			free(curr->literal);
@@ -68,4 +72,3 @@ void	remove_node(t_data *data, char *var)
 		curr = curr->next;
 	}
 }
-

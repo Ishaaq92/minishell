@@ -62,6 +62,29 @@ void	join_list(t_token *args, t_token *wild)
 	}
 }
 
+char	*find_wildcard(char *str)
+{
+	int		i;
+	int		quote_char;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '*')
+			return (str + i);
+		else if (str[i] == '\"' || str[i] == '\'')
+		{
+			quote_char = str[i++];
+			while (str[i] != quote_char)
+				i++;
+			i++;
+		}
+		else
+			i++;
+	}
+	return (NULL);
+}
+
 int	get_wildcard_args(t_token *args, t_token **wild_args)
 {
 	int		j;
@@ -69,7 +92,8 @@ int	get_wildcard_args(t_token *args, t_token **wild_args)
 	char	*prefix;
 
 	j = 0;
-	suffix = ft_strchr(args->literal, '*');
+	// suffix = ft_strchr(args->literal, '*');
+	suffix = find_wildcard(args->literal);
 	if (!suffix)
 		return (1);
 	while (args->literal[j] != '*')
