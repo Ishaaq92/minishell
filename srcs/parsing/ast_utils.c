@@ -39,10 +39,10 @@ void	free_ast(t_ast *ast)
 	i = 0;
 	while (ast->literal && ast->literal[i])
 	{
-		free(ast->literal[i]);
-		i ++;
+		// free(ast->literal[i]);
+		i++;
 	}
-	free(ast->literal);
+	// free(ast->literal);
 	free(ast);
 }
 

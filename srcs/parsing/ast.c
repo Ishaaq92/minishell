@@ -107,17 +107,18 @@ static t_ast	*parse_pipe(t_token **token, t_token **stop)
 	t_ast	*pipe;
 
 	start = *token;
-	while ((*token) && (*token)->next && (*token) != (*stop))
+	temp = *token;
+	while (temp && temp->next && temp != (*stop))
 	{
-		if ((*token)->type == PIPE)
+		if (temp->type == PIPE)
 		{
-			pipe = ast_new(*token);
-			temp = (*token)->next;
-			pipe->left = parse_brackets(&start, token);
+			pipe = ast_new(temp);
+			temp = temp->next;
+			pipe->left = parse_brackets(&start, &temp);
 			pipe->right = parse_pipe(&temp, stop);
 			return (pipe);
 		}
-		(*token) = (*token)->next;
+		temp = temp->next;
 	}
 	return (parse_brackets(&start, stop));
 }

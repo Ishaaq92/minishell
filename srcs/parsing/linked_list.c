@@ -68,7 +68,7 @@ void	ft_lstclear(t_token **lst)
 		while (*lst)
 		{
 			tmp = (*lst)->next;
-			free((*lst)->literal);
+			// free((*lst)->literal);
 			free((*lst));
 			(*lst) = tmp;
 		}

@@ -14,31 +14,41 @@
 
 static void	update_tokens(t_data *data, t_token *current, t_token *list);
 
-void	clean_args(t_data *data)
+void	clean_args(t_data *data, t_ast *node)
 {
 	t_token	*current;
 	t_token	*list;
 
-	current = data->token_list;
+	current = node->token;
+	(void)node;
 	list = NULL;
-	while (current)
+	while (current && current->type == WORD)
 	{
-		if (current->type == WORD)
-			if (current->literal)
+		if (current->literal)
+		{
+			if (ft_strchr(current->literal, '$'))
 			{
-				if (ft_strchr(current->literal, '$'))
+				param_sub(data, &current->literal);
+				create_tokens(current->literal, &list);
+				if (list && list->next)
 				{
-					param_sub(data, &current->literal);
-					create_tokens(current->literal, &list);
 					update_tokens(data, current, list);
-											ft_lstdelone(current);
-						current = list;
+					ft_lstdelone(current);
+					current = list;
 				}
-				remove_quotes(current->literal);
+				else
+				{
+					ft_lstclear(&list);
+				}
+				
 			}
+			remove_quotes(current->literal);
+		}
 		current = current->next;
 		list = NULL;
 	}
+	free(node->literal);
+	node->literal = parse_cmd_args(node->token, count_argc(node->token)); 
 }
 
 // this function will handle the newly created linked list of tokens from 
@@ -58,14 +68,14 @@ static void	update_tokens(t_data *data, t_token *current, t_token *list)
 		temp->type = WORD;
 		temp = temp->next;
 	}
-	if (list && list->next)
+	temp = current->prev;
+	if (temp)
+		temp->next = list;
+	else
+		data->token_list = list;
+	list->prev = temp;	
+	if (list)
 	{
-		temp = current->prev;
-		if (temp)
-			temp->next = list;
-		else
-			data->token_list = list;
-		list->prev = temp;
 		list_last = ft_lstlast(list);
 		list_last->next = current->next;
 		temp = current->next;

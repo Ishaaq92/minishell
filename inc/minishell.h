@@ -136,13 +136,15 @@ void	print_ast(t_ast *ast, int i);
 void	free_ast(t_ast *ast);
 
 // ast_cmd.c
-t_ast	*parse_cmd(t_token **node);
+t_ast	*parse_cmd(t_token **token);
+char	**parse_cmd_args(t_token *token, int argc);
+int		count_argc(t_token *token);
 
 // ast_redir.c
 t_ast	*parse_redir(t_token **token, t_token **stop);
 
 // clean_args.c
-void	clean_args(t_data *data);
+void	clean_args(t_data *data, t_ast *node);
 
 // Execution
 
@@ -177,7 +179,6 @@ int		execute_redir(t_data *data, t_ast *node);
 
 // exec_cmd.c
 int		execute_cmd(t_data *data, t_ast *node);
-// void	clean_args(t_data *data, t_ast *node);
 
 // wildcards.c
 void    wildcards(t_data *data);

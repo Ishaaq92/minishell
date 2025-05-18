@@ -12,21 +12,18 @@
 
 #include "../../inc/minishell.h"
 
-static char		**parse_cmd_args(t_token *node, int argc);
-static int		count_argc(t_token *node);
-
 // treat whatever is left after all operators are parsed as a command plus
 // arguments
-t_ast	*parse_cmd(t_token	**node)
+t_ast	*parse_cmd(t_token	**token)
 {
 	t_ast	*cmd;
 
-	if (node == NULL || (*node) == NULL)
+	if (token == NULL || (*token) == NULL)
 		return (NULL);
-	while ((*node)->type == LBRACE || (*node)->type == RBRACE)
-		(*node) = (*node)->next;
-	cmd = ast_new(*node);
-	cmd->literal = parse_cmd_args(*node, count_argc(*node));
+	while ((*token)->type == LBRACE || (*token)->type == RBRACE)
+		(*token) = (*token)->next;
+	cmd = ast_new(*token);
+	cmd->literal = parse_cmd_args(*token, count_argc(*token));
 	if (cmd->literal == NULL)
 		return (free(cmd), NULL);
 	return (cmd);
@@ -34,7 +31,7 @@ t_ast	*parse_cmd(t_token	**node)
 
 // this helper function generates a double pointer array of strings which
 // are the command name followed by its arguments
-static char	**parse_cmd_args(t_token *node, int argc)
+char	**parse_cmd_args(t_token *token, int argc)
 {
 	t_token	*current;
 	char	**result;
@@ -44,10 +41,12 @@ static char	**parse_cmd_args(t_token *node, int argc)
 	if (!result)
 		return (NULL);
 	i = 0;
-	current = node;
+	current = token;
+	if (current->literal[0] == '\0')
+		current = current->next;
 	while (i < argc)
 	{
-		result[i++] = ft_strdup(current->literal);
+		result[i++] = current->literal;
 		current = current->next;
 	}
 	result[i] = NULL;
@@ -56,13 +55,15 @@ static char	**parse_cmd_args(t_token *node, int argc)
 
 // this helper function counts the arguments the command will have
 // based on how many tokens have the type WORD in a row
-static int	count_argc(t_token *node)
+int	count_argc(t_token *token)
 {
 	t_token	*temp;
 	int		count;
 
 	count = 0;
-	temp = node;
+	temp = token;
+	if (temp->literal[0] =='\0')
+		temp = temp->next;
 	while (temp && temp->type == WORD)
 	{
 		temp = temp->next;

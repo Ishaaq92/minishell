@@ -42,7 +42,7 @@ int	execute_cmd(t_data *data, t_ast *node)
 {
 	pid_t	pid;
 
-	clean_args(data);
+	clean_args(data, node);
 	if (is_builtin(data, node))
 		return (data->exit_status);
 	if (!ft_strcmp(node->literal[0], ".."))
