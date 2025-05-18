@@ -14,11 +14,17 @@
 
 static void	exec_child(char **cmd, t_envp *env_list);
 
+int	empty_cmd(void)
+{
+	custom_error("", "command not found");
+	return (127);
+}
+
 // TODO: change these numbers to macros
 int	is_builtin(t_data *data, t_ast *node)
 {
-	if (!node)
-		return (0);
+	if (!node || !node->literal[0])
+		data->exit_status = empty_cmd();
 	else if (!ft_strcmp(node->literal[0], "echo"))
 		data->exit_status = bi_echo(data, node);
 	else if (!ft_strcmp(node->literal[0], "cd"))

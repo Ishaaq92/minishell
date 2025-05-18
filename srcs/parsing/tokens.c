@@ -78,8 +78,12 @@ static void	handle_op(char **str, char **literal, t_token *token)
 	if (ft_strchr("<>&|", (*str)[i]))
 	{
 		i++;
-		if ((*str)[i] == (*str)[i - 1])
+		while ((*str)[i] == (*str)[i - 1])
 			i++;
+		// changed this to a while loop to match bash in one specific case
+		// if it causes other issues, revert to an if statement which was working really well
+		// if ((*str)[i] == (*str)[i - 1])
+		// 	i++;
 		// while (ft_isdigit((*str)[i]))
 		// 	i++;
 	}

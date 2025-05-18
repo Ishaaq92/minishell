@@ -20,7 +20,6 @@ void	clean_args(t_data *data, t_ast *node)
 	t_token	*list;
 
 	current = node->token;
-	(void)node;
 	list = NULL;
 	while (current && current->type == WORD)
 	{
@@ -30,17 +29,14 @@ void	clean_args(t_data *data, t_ast *node)
 			{
 				param_sub(data, &current->literal);
 				create_tokens(current->literal, &list);
-				if (list && list->next)
+				if (list)
 				{
 					update_tokens(data, current, list);
+					if (current == node->token)
+						node->token = list;
 					ft_lstdelone(current);
 					current = list;
 				}
-				else
-				{
-					ft_lstclear(&list);
-				}
-				
 			}
 			remove_quotes(current->literal);
 		}
@@ -74,12 +70,9 @@ static void	update_tokens(t_data *data, t_token *current, t_token *list)
 	else
 		data->token_list = list;
 	list->prev = temp;	
-	if (list)
-	{
-		list_last = ft_lstlast(list);
-		list_last->next = current->next;
-		temp = current->next;
-		if (temp)
-			temp->prev = list_last;
-	}
+	list_last = ft_lstlast(list);
+	list_last->next = current->next;
+	temp = current->next;
+	if (temp)
+		temp->prev = list_last;
 }

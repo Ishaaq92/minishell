@@ -24,7 +24,7 @@ int	check_valid_order(t_token **head)
 	tmp = *head;
 	if (tmp->type < 2 || tmp->type == PIPE || check_brackets(head))
 		return (1);
-	while (tmp)
+	while (tmp->next)
 	{
 		if (tmp->open_quote)
 			return (1);
@@ -35,6 +35,8 @@ int	check_valid_order(t_token **head)
 			return (1);
 		tmp = tmp->next;
 	}
+	if (tmp->type < 7 || tmp->type == LBRACE)
+		return (1);
 	return (0);
 }
 
@@ -50,7 +52,7 @@ static int	check_brackets(t_token **head)
 		if (temp->type == LBRACE)
 		{
 			open_brackets++;
-			if (temp->next->type == RBRACE || open_lbrace(temp->next))
+			if ((temp->next && temp->next->type == RBRACE) || open_lbrace(temp->next))
 				return (1);
 		}
 		else if (temp->type == RBRACE)

@@ -122,7 +122,7 @@ static t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 	data->env_llst = env_llst;
 	create_tokens(*line, &(data->token_list));
 	// if () || data->token_list == NULL)
-	if (!data->token_list && check_valid_order(&data->token_list))
+	if (data->token_list && check_valid_order(&data->token_list))
 	{
 		*exit_status = 2;
 		return (custom_error("tokens", "syntax error"), free_data(data), NULL);
