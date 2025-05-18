@@ -56,11 +56,15 @@ static t_ast	*parse_logical(t_token **token, t_token **stop)
 	t_ast	*logical;
 
 	start = *token;
-	temp = *stop;
+	temp = *token;
+	while (temp != *stop)
+		temp = temp->next;
 	while (temp && (temp)->prev && (temp) != (start))
 	{
 		if (temp->type == RBRACE)
 			skip_braces(&temp);
+		if (temp == start)
+			continue ;
 		if ((temp)->type == LOGICAL_AND || (temp)->type == LOGICAL_OR)
 		{
 			logical = ast_new(temp);
@@ -146,7 +150,6 @@ t_token	*get_rbrace(t_token *lbrace)
 // after pipes, begin looking for brackets
 // if a bracket is found, the inside content is sent to parse_logical
 // and treated the same way as logical operators outside brackets
-// TODO: handle nested brackets
 static t_ast	*parse_brackets(t_token **token, t_token **stop)
 {
 	t_token	*start;
