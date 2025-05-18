@@ -76,6 +76,7 @@ int	get_wildcard_args(t_token *args, t_token **wild_args)
 		j++;
 	prefix = ft_strndup(args->literal, j++);
 	suffix = ft_strdup(++suffix);
+	(remove_quotes(prefix), remove_quotes(suffix));
 	print_files(prefix, suffix, wild_args);
 	return (free(prefix), free(suffix), 0);
 }

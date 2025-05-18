@@ -56,9 +56,7 @@ static t_ast	*parse_logical(t_token **token, t_token **stop)
 	t_ast	*logical;
 
 	start = *token;
-	temp = *token;
-	while (temp != *stop)
-		temp = temp->next;
+	temp = *stop;
 	while (temp && (temp)->prev && (temp) != (start))
 	{
 		if (temp->type == RBRACE)

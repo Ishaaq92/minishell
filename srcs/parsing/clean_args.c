@@ -18,7 +18,9 @@ void	clean_args(t_data *data, t_ast *node)
 {
 	t_token	*current;
 	t_token	*list;
+	// int		update;
 
+	// update = 0;
 	current = node->token;
 	list = NULL;
 	while (current && current->type == WORD)

@@ -15,6 +15,9 @@
 static t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst);
 void	free_data(t_data *data);
 
+// the following code is to test minishell when commands are fed to it from a file
+// create a test.sh, put commands in it, and now we can test it with valgrind and stuff
+
 // int	main(int ac, char *av[], char *envp[])
 // {
 // 	char	*line;
