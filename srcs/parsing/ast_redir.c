@@ -80,6 +80,9 @@ static t_ast	*parse_file(t_token **token)
 	t_ast		*path;
 
 	path = ast_new(*token);
+	path->literal = (char **) malloc((sizeof(char *) * 2));
+	path->literal[0] = (*token)->literal;
+	path->literal[1] = NULL;
 	path->type = PATH;
 	return (path);
 }

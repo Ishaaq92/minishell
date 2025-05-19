@@ -146,6 +146,9 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 // clean_args.c
 void	clean_args(t_data *data, t_ast *node);
 
+// heredoc.c
+int	parse_heredoc(t_data *data, t_token *token);
+
 // Execution
 
 // env_delete.c

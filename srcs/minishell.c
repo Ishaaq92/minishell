@@ -125,12 +125,13 @@ static t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 	data->head = NULL;
 	data->env_llst = env_llst;
 	create_tokens(*line, &(data->token_list));
-	// if () || data->token_list == NULL)
 	if (data->token_list && check_valid_order(&data->token_list))
 	{
 		*exit_status = 2;
 		return (custom_error("tokens", "syntax error"), ft_lstclear(&data->token_list), free(data), NULL);
 	}
+	 if (parse_heredoc(data, data->token_list))
+	 	return (ft_lstclear(&data->token_list), free(data), NULL);
 	// printf("\n***TOKEN LIST***\n");
 	// param_sub(data, line);
 	// clean_args(data);
