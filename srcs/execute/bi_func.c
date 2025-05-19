@@ -20,7 +20,7 @@
 // export: ALMOST DONE
 // env: DONE
 
-static void	swap_dir(t_data *data);
+static int	swap_dir(t_data *data);
 
 int	echo_args(char *str)
 {
@@ -68,13 +68,16 @@ int	bi_cd(t_data *data, t_ast *node)
 {
 	char	*new_path;
 	char	*old_path;
+	char	*temp;
 
-	if (node->literal[1] == NULL || ft_strcmp(node->literal[1], "~") == 0)
+	if (node->literal[1] == NULL || !ft_strcmp(node->literal[1], "~") || !ft_strcmp(node->literal[1], "--"))
 		new_path = value_envp(&data->env_llst, "HOME");
 	else if (ft_strcmp(node->literal[1], "-") == 0)
-		return (swap_dir(data), 0);
+		return (swap_dir(data));
 	else
 		new_path = ft_strdup(node->literal[1]);
+	if (!new_path)
+		return (bi_custom_error("cd", "HOME", "not set"), 1);
 	if (access(new_path, F_OK) == -1)
 	{
 		bi_custom_error("cd", node->literal[1], "No such file or directory");
@@ -84,27 +87,37 @@ int	bi_cd(t_data *data, t_ast *node)
 	}
 	old_path = getcwd(NULL, 0);
 	if (chdir(new_path) == -1)
-		return(bi_custom_error("cd", node->literal[1], "Permission denied"), 1);
+		return(bi_custom_error("cd", node->literal[1], "Permission denied"), free(new_path), free(old_path), 1);
 	env_alter(data, "OLDPWD=", old_path);
 	if (old_path)
 		free(old_path);
-	env_alter(data, "PWD=", new_path);
+	temp = getcwd(NULL, 0);
+	if (temp)
+		(env_alter(data, "PWD=", temp), free(temp));
 	if (new_path)
 		free(new_path);
 	return (0);
 }
 
-static void	swap_dir(t_data *data)
+static int	swap_dir(t_data *data)
 {
 	char	*old_path;
 	char	*new_path;
 	
 	old_path = value_envp(&data->env_llst, "OLDPWD");
-	new_path = value_envp(&data->env_llst, "PWD");
+	if (!old_path)
+		return(custom_error("cd", "OLDPWD not set" ), 1);
+	new_path = getcwd(NULL, 0); 
+	if (!new_path)
+		return(custom_error("cd", "getcwd failed" ), 1);
 	if (old_path)
+	{
 		chdir(old_path);
-	env_alter(data, "OLDPWD=", new_path);
-	env_alter(data, "PWD=", old_path);
-	free(new_path);
-	free(old_path);
+		env_alter(data, "OLDPWD=", new_path);
+		env_alter(data, "PWD=", old_path);
+	}
+	printf("%s\n", new_path);
+	(free(new_path), free(old_path));
+	return (0);
 }
+

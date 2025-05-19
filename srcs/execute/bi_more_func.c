@@ -105,6 +105,8 @@ static int	is_key_valid(char *key)
 	i = 0;
 	while (key[i] && key[i] != '=')
 	{
+		if (key[i] == '+' && key[i + 1] == '=')
+			return (0);
 		if (!ft_isalnum(key[i]) && key[i] != '_')
 			return (custom_error(key, "not a valid identifier"), 1);
 		i++;
@@ -115,11 +117,19 @@ static int	is_key_valid(char *key)
 static void	add_update_env(t_data *data, t_ast *node, int i)
 {
 	char	*key;
+	char	*temp;
 	t_envp	*existing;
 
 	key = get_param_name(node->literal[i]);
 	existing = check_envp(data, key);
-	if (existing && ft_strchr(node->literal[i], '='))
+	if (existing && ft_strchr(node->literal[i], '+'))
+	{
+		temp = existing->literal;
+		existing->literal = ft_strjoin(existing->literal,
+			ft_strchr(node->literal[i], '=') + 1);
+		(free(temp));
+	}
+	else if (existing && ft_strchr(node->literal[i], '='))
 	{
 			free(existing->literal);
 			existing->literal = ft_strdup(node->literal[i]);
@@ -127,6 +137,30 @@ static void	add_update_env(t_data *data, t_ast *node, int i)
 	else
 		add_node(data, node->literal[i]);
 	free(key);
+}
+int	ms_atoi(const char *str)
+{
+	size_t			i;
+	int				minus;
+	long int		result;
+
+	i = 0;
+	minus = 0;
+	result = 0;
+	while ((str[i] <= '\r' && str[i] >= '\t') || str[i] == ' ')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i++] == '-')
+			minus = 1;
+	}
+	while (str[i])
+		result = result * 10 + (str[i++] - '0');
+	if (minus == 1)
+		result = -result;
+	if (result > INT_MAX || result < INT_MIN)
+		return (custom_error("exit", "numeric argument required"), 1);
+	return (result);
 }
 
 int	bi_exit(t_data *data, t_ast *node)
@@ -142,16 +176,18 @@ int	bi_exit(t_data *data, t_ast *node)
 	while (args && args[0] && args[++i] != NULL)
 	{
 		j = 0;
+		if (args[1][0] == '+')
+			j++;
 		while (args[i][j] && ft_isdigit(args[i][j]) != 0)
 			j++;
-		if (i == 1 && args[i][j] != '\0')
+		if (args[1][0] == '\0' || (i == 1 && args[i][j] != '\0'))
 			return (custom_error("exit","numeric argument required"), 2);
 		else if (i == 1 && args[i][j] == '\0' && j < 11)
-			code = ft_atoi(args[i]);
+			code = ms_atoi(args[i]);
 	}
 	if (i > 2)
 		return (custom_error("exit","too many arguments"), 1);
-	data->exit_status = code;
+	data->exit_status = code % 256;
 	exit_cleanup(data);
 	// Will never return 0
 	return (0);

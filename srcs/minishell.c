@@ -50,7 +50,6 @@ void	free_data(t_data *data);
 // 			line = get_next_line(testfd);
 // 		}
 // 	}
-// 	printf("i = %i\n", exit_status);
 // 	return (del_lst(&env_llst), exit_status);
 // }
 
@@ -87,8 +86,8 @@ int	main(int ac, char *av[], char *envp[])
 					env_llst = data->env_llst;
 					free_data(data);
 				}
+				free(line);
 			}
-			free(line);
 		}
 	}
 	// tester only
@@ -106,8 +105,8 @@ int	main(int ac, char *av[], char *envp[])
 				exit_status = data->exit_status;
 				env_llst = data->env_llst;
 				free_data(data);
-				free(line);
 			}
+			free(line), free(line2);
 			line = get_next_line(fileno(stdin));
 		}
 	}
@@ -125,6 +124,8 @@ static t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 	data->head = NULL;
 	data->env_llst = env_llst;
 	create_tokens(*line, &(data->token_list));
+	if (!data->token_list)
+		return (free(data), NULL);
 	if (data->token_list && check_valid_order(&data->token_list))
 	{
 		*exit_status = 2;
@@ -158,17 +159,3 @@ void	free_data(t_data *data)
 	free(data);
 	// exit_cleanup(data);
 }
-
-	// if (ac >= 2 && !ft_strncmp(av[1], "-c", 2))
-	// if (ac > 1)
-	// {
-	// 	data = init_exec_data(ft_strtrim(get_next_line(fileno(stdin)), "\n"), envp, &exit_status);
-	// 	if (data)
-	// 	{
-	// 		execute_node(data, data->head);
-	// 		exit_status = data->exit_status;
-	// 		free_data(data);
-	// 	}
-	// 	return (exit_status);
-	// }
-	// int fd = 0;

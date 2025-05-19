@@ -49,6 +49,7 @@ void	param_sub(t_data *data, char **str)
 			if (!*key && (!(*str)[i + 1] || dquote % 2 != 0))
 			{
 				i++;
+				free(key);
 				continue ;
 			}
 			perform_sub(data, str, i, key);

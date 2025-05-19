@@ -24,6 +24,7 @@
 # include <sys/types.h>
 # include <dirent.h> // for opendir
 # include <stdarg.h>
+# include <limits.h>
 
 enum e_commands
 {

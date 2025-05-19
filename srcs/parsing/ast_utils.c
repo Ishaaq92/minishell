@@ -42,7 +42,7 @@ void	free_ast(t_ast *ast)
 		// free(ast->literal[i]);
 		i++;
 	}
-	// free(ast->literal);
+	free(ast->literal);
 	free(ast);
 }
 

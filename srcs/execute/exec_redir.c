@@ -19,6 +19,9 @@ int		redir_output(t_data *data, t_ast *node);
 
 int	execute_redir(t_data *data, t_ast *node)
 {
+	// int		fd[2];
+
+	// pipe(fd);
 	if (node->type != IN_HEREDOC)
 	{
 		param_sub(data, &node->right->token->literal);
@@ -30,8 +33,8 @@ int	execute_redir(t_data *data, t_ast *node)
 		data->exit_status = redir_output(data, node);
 	if (node->left && data->exit_status == 0)
 		execute_node(data, node->left);
-	if (dup2(data->std_fd[0], STDIN_FILENO) == -1)
-		return (perror("dup2 failed"), 1);
+	// if (dup2(data->std_fd[0], STDIN_FILENO) == -1)
+	// 	return (perror("dup2 failed"), 1);
 	reset_redir(data);
 	if (node->type == IN_HEREDOC)
 		unlink(node->right->literal[0]);

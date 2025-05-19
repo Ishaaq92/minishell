@@ -31,7 +31,7 @@ int	parse_heredoc(t_data *data, t_token *token)
 			if (store_input(data, token->next->literal, temp_name))
 				return (free(temp_no), free(temp_name), 1);
 			(free(token->next->literal), free(temp_no));
-			token->next->literal = ft_strdup(temp_name);
+			token->next->literal = temp_name;
 			i++;
 		}
 		token = token->next;
@@ -56,14 +56,14 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 		return (custom_error("open", "failed to open temp file"), 1);
 	while (42)
 	{
-		write(STDIN_FILENO, "> ", 2);
-		buffer = get_next_line(STDIN_FILENO);
+		buffer = readline("> ");
 		if (buffer && buffer[0] != '\n'
-			&& !ft_strncmp(buffer, lim, ft_strlen(lim)))
+			&& !ft_strncmp(buffer, lim, ft_strlen(buffer) - 1))
 			break ;
-		if (has_quotes)
+		if (!has_quotes)
 			param_sub(data, &buffer);
 		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
+		write(temp_fd, "\n", 1);
 	}
 	(free(buffer), close(temp_fd));
 	return (0);

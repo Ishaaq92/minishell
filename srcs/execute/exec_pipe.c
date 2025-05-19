@@ -23,14 +23,10 @@ int	execute_pipe(t_data *data, t_ast *node)
 	pid = fork();
 	pipe(pipe_fd);
 	if (pid == 0)
-	{
 		do_pipe_cmds(data, node, pipe_fd);
-	}
 	else
-	{
 		waitpid(pid, &status, 0);
-		
-	}
+	close(pipe_fd[0]), close(pipe_fd[1]);
 	return (WEXITSTATUS(status));
 }
 
@@ -47,8 +43,8 @@ int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 		close(pipe_fd[0]);
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 			return (perror("dup2 failed"), 1);
-		close(pipe_fd[1]);
 		execute_node(data, node->left);
+		close(pipe_fd[1]);
 	}
 	else
 	{
@@ -58,5 +54,7 @@ int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 		data->exit_status = execute_node(data, node->right);
 		close(pipe_fd[0]);
 	}
+	del_lst(&data->env_llst);
+	free_data(data);
 	exit(data->exit_status);
 }

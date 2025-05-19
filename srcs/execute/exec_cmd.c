@@ -51,7 +51,7 @@ int	execute_cmd(t_data *data, t_ast *node)
 	clean_args(data, node);
 	if (is_builtin(data, node))
 		return (data->exit_status);
-	if (!ft_strcmp(node->literal[0], ".."))
+	if (!ft_strcmp(node->literal[0], "..") || !ft_strcmp(node->literal[0], "."))
 		return (custom_error(node->literal[0], "command not found"), 127);
 	else if (!ft_strncmp(node->literal[0], "./", 2) || node->literal[0][0] == '/')
 	{
@@ -68,6 +68,8 @@ int	execute_cmd(t_data *data, t_ast *node)
 			custom_error(node->literal[0], "command not found");
 		return (127);
 	}
+	free(node->literal);
+	node->literal = parse_cmd_args(node->token, count_argc(node->token)); 
 	pid = fork();
 	if (pid == 0)
 	{
