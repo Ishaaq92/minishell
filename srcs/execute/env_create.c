@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/15 19:33:11 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/19 20:18:15 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,11 @@ int	add_node(t_data *data, char *string)
 {
 	t_envp	*new;	
 	t_envp	*lst;
-	// char	**array;
 
 	lst = data->env_llst;
-	// array = data->envp;
 	new = env_add();
 	new->literal = ft_strdup(string);
 	env_lstadd_back(&lst, new);
-	// del_array(array);
-	// data->envp = stitch_env(lst);
 	return (0);
 }
 
@@ -38,8 +34,6 @@ t_envp	*set_envp(char **envp)
 	t_envp		*env_new;
 	t_envp		*head;
 
-	// this occurs when there are no environment variables which can happen
-	// create a blank linked list or something if that occurs?
 	if (!envp)
 		return (NULL);
 	i = 0;
@@ -53,9 +47,7 @@ t_envp	*set_envp(char **envp)
 	}
 	return (head);
 }
-// This function does NOT free key or value. 
-// Only free curr->literal.
-// KEY MUST INCLUE THE '=' CHARACTER. Eg. 'PWD='
+
 void	env_alter(t_data *data, char *key, char *value)
 {
 	t_envp		*curr;
@@ -69,8 +61,6 @@ void	env_alter(t_data *data, char *key, char *value)
 		return ;
 	free(curr->literal);
 	curr ->literal = ft_strjoin(key, value);
-	// free(data->envp);
-	// data->envp = stitch_env(data->env_llst);
 }
 
 static t_envp	*env_add(void)

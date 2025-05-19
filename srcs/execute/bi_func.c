@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/16 17:04:53 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/19 20:44:12 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 // env: DONE
 
 static int	swap_dir(t_data *data);
+char	*more_bi_cd(t_data *data, t_ast *node);
 
 int	echo_args(char *str)
 {
@@ -70,12 +71,9 @@ int	bi_cd(t_data *data, t_ast *node)
 	char	*old_path;
 	char	*temp;
 
-	if (node->literal[1] == NULL || !ft_strcmp(node->literal[1], "~") || !ft_strcmp(node->literal[1], "--"))
-		new_path = value_envp(&data->env_llst, "HOME");
-	else if (ft_strcmp(node->literal[1], "-") == 0)
+	if (ft_strcmp(node->literal[1], "-") == 0)
 		return (swap_dir(data));
-	else
-		new_path = ft_strdup(node->literal[1]);
+	new_path = more_bi_cd(data, node);
 	if (!new_path)
 		return (bi_custom_error("cd", "HOME", "not set"), 1);
 	if (access(new_path, F_OK) == -1)
@@ -87,7 +85,7 @@ int	bi_cd(t_data *data, t_ast *node)
 	}
 	old_path = getcwd(NULL, 0);
 	if (chdir(new_path) == -1)
-		return(bi_custom_error("cd", node->literal[1], "Permission denied"), free(new_path), free(old_path), 1);
+		return (bi_custom_error("cd", node->literal[1], "Permission denied"), free(new_path), free(old_path), 1);
 	env_alter(data, "OLDPWD=", old_path);
 	if (old_path)
 		free(old_path);
@@ -97,6 +95,19 @@ int	bi_cd(t_data *data, t_ast *node)
 	if (new_path)
 		free(new_path);
 	return (0);
+}
+
+char	*more_bi_cd(t_data *data, t_ast *node)
+{
+	char	*new_path;
+
+	if (node->literal[1] == NULL
+		|| !ft_strcmp(node->literal[1], "~")
+		|| !ft_strcmp(node->literal[1], "--"))
+		new_path = value_envp(&data->env_llst, "HOME");
+	else
+		new_path = ft_strdup(node->literal[1]);
+	return (new_path);
 }
 
 static int	swap_dir(t_data *data)
@@ -116,7 +127,7 @@ static int	swap_dir(t_data *data)
 		env_alter(data, "OLDPWD=", new_path);
 		env_alter(data, "PWD=", old_path);
 	}
-	printf("%s\n", new_path);
+	printf("%s\n", old_path);
 	(free(new_path), free(old_path));
 	return (0);
 }
