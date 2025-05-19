@@ -41,54 +41,62 @@ int	execute_redir(t_data *data, t_ast *node)
 	return (data->exit_status);
 }
 
-int	redir_heredoc2(t_data *data, t_ast *node)
-{
-	int		temp_fd;
-	char	*buffer;
-	char	*eof;
+// int	redir_heredoc2(t_data *data, t_ast *node)
+// {
+// 	int		temp_fd;
+// 	char	*buffer;
+// 	char	*eof;
 
-	temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC | O_RDONLY, 0666);
-	eof = node->right->token->literal;
-	remove_quotes(eof);
-	if (temp_fd < 0)
-		perror("heredoc failed to create a temp file\n");
-	while (42)
-	{
-		write(data->std_fd[STDOUT_FILENO], "> ", 2);
-		buffer = get_next_line(data->std_fd[STDIN_FILENO]);
-		if (buffer && buffer[0] != '\n'
-			&& !ft_strncmp(buffer, eof, ft_strlen(buffer) - 1))
-			break ;
-		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
-	}
-	(free(buffer), close(temp_fd));
-	return (0);
-}
+// 	// temp_fd = open("temp", O_CREAT | O_WRONLY | O_TRUNC | O_RDONLY, 0666);
+// 	eof = node->right->token->literal;
+// 	remove_quotes(eof);
+// 	if (temp_fd < 0)
+// 		perror("heredoc failed to create a temp file\n");
+// 	while (42)
+// 	{
+// 		write(data->std_fd[STDOUT_FILENO], "> ", 2);
+// 		buffer = get_next_line(data->std_fd[STDIN_FILENO]);
+// 		if (buffer && buffer[0] != '\n'
+// 			&& !ft_strncmp(buffer, eof, ft_strlen(buffer) - 1))
+// 			break ;
+// 		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
+// 	}
+// 	(free(buffer), close(temp_fd));
+// 	return (0);
+// }
 
 // cat needs the fd to have RDONLY flag I think? look it up TODO
 int	redir_heredoc(t_data *data, t_ast *node)
 {
-	int		fd[2];
-	pid_t	pid;
-	int		temp_fd;
+	char	*buffer;
+	char	*eof;
+	int		has_quotes;
 
-	if (pipe(fd) == -1)
-		perror("uh oh");
-	pid = fork();
-	if (pid < 0)
-		perror("also uh oh");
-	if (pid == 0)
+	(void) data;
+	int		fd[2];
+
+	reset_redir(data);
+	has_quotes = 0;
+	pipe(fd);
+	eof = node->right->token->literal;
+	if (ft_strchr(eof, '\\') || ft_strchr(eof, '\'') || ft_strchr(eof, '\"'))
+		has_quotes = 1;
+	remove_quotes(eof);
+	while (42)
 	{
-		redir_heredoc2(data, node);
-		exit(55);
+		buffer = readline("> ");
+		if (buffer && buffer[0] != '\n'
+		&& !ft_strncmp(buffer, eof, ft_strlen(buffer) - 1))
+			break ;
+		if (!has_quotes)
+			param_sub(data, &buffer);
+		(write(fd[1], buffer, ft_strlen(buffer)), free(buffer));
+		write(fd[1], "\n", 1);
 	}
-	waitpid(pid, NULL, 0);
-	// close(fd[0]);
-	temp_fd = open("temp", O_RDONLY);
-	if (dup2(temp_fd, STDIN_FILENO) == -1)
+	if (dup2(fd[0], STDIN_FILENO) == -1)
 		return (perror("dup2 failed"), 1);
+	(free(buffer), close(fd[0]), close(fd[1]));
 	return (0);
-	
 }
 
 int	redir_output(t_data *data, t_ast *node)
@@ -112,6 +120,7 @@ int	redir_output(t_data *data, t_ast *node)
 		return (custom_error(node->right->token->literal, "No such file or directory"), 1);
 	if (dup2(fd_newfile, fd_redir) == -1)
 		return (perror("dup2 failed"), 1);
+	close(fd_newfile);
 	return (0);
 }
 
@@ -135,6 +144,7 @@ int	redir_input(t_data *data, t_ast *node)
 	}
 	if (dup2(fd_newfile, fd_redir) == -1)
 		return (perror("dup2 failed"), 1);
+	close(fd_newfile);
 	return (0);
 }
 

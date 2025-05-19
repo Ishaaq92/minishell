@@ -176,6 +176,7 @@ int		execute_pipe(t_data *data, t_ast *node);
 
 // exec_redir.c
 int		execute_redir(t_data *data, t_ast *node);
+void	reset_redir(t_data *data);
 
 // exec_cmd.c
 int		execute_cmd(t_data *data, t_ast *node);

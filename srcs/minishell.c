@@ -39,7 +39,7 @@ void	free_data(t_data *data);
 // 		{
 // 			char *line2 = ft_strtrim(line, "\n");
 // 			data = init_exec_data(&line2, &exit_status, env_llst);
-// 			if (data)
+// 			if (data && data->head)
 // 			{
 // 				execute_node(data, data->head);
 // 				exit_status = data->exit_status;
@@ -50,6 +50,7 @@ void	free_data(t_data *data);
 // 			line = get_next_line(testfd);
 // 		}
 // 	}
+// 	printf("i = %i\n", exit_status);
 // 	return (del_lst(&env_llst), exit_status);
 // }
 
@@ -77,15 +78,15 @@ int	main(int ac, char *av[], char *envp[])
 			free(prompt);
 			if (line && *line)
 			{
-				add_history(line);
 				data = init_exec_data(&line, &exit_status, env_llst);
-				if (data == NULL)
-					continue ;
 				if (data)
+				{
+					add_history(line);
 					execute_node(data, data->head);
-				exit_status = data->exit_status;
-				env_llst = data->env_llst;
-				free_data(data);
+					exit_status = data->exit_status;
+					env_llst = data->env_llst;
+					free_data(data);
+				}
 			}
 			free(line);
 		}
@@ -128,7 +129,7 @@ static t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 	if (data->token_list && check_valid_order(&data->token_list))
 	{
 		*exit_status = 2;
-		return (custom_error("tokens", "syntax error"), free_data(data), NULL);
+		return (custom_error("tokens", "syntax error"), ft_lstclear(&data->token_list), free(data), NULL);
 	}
 	// printf("\n***TOKEN LIST***\n");
 	// param_sub(data, line);
@@ -142,9 +143,6 @@ static t_data	*init_exec_data(char **line, int *exit_status, t_envp *env_llst)
 	data->std_fd[0] = dup(STDIN_FILENO);
 	data->std_fd[1] = dup(STDOUT_FILENO);
 	data->std_fd[2] = dup(STDERR_FILENO);
-	// close(data->std_fd[0]);
-	// close(data->std_fd[1]);
-	// close(data->std_fd[2]);
 	return (data);
 }
 
@@ -153,6 +151,9 @@ void	free_data(t_data *data)
 	free_ast(data->head);
 	// del_lst(&data->env_llst);
 	ft_lstclear(&data->token_list);
+	close(data->std_fd[0]);
+	close(data->std_fd[1]);
+	close(data->std_fd[2]);
 	free(data);
 	// exit_cleanup(data);
 }
