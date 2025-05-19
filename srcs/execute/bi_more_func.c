@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:16:31 by ishaaq            #+#    #+#             */
-/*   Updated: 2025/05/15 19:35:46 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/19 20:56:36 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,18 +126,19 @@ static void	add_update_env(t_data *data, t_ast *node, int i)
 	{
 		temp = existing->literal;
 		existing->literal = ft_strjoin(existing->literal,
-			ft_strchr(node->literal[i], '=') + 1);
+				ft_strchr(node->literal[i], '=') + 1);
 		(free(temp));
 	}
 	else if (existing && ft_strchr(node->literal[i], '='))
 	{
-			free(existing->literal);
-			existing->literal = ft_strdup(node->literal[i]);
+		free(existing->literal);
+		existing->literal = ft_strdup(node->literal[i]);
 	}
 	else
 		add_node(data, node->literal[i]);
 	free(key);
 }
+
 int	ms_atoi(const char *str)
 {
 	size_t			i;
@@ -169,7 +170,7 @@ int	bi_exit(t_data *data, t_ast *node)
 	int		code;
 	int		i;	
 	int		j;	
-	
+
 	i = 0;
 	code = 0;
 	args = node->literal;
@@ -181,14 +182,13 @@ int	bi_exit(t_data *data, t_ast *node)
 		while (args[i][j] && ft_isdigit(args[i][j]) != 0)
 			j++;
 		if (args[1][0] == '\0' || (i == 1 && args[i][j] != '\0'))
-			return (custom_error("exit","numeric argument required"), 2);
+			return (custom_error("exit", "numeric argument required"), 2);
 		else if (i == 1 && args[i][j] == '\0' && j < 11)
 			code = ms_atoi(args[i]);
 	}
 	if (i > 2)
-		return (custom_error("exit","too many arguments"), 1);
+		return (custom_error("exit", "too many arguments"), 1);
 	data->exit_status = code % 256;
 	exit_cleanup(data);
-	// Will never return 0
 	return (0);
 }

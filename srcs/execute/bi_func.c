@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/19 20:44:12 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/19 20:53:40 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 // env: DONE
 
 static int	swap_dir(t_data *data);
-char	*more_bi_cd(t_data *data, t_ast *node);
+char		*more_bi_cd(t_data *data, t_ast *node);
+void		change_wd(t_data *data, char *new_path, char *old_path);
 
 int	echo_args(char *str)
 {
@@ -69,7 +70,6 @@ int	bi_cd(t_data *data, t_ast *node)
 {
 	char	*new_path;
 	char	*old_path;
-	char	*temp;
 
 	if (ft_strcmp(node->literal[1], "-") == 0)
 		return (swap_dir(data));
@@ -86,6 +86,14 @@ int	bi_cd(t_data *data, t_ast *node)
 	old_path = getcwd(NULL, 0);
 	if (chdir(new_path) == -1)
 		return (bi_custom_error("cd", node->literal[1], "Permission denied"), free(new_path), free(old_path), 1);
+	change_wd(data, new_path, old_path);
+	return (0);
+}
+
+void	change_wd(t_data *data, char *new_path, char *old_path)
+{
+	char	*temp;
+
 	env_alter(data, "OLDPWD=", old_path);
 	if (old_path)
 		free(old_path);
@@ -94,7 +102,6 @@ int	bi_cd(t_data *data, t_ast *node)
 		(env_alter(data, "PWD=", temp), free(temp));
 	if (new_path)
 		free(new_path);
-	return (0);
 }
 
 char	*more_bi_cd(t_data *data, t_ast *node)
@@ -114,13 +121,13 @@ static int	swap_dir(t_data *data)
 {
 	char	*old_path;
 	char	*new_path;
-	
+
 	old_path = value_envp(&data->env_llst, "OLDPWD");
 	if (!old_path)
-		return(custom_error("cd", "OLDPWD not set" ), 1);
-	new_path = getcwd(NULL, 0); 
+		return (custom_error("cd", "OLDPWD not set" ), 1);
+	new_path = getcwd(NULL, 0);
 	if (!new_path)
-		return(custom_error("cd", "getcwd failed" ), 1);
+		return (custom_error("cd", "getcwd failed" ), 1);
 	if (old_path)
 	{
 		chdir(old_path);
