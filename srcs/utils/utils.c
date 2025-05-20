@@ -12,6 +12,7 @@
 
 #include "../../inc/minishell.h"
 
+// helper function for exit builtin
 void	exit_cleanup(t_data *data)
 {
 	int	exit_status;
@@ -44,6 +45,9 @@ int	bi_custom_error(char *func, char *str, char *msg)
 	return (0);
 }
 
+// helper function to print an error message when applicable
+// str is the string or function that caused the error
+// msg is the descriptive error message
 int	custom_error(char *str, char *msg)
 {
 	write(STDERR_FILENO, "minishell: ", 12);

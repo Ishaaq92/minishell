@@ -12,6 +12,7 @@
 
 #include "../../inc/minishell.h"
 
+// prints the token list, along with token type enum, for debugging purposes
 void	print_tokens(t_token **head)
 {
 	t_token		*temp;

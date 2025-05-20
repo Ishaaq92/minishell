@@ -31,7 +31,7 @@ char	*get_param_name(char *str)
 }
 
 // put me in coach
-void	param_sub(t_data *data, char **str)
+void	param_sub(t_data *data, char **str, int heredoc)
 {
 	int		i;
 	int		dquote;
@@ -41,7 +41,7 @@ void	param_sub(t_data *data, char **str)
 	dquote = 0;
 	while (*str && (*str)[i])
 	{
-		if (skip_quotes(str, &dquote, &i))
+		if (heredoc == 0 && skip_quotes(str, &dquote, &i))
 			continue ;
 		if ((*str)[i] == '$')
 		{

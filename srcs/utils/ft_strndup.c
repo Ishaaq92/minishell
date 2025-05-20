@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 
+// returns a malloc'd string of s, copying up to n chars
 char	*ft_strndup(const char *s, int n)
 {
 	int		i;

@@ -14,6 +14,7 @@
 
 static char	*exit_colour(int exit_status);
 
+// function used to build the dynamic string before the readline prompt
 char	*get_prompt(int exit_status)
 {
 	char	*prompt;
@@ -35,9 +36,11 @@ char	*get_prompt(int exit_status)
 	return (free(temp), free(temp2), free(pwd), prompt);
 }
 
+// helper function for norm reasons. sets the colour based on exit no
+// green if 0, red if 1, magenta for segfault, yellow for the rest
 static char	*exit_colour(int exit_status)
 {
-	if (!exit_status)
+	if (exit_status == 0)
 		return (ft_strdup("\001\e[0;92m\002[ "));
 	else if (exit_status == 1)
 		return (ft_strdup("\001\e[0;91m\002[ "));

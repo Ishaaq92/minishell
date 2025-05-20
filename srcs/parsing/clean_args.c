@@ -38,7 +38,7 @@ static void	rebuild_token_list(t_data *data, t_ast *node, t_token **current)
 	t_token		*list;
 
 	list = NULL;
-	param_sub(data, &(*current)->literal);
+	param_sub(data, &(*current)->literal, 0);
 	create_tokens((*current)->literal, &list);
 	if (list)
 	{

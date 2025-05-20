@@ -122,9 +122,6 @@ int		bi_custom_error(char *func, char *str, char *msg);
 // prompt.c
 char	*get_prompt(int exit_status);
 
-// ft_split2.c
-char	**ft_split2(char *str, char *charset);
-
 // ft_strndup.c
 char	*ft_strndup(const char *s, int n);
 
@@ -199,7 +196,7 @@ int		get_wildcard_args(t_token *args, t_token **wild_args);
 void	remove_quotes(char *str);
 
 // param_sub.c
-void	param_sub(t_data *data, char **str);
+void	param_sub(t_data *data, char **str, int heredoc);
 char	*get_param_name(char *str);
 
 // bi_cd.c

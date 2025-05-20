@@ -12,22 +12,22 @@
 
 #include "../../inc/minishell.h"
 
-int		execute_redir(t_data *data, t_ast *node);
-static int		redir_input(t_data *data, t_ast *node);
-static int		redir_output(t_data *data, t_ast *node);
-void	reset_redir(t_data *data);
+int				execute_redir(t_data *data, t_ast *node);
+static int		redir_input(t_ast *node);
+static int		redir_output(t_ast *node);
+void			reset_redir(t_data *data);
 
 int	execute_redir(t_data *data, t_ast *node)
 {
 	if (node->type != IN_HEREDOC)
 	{
-		param_sub(data, &node->right->token->literal);
+		param_sub(data, &node->right->token->literal, 0);
 		remove_quotes(node->right->token->literal);
 	}
 	if (node->type == REDIR_IN || node->type == IN_HEREDOC)
-		data->exit_status = redir_input(data, node);
+		data->exit_status = redir_input(node);
 	else if (node->type == REDIR_OUT || node->type == OUT_APPEND)
-		data->exit_status = redir_output(data, node);
+		data->exit_status = redir_output(node);
 	if (node->left && data->exit_status == 0)
 		execute_node(data, node->left);
 	reset_redir(data);
@@ -36,16 +36,15 @@ int	execute_redir(t_data *data, t_ast *node)
 	return (data->exit_status);
 }
 
-static int	redir_input(t_data *data, t_ast *node)
+static int	redir_input(t_ast *node)
 {
 	int		fd_newfile;
 	int		fd_redir;
 
-	(void) data;
 	if (ft_isdigit(*node->token->literal))
 		fd_redir = ft_atoi(node->token->literal);
 	else
-		fd_redir = 0;
+		fd_redir = STDIN_FILENO;
 	fd_newfile = open(node->right->literal[0], O_RDONLY);
 	if (fd_newfile < 0)
 		return (custom_error(node->right->literal[0],
@@ -56,17 +55,16 @@ static int	redir_input(t_data *data, t_ast *node)
 	return (0);
 }
 
-static int	redir_output(t_data *data, t_ast *node)
+static int	redir_output(t_ast *node)
 {
 	int		fd_newfile;
 	int		fd_redir;
 	int		flags;
 
-	(void) data;
 	if (ft_isdigit(node->token->literal[0]))
 		fd_redir = ft_atoi(node->token->literal);
 	else
-		fd_redir = 1;
+		fd_redir = STDOUT_FILENO;
 	if (node->type == REDIR_OUT)
 		flags = O_CREAT | O_WRONLY | O_TRUNC;
 	else

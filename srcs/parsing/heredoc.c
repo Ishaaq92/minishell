@@ -61,7 +61,7 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 			&& !ft_strncmp(buffer, lim, ft_strlen(buffer) - 1))
 			break ;
 		if (!has_quotes)
-			param_sub(data, &buffer);
+			param_sub(data, &buffer, 1);
 		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
 		write(temp_fd, "\n", 1);
 	}
