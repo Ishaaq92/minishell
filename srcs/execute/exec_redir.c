@@ -13,9 +13,9 @@
 #include "../../inc/minishell.h"
 
 int		execute_redir(t_data *data, t_ast *node);
-int		redir_input(t_data *data, t_ast *node);
+static int		redir_input(t_data *data, t_ast *node);
+static int		redir_output(t_data *data, t_ast *node);
 void	reset_redir(t_data *data);
-int		redir_output(t_data *data, t_ast *node);
 
 int	execute_redir(t_data *data, t_ast *node)
 {
@@ -36,35 +36,7 @@ int	execute_redir(t_data *data, t_ast *node)
 	return (data->exit_status);
 }
 
-int	redir_output(t_data *data, t_ast *node)
-{
-	int		fd_newfile;
-	int		fd_redir;
-	int		flag;
-
-	(void) data;
-	if (ft_isdigit(node->token->literal[0]))
-		fd_redir = ft_atoi(node->token->literal);
-	else
-		fd_redir = 1;
-	if (node->type == REDIR_OUT)
-		flag = O_TRUNC;
-	else
-		flag = O_APPEND;
-	fd_newfile = open(node->right->token->literal,
-			O_CREAT | O_WRONLY | flag, 0666);
-	if (fd_newfile < 0)
-		return (custom_error(node->right->token->literal,
-				"No such file or directory"), 1);
-	if (dup2(fd_newfile, fd_redir) == -1)
-		return (perror("dup2 failed"), 1);
-	close(fd_newfile);
-	return (0);
-}
-
-// TODO: fix the line with three arrows, put the filename in a 
-// more accessible location
-int	redir_input(t_data *data, t_ast *node)
+static int	redir_input(t_data *data, t_ast *node)
 {
 	int		fd_newfile;
 	int		fd_redir;
@@ -74,12 +46,35 @@ int	redir_input(t_data *data, t_ast *node)
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = 0;
-	fd_newfile = open(node->right->token->literal, O_RDONLY);
+	fd_newfile = open(node->right->literal[0], O_RDONLY);
 	if (fd_newfile < 0)
-	{
-		custom_error(node->right->token->literal, "No such file or directory");
-		return (1);
-	}
+		return (custom_error(node->right->literal[0],
+				"No such file or directory"), 1);
+	if (dup2(fd_newfile, fd_redir) == -1)
+		return (perror("dup2 failed"), 1);
+	close(fd_newfile);
+	return (0);
+}
+
+static int	redir_output(t_data *data, t_ast *node)
+{
+	int		fd_newfile;
+	int		fd_redir;
+	int		flags;
+
+	(void) data;
+	if (ft_isdigit(node->token->literal[0]))
+		fd_redir = ft_atoi(node->token->literal);
+	else
+		fd_redir = 1;
+	if (node->type == REDIR_OUT)
+		flags = O_CREAT | O_WRONLY | O_TRUNC;
+	else
+		flags = O_CREAT | O_WRONLY | O_APPEND;
+	fd_newfile = open(node->right->literal[0], flags, 0666);
+	if (fd_newfile < 0)
+		return (custom_error(node->right->literal[0],
+				"No such file or directory"), 1);
 	if (dup2(fd_newfile, fd_redir) == -1)
 		return (perror("dup2 failed"), 1);
 	close(fd_newfile);
