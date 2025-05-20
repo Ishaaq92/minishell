@@ -34,7 +34,6 @@ int	find_cmd_path(t_ast *node, t_envp *env_list)
 		if (access(test_path, F_OK) == 0)
 		{
 			free(node->token->literal);
-			// free(test_path);
 			node->token->literal = test_path;
 			return (free_paths(paths), 0);
 		}

@@ -24,7 +24,7 @@ char	*get_prompt(int exit_status)
 	temp = exit_colour(exit_status);
 	temp2 = ft_itoa(exit_status);
 	prompt = ft_strjoin(temp, temp2);
-	free(temp), free(temp2);
+	(free(temp), free(temp2));
 	temp = prompt;
 	prompt = ft_strjoin(temp, " ]\001\e[0m\002 \001\e[0;94m\002");
 	free(temp);

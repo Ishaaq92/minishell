@@ -117,7 +117,7 @@ int		check_valid_order(t_token **head);
 void	exit_cleanup(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 int		custom_error(char *str, char *msg);
-int		bi_custom_error(char * func, char *str, char *msg);
+int		bi_custom_error(char *func, char *str, char *msg);
 
 // prompt.c
 char	*get_prompt(int exit_status);
@@ -148,7 +148,7 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 void	clean_args(t_data *data, t_ast *node);
 
 // heredoc.c
-int	parse_heredoc(t_data *data, t_token *token);
+int		parse_heredoc(t_data *data, t_token *token);
 
 // Execution
 
@@ -186,7 +186,7 @@ void	reset_redir(t_data *data);
 int		execute_cmd(t_data *data, t_ast *node);
 
 // wildcards.c
-void    wildcards(t_data *data);
+void	wildcards(t_data *data);
 void	ft_lstdelone(t_token *args);
 
 // quote_removal.c
@@ -197,13 +197,13 @@ void	param_sub(t_data *data, char **str);
 char	*get_param_name(char *str);
 
 // bi_func.c
-int	bi_pwd(t_data *data);
-int	bi_cd(t_data *data, t_ast *node);
-int	bi_env(t_data *data);
-int	bi_export(t_data *data, t_ast *node);
-int	bi_exit(t_data *data, t_ast *node);
-int	bi_unset(t_data *data, t_ast *node);
-int	bi_echo(t_data *data, t_ast *node);
+int		bi_pwd(t_data *data);
+int		bi_cd(t_data *data, t_ast *node);
+int		bi_env(t_data *data);
+int		bi_export(t_data *data, t_ast *node);
+int		bi_exit(t_data *data, t_ast *node);
+int		bi_unset(t_data *data, t_ast *node);
+int		bi_echo(t_data *data, t_ast *node);
 
 // debug.c
 void	print_tokens(t_token **head);

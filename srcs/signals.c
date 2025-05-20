@@ -16,7 +16,6 @@ void	handle_ctrl_c(int sig)
 {
 	(void)sig;
 	write(STDOUT_FILENO, "\n", 1);
-	// rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -26,7 +25,6 @@ void	handle_ctrl_z(int sig)
 	(void) sig;
 	write(1, "Control Z was inputed\n", 23);
 	write(1, "exit\n", 5);
-	// exit_cleanup(NULL);
 	exit(1);
 }
 

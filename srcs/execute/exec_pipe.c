@@ -26,7 +26,7 @@ int	execute_pipe(t_data *data, t_ast *node)
 		do_pipe_cmds(data, node, pipe_fd);
 	else
 		waitpid(pid, &status, 0);
-	close(pipe_fd[0]), close(pipe_fd[1]);
+	(close(pipe_fd[0]), close(pipe_fd[1]));
 	return (WEXITSTATUS(status));
 }
 

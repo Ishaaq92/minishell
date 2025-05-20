@@ -50,10 +50,8 @@ int	is_blank(char c)
 // returns true if the character is an operator
 int	is_op(char c)
 {
-	if (c == '<' || c == '>' || \
-		c == '|' || \
-		c == '(' || c == ')' || \
-		c == '&')
+	if (c == '<' || c == '>' || c == '|'
+		|| c == '(' || c == ')' || c == '&')
 		return (1);
 	return (0);
 }

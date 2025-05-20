@@ -36,7 +36,7 @@ void	param_sub(t_data *data, char **str)
 	int		i;
 	int		dquote;
 	char	*key;
-	
+
 	i = 0;
 	dquote = 0;
 	while (*str && (*str)[i])
@@ -53,7 +53,7 @@ void	param_sub(t_data *data, char **str)
 				continue ;
 			}
 			perform_sub(data, str, i, key);
-			free(key);			
+			free(key);
 			continue ;
 		}
 		i++;

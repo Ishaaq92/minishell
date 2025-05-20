@@ -73,7 +73,7 @@ int	count_argc(t_token *token)
 
 	count = 0;
 	temp = token;
-	if (temp->literal[0] =='\0')
+	if (temp->literal[0] == '\0')
 		temp = temp->next;
 	while (temp)
 	{
@@ -89,7 +89,6 @@ int	count_argc(t_token *token)
 			count++;
 			temp = temp->next;
 		}
-
 	}
 	return (count);
 }

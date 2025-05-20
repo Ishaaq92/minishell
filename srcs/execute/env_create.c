@@ -82,6 +82,8 @@ char	**stitch_env(t_envp *head)
 	i = 0;
 	size = ft_lstsize(head);
 	envp = (char **) malloc(sizeof(char *) * (size + 1));
+	if (!envp)
+		return (NULL);
 	while (i < size && head->literal)
 	{
 		envp[i] = ft_strdup(head->literal);

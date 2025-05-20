@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/25 15:00:15 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/13 20:10:47 by isahmed          ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   utils.c											:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: isahmed <isahmed@student.42.fr>			+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2025/03/25 15:00:15 by isahmed		   #+#	#+#			 */
+/*   Updated: 2025/05/13 20:10:47 by isahmed		  ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
@@ -32,24 +32,24 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-int	bi_custom_error(char * func, char *str, char *msg)
+int	bi_custom_error(char *func, char *str, char *msg)
 {
-    write(STDERR_FILENO, "minishell: ", 12);
-    write(STDERR_FILENO, func, ft_strlen(func));
-    write(STDERR_FILENO, ": ", 2);
-    write(STDERR_FILENO, str, ft_strlen(str));
-    write(STDERR_FILENO, ": ", 2);
-    write(STDERR_FILENO, msg, ft_strlen(msg));
-    write(STDERR_FILENO, "\n", 1);
-    return (0);
+	write(STDERR_FILENO, "minishell: ", 12);
+	write(STDERR_FILENO, func, ft_strlen(func));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, str, ft_strlen(str));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+	write(STDERR_FILENO, "\n", 1);
+	return (0);
 }
 
 int	custom_error(char *str, char *msg)
 {
-    write(STDERR_FILENO, "minishell: ", 12);
-    write(STDERR_FILENO, str, ft_strlen(str));
-    write(STDERR_FILENO, ": ", 2);
-    write(STDERR_FILENO, msg, ft_strlen(msg));
-    write(STDERR_FILENO, "\n", 1);
-    return (0);
+	write(STDERR_FILENO, "minishell: ", 12);
+	write(STDERR_FILENO, str, ft_strlen(str));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+	write(STDERR_FILENO, "\n", 1);
+	return (0);
 }

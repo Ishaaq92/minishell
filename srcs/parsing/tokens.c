@@ -80,12 +80,6 @@ static void	handle_op(char **str, char **literal, t_token *token)
 		i++;
 		while ((*str)[i] == (*str)[i - 1])
 			i++;
-		// changed this to a while loop to match bash in one specific case
-		// if it causes other issues, revert to an if statement which was working really well
-		// if ((*str)[i] == (*str)[i - 1])
-		// 	i++;
-		// while (ft_isdigit((*str)[i]))
-		// 	i++;
 	}
 	else if ((*str)[i] == '(' || (*str)[i] == ')')
 		i++;
@@ -96,7 +90,6 @@ static void	handle_op(char **str, char **literal, t_token *token)
 
 // if a character is not a number or an operator or a space, it has to be a word
 // loop through the string until you find a breakpoint, a token or a space
-// TODO: is is_blank necessary? can you have tabs inside a prompt? or do you just check for space
 static void	handle_word(char **str, char **literal, t_token *token)
 {
 	int		i;

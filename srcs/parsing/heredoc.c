@@ -42,7 +42,7 @@ int	parse_heredoc(t_data *data, t_token *token)
 // what do I want this function to do?
 // - immediately begin the heredoc prompt, don't wait until execution
 // - store input in a temp file (pipe?)
-// - replace the token->literal with the name of the new temp file instead of limiter
+// - replace the token->literal with name of new temp file instead of lim
 static int	store_input(t_data *data, char *lim, char *temp_name)
 {
 	char	*buffer;

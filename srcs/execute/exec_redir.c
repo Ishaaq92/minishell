@@ -19,9 +19,6 @@ int		redir_output(t_data *data, t_ast *node);
 
 int	execute_redir(t_data *data, t_ast *node)
 {
-	// int		fd[2];
-
-	// pipe(fd);
 	if (node->type != IN_HEREDOC)
 	{
 		param_sub(data, &node->right->token->literal);
@@ -33,8 +30,6 @@ int	execute_redir(t_data *data, t_ast *node)
 		data->exit_status = redir_output(data, node);
 	if (node->left && data->exit_status == 0)
 		execute_node(data, node->left);
-	// if (dup2(data->std_fd[0], STDIN_FILENO) == -1)
-	// 	return (perror("dup2 failed"), 1);
 	reset_redir(data);
 	if (node->type == IN_HEREDOC)
 		unlink(node->right->literal[0]);
@@ -47,7 +42,7 @@ int	redir_output(t_data *data, t_ast *node)
 	int		fd_redir;
 	int		flag;
 
-	(void) data;	
+	(void) data;
 	if (ft_isdigit(node->token->literal[0]))
 		fd_redir = ft_atoi(node->token->literal);
 	else
@@ -59,7 +54,8 @@ int	redir_output(t_data *data, t_ast *node)
 	fd_newfile = open(node->right->token->literal,
 			O_CREAT | O_WRONLY | flag, 0666);
 	if (fd_newfile < 0)
-		return (custom_error(node->right->token->literal, "No such file or directory"), 1);
+		return (custom_error(node->right->token->literal,
+			"No such file or directory"), 1);
 	if (dup2(fd_newfile, fd_redir) == -1)
 		return (perror("dup2 failed"), 1);
 	close(fd_newfile);

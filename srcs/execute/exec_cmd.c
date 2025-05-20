@@ -72,13 +72,9 @@ int	execute_cmd(t_data *data, t_ast *node)
 	node->literal = parse_cmd_args(node->token, count_argc(node->token)); 
 	pid = fork();
 	if (pid == 0)
-	{
 		exec_child(node->literal, data->env_llst);
-	}
 	else
-	{
 		waitpid(pid, &data->exit_status, 0);
-	}
 	return (WEXITSTATUS(data->exit_status));
 }
 
@@ -90,7 +86,7 @@ static void	exec_child(char **cmd, t_envp *env_list)
 	dir = opendir(cmd[0]);
 	envp = stitch_env(env_list);
 	if (!envp)
-		(custom_error("malloc", "memory allocation failed"), exit(EXIT_FAILURE));
+		(custom_error("env list", "malloc failed"), exit(EXIT_FAILURE));
 	if (dir)
 		(custom_error(cmd[0], "Is a directory"), closedir(dir), exit(126));
 	execve(cmd[0], cmd, envp);

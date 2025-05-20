@@ -50,7 +50,7 @@ void	remove_node(t_data *data, char *var)
 	t_envp	*curr;
 	t_envp	*prev;
 	int		len;
-	
+
 	curr = data->env_llst;
 	prev = NULL;
 	len = ft_strlen(var);

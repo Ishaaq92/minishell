@@ -85,7 +85,8 @@ int	bi_cd(t_data *data, t_ast *node)
 	}
 	old_path = getcwd(NULL, 0);
 	if (chdir(new_path) == -1)
-		return (bi_custom_error("cd", node->literal[1], "Permission denied"), free(new_path), free(old_path), 1);
+		return (bi_custom_error("cd", node->literal[1], "Permission denied"),
+			free(new_path), free(old_path), 1);
 	change_wd(data, new_path, old_path);
 	return (0);
 }
@@ -138,4 +139,3 @@ static int	swap_dir(t_data *data)
 	(free(new_path), free(old_path));
 	return (0);
 }
-

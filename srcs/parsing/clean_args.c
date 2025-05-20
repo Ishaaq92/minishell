@@ -18,9 +18,7 @@ void	clean_args(t_data *data, t_ast *node)
 {
 	t_token	*current;
 	t_token	*list;
-	// int		update;
 
-	// update = 0;
 	current = node->token;
 	list = NULL;
 	while (current && current->type == WORD)
@@ -46,7 +44,7 @@ void	clean_args(t_data *data, t_ast *node)
 		list = NULL;
 	}
 	free(node->literal);
-	node->literal = parse_cmd_args(node->token, count_argc(node->token)); 
+	node->literal = parse_cmd_args(node->token, count_argc(node->token));
 }
 
 // this function will handle the newly created linked list of tokens from 
@@ -71,7 +69,7 @@ static void	update_tokens(t_data *data, t_token *current, t_token *list)
 		temp->next = list;
 	else
 		data->token_list = list;
-	list->prev = temp;	
+	list->prev = temp;
 	list_last = ft_lstlast(list);
 	list_last->next = current->next;
 	temp = current->next;

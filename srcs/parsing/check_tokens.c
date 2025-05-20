@@ -62,7 +62,8 @@ static int	check_brackets(t_token *token)
 		else if (token->type == RBRACE)
 		{
 			total++;
-			if (token->next && (token->next->type == LBRACE || token->next->type == WORD))
+			if (token->next
+				&& (token->next->type == LBRACE || token->next->type == WORD))
 				return (1);
 		}
 		token = token->next;

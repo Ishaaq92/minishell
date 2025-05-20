@@ -12,7 +12,8 @@
 
 #include "../../inc/minishell.h"
 
-static t_ast	*create_redir_node(t_token *start, t_token **stop, t_token *temp, t_token *next_token);
+static t_ast	*create_redir_node(t_token *start, t_token **stop,
+					t_token *temp, t_token *next_token);
 static t_ast	*parse_redir2(t_token **token, t_token **stop);
 static t_ast	*parse_file(t_token **token);
 
@@ -44,7 +45,8 @@ t_ast	*parse_redir(t_token **token, t_token **stop)
 
 // this helper function handles the scenario where a redir token has
 // a command attached to it or is in the middle of a token list
-static t_ast	*create_redir_node(t_token *start, t_token **stop, t_token *temp, t_token *next_token)
+static t_ast	*create_redir_node(t_token *start, t_token **stop,
+		t_token *temp, t_token *next_token)
 {
 	t_ast		*redir;
 

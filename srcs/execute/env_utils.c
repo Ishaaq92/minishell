@@ -70,7 +70,7 @@ char	*value_envp(t_envp **lst, char *str)
 	curr = *lst;
 	while (curr != NULL)
 	{
-		if (ft_strncmp(str, curr->literal, length) == 0 \
+		if (ft_strncmp(str, curr->literal, length) == 0
 			&& curr->literal[length] == '=')
 			return (ft_strndup(&curr->literal[length + 1],
 					ft_strlen(&curr->literal[length + 1])));
@@ -84,11 +84,11 @@ t_envp	*check_envp(t_data *data, char *key)
 	t_envp	*curr;
 	int		len;
 
-	len = ft_strlen(key);	
+	len = ft_strlen(key);
 	curr = data->env_llst;
 	while (curr)
 	{
-		if (ft_strncmp(curr->literal, key, len) == 0 && curr->literal[len] == '=')
+		if (!ft_strncmp(curr->literal, key, len) && curr->literal[len] == '=')
 			break ;
 		curr = curr->next;
 	}
