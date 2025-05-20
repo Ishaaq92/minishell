@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 16:21:28 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/16 17:09:39 by isahmed          ###   ########.fr       */
+/*   Created: 2025-05-17 15:00:38 by avalsang          #+#    #+#             */
+/*   Updated: 2025-05-17 15:00:38 by avalsang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	redir_output(t_data *data, t_ast *node)
 			O_CREAT | O_WRONLY | flag, 0666);
 	if (fd_newfile < 0)
 		return (custom_error(node->right->token->literal,
-			"No such file or directory"), 1);
+				"No such file or directory"), 1);
 	if (dup2(fd_newfile, fd_redir) == -1)
 		return (perror("dup2 failed"), 1);
 	close(fd_newfile);

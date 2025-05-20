@@ -209,7 +209,7 @@ int		bi_cd(t_data *data, t_ast *node);
 int		bi_echo(t_data *data, t_ast *node);
 
 // bi_export.c
-int	bi_export(t_data *data, t_ast *node);
+int		bi_export(t_data *data, t_ast *node);
 
 // bi_the_rest.c
 int		bi_pwd(t_data *data);
