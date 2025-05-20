@@ -14,6 +14,11 @@
 
 static void	collapse_quotes(char *str, int *i, char quote_char);
 
+// loop through the string and find a quote or a backslash
+// in bash, quotes are dealt from left to right, not as nested matryoshka dolls
+// if a quote is found, the string collapses in on itself, removing the quotes
+// everything after the first quote is shifted one char to the left, and same
+// for after the second quote
 void	remove_quotes(char *str)
 {
 	int		i;
@@ -35,6 +40,8 @@ void	remove_quotes(char *str)
 	}
 }
 
+// helper function to remove quotes
+// the quote char is used to diffentiate between single and double quote
 static void	collapse_quotes(char *str, int *i, char quote_char)
 {
 	ft_memmove(str + *i, str + *i + 1, ft_strlen(str + *i));

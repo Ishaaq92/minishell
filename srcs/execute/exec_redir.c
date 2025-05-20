@@ -17,13 +17,13 @@ static int		redir_input(t_ast *node);
 static int		redir_output(t_ast *node);
 void			reset_redir(t_data *data);
 
+// used to execute the redir node
+// if there is a command, execute it after performing redirections
+// then reset the std fds back to their original status
 int	execute_redir(t_data *data, t_ast *node)
 {
-	if (node->type != IN_HEREDOC)
-	{
-		param_sub(data, &node->right->token->literal, 0);
-		remove_quotes(node->right->token->literal);
-	}
+	param_sub(data, &node->right->token->literal, 0);
+	remove_quotes(node->right->token->literal);
 	if (node->type == REDIR_IN || node->type == IN_HEREDOC)
 		data->exit_status = redir_input(node);
 	else if (node->type == REDIR_OUT || node->type == OUT_APPEND)

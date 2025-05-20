@@ -15,6 +15,9 @@
 int		is_builtin(t_data *data, t_ast *node);
 int		execute_logical(t_data *data, t_ast *node);
 
+// used to redirect the node to the correct exec function
+// also kickstarts the execution process, each ast node will call
+// back to this function until no nodes are left
 int	execute_node(t_data *data, t_ast *node)
 {
 	if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
@@ -28,6 +31,9 @@ int	execute_node(t_data *data, t_ast *node)
 	return (data->exit_status);
 }
 
+// executes the logical nodes
+// && operator only executes the next cmd if exit code was 0
+// || only executes next cmd if exit code was not 0
 int	execute_logical(t_data *data, t_ast *node)
 {
 	data->exit_status = execute_node(data, node->left);

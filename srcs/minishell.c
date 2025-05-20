@@ -120,6 +120,7 @@ void	free_data(t_data *data)
 {
 	free_ast(data->head);
 	ft_lstclear(&data->token_list);
+	reset_redir(data);
 	close(data->std_fd[0]);
 	close(data->std_fd[1]);
 	close(data->std_fd[2]);

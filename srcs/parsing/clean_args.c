@@ -15,6 +15,9 @@
 static void	connect_token_list(t_data *data, t_token *current, t_token *list);
 static void	rebuild_token_list(t_data *data, t_ast *node, t_token **current);
 
+// crawl through the token list, first sub params then remove quotes
+// once you're finished, update the ast node's char** variable which is 
+// used by execve as the command and its arguments
 void	clean_args(t_data *data, t_ast *node)
 {
 	t_token	*current;
@@ -33,6 +36,11 @@ void	clean_args(t_data *data, t_ast *node)
 	reset_node_literal(node);
 }
 
+// if a dollar sign is located, begin the param sub process
+// first, find and replace the dollar sign with the env var, if it exists
+// then, tokenise the new string, to see if it can be broken into more tokens
+// if a new list is created, delete the token containing the dollar sign
+// and attach the new list in its place
 static void	rebuild_token_list(t_data *data, t_ast *node, t_token **current)
 {
 	t_token		*list;
@@ -50,6 +58,7 @@ static void	rebuild_token_list(t_data *data, t_ast *node, t_token **current)
 	}
 }
 
+// helper function which frees the old char ** and updates it with new tokens
 void	reset_node_literal(t_ast *node)
 {
 	free(node->literal);
@@ -60,8 +69,11 @@ void	reset_node_literal(t_ast *node)
 // param_sub
 // first it will set all tokens inside it to WORD, so tokens like ">" or "|" are
 // handled as words, not operators, like bash
-// then, if list->next exists, meaning the token was split into chunks and isn't
-// just one single token after substitution, attach the list
+// then, if the previous node was null, that means this token was the first
+// so set it as the head. If there was a previous node, its next points to 
+// the first node of the new list
+// then find the last token of the new list, its next points to the next token
+// of the old list
 static void	connect_token_list(t_data *data, t_token *current, t_token *list)
 {
 	t_token		*temp;

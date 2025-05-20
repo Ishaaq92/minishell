@@ -15,6 +15,10 @@
 static int	check_lim_for_quotes(char *str);
 static int	store_input(t_data *data, char *lim, char *temp_name);
 
+// crawl through the token list, look for heredoc tokens
+// the next token was the limiter for heredoc, which we don't need anymore
+// so replace that token with the name of the temp file created so exec and 
+// ast can access the file
 int	parse_heredoc(t_data *data, t_token *token)
 {
 	char	*temp_name;
@@ -39,10 +43,7 @@ int	parse_heredoc(t_data *data, t_token *token)
 	return (0);
 }
 
-// what do I want this function to do?
-// - immediately begin the heredoc prompt, don't wait until execution
-// - store input in a temp file (pipe?)
-// - replace the token->literal with name of new temp file instead of lim
+// begins the heredoc user prompt, stores input in a temp file
 static int	store_input(t_data *data, char *lim, char *temp_name)
 {
 	char	*buffer;
@@ -54,7 +55,7 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 	temp_fd = open(temp_name, O_CREAT | O_WRONLY | O_TRUNC | O_RDONLY, 0666);
 	if (temp_fd < 0)
 		return (custom_error("open", "failed to open temp file"), 1);
-	while (42)
+	while (lim)
 	{
 		buffer = readline("> ");
 		if (buffer && buffer[0] != '\n'
@@ -65,22 +66,20 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
 		write(temp_fd, "\n", 1);
 	}
-	(free(buffer), close(temp_fd));
-	return (0);
+	return (free(buffer), close(temp_fd), 0);
 }
 
 // if the limiter token after heredoc contains any quote or backslash,
 // do not perform paramter expansion on heredoc input
 static int	check_lim_for_quotes(char *str)
 {
-	int		i;
-
-	i = 0;
-	while (str[i])
+	if (!str)
+		return (0);
+	while (*str)
 	{
-		if (ft_strchr("\"\'\\", str[i]))
+		if (ft_strchr("\"\'\\", *str))
 			return (1);
-		i++;
+		str++;
 	}
 	return (0);
 }

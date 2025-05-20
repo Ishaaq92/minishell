@@ -79,6 +79,7 @@ void	skip_braces(t_token **temp)
 	}
 }
 
+// used by parse_brackets to find the right brace of a given lbrace
 t_token	*get_rbrace(t_token *lbrace)
 {
 	int		count;

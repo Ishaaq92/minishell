@@ -16,21 +16,10 @@ static void	copy_latter_half_of_string(char **result, char *str);
 static void	perform_sub(t_data *data, char **str, int i, char *param);
 static int	skip_quotes(char **str, int *dquote, int *i);
 
-char	*get_param_name(char *str)
-{
-	int		i;
-
-	i = 0;
-	if (str[i] && (str[i] == '?'))
-		return (ft_strndup(str, 1));
-	else if (str[i] && (str[i] >= '0' && str[i] <= '9'))
-		return (ft_strndup(str, 1));
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	return (ft_strndup(str, i));
-}
-
-// put me in coach
+// loop through the string until you find a dollar sign
+// params are not expanded in single quotes or after backslash
+// dquote is used to track if we're in a double quote or not
+// heredoc expands even in quotes, because why not
 void	param_sub(t_data *data, char **str, int heredoc)
 {
 	int		i;
@@ -52,14 +41,31 @@ void	param_sub(t_data *data, char **str, int heredoc)
 				free(key);
 				continue ;
 			}
-			perform_sub(data, str, i, key);
-			free(key);
+			(perform_sub(data, str, i, key), free(key));
 			continue ;
 		}
 		i++;
 	}
 }
 
+// helper string, returns the key of an env var
+// keys can have alphanum or _ in them, but they cannot start with a num
+char	*get_param_name(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (str[i] && (str[i] == '?'))
+		return (ft_strndup(str, 1));
+	else if (str[i] && (str[i] >= '0' && str[i] <= '9'))
+		return (ft_strndup(str, 1));
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+		i++;
+	return (ft_strndup(str, i));
+}
+
+// helper function for param subbing, used to skip over quotes 
+// and track status of double quotes
 static int	skip_quotes(char **str, int *dquote, int *i)
 {
 	if ((*str)[*i] == '\\')
@@ -84,6 +90,9 @@ static int	skip_quotes(char **str, int *dquote, int *i)
 	return (0);
 }
 
+// function used to replace the $ value
+// copy everything before the dollar sign, strjoin it with the sub,
+// then strjoin that with the rest of the string
 static void	perform_sub(t_data *data, char **str, int i, char *key)
 {
 	char	*sub_value;
