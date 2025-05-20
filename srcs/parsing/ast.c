@@ -18,7 +18,6 @@
 static t_ast	*parse_logical(t_token **token, t_token **stop);
 static t_ast	*parse_pipe(t_token **token, t_token **stop);
 static t_ast	*parse_brackets(t_token **token, t_token **stop);
-static void		skip_braces(t_token **temp);
 
 // ast generation starts here
 // take the entire token list and pass start and end to parse_logical
@@ -77,28 +76,6 @@ static t_ast	*parse_logical(t_token **token, t_token **stop)
 	return (parse_pipe(&start, stop));
 }
 
-// this helper function skips over brackets while parsing logical ops
-// the logical operators inside brackets have lower priority and will
-// be handled later by parse_brackets
-static void	skip_braces(t_token **temp)
-{
-	int		count;
-
-	count = 0;
-	while ((*temp) && (*temp)->prev)
-	{
-		if ((*temp)->type == RBRACE)
-			count++;
-		if ((*temp)->type == LBRACE)
-		{
-			count--;
-			if (count <= 0)
-				break ;
-		}
-		(*temp) = (*temp)->prev;
-	}
-}
-
 // once logical operators are sorted, look for pipes
 // this search is done left to right, which does not hinder the reverse
 // logical search 
@@ -123,28 +100,6 @@ static t_ast	*parse_pipe(t_token **token, t_token **stop)
 		temp = temp->next;
 	}
 	return (parse_brackets(&start, stop));
-}
-
-t_token	*get_rbrace(t_token *lbrace)
-{
-	int		count;
-	t_token	*temp;
-
-	count = 0;
-	temp = lbrace;
-	while ((temp) && (temp)->next)
-	{
-		if ((temp)->type == LBRACE)
-			count++;
-		if ((temp)->type == RBRACE)
-		{
-			count--;
-			if (count <= 0)
-				return (temp);
-		}
-		(temp) = (temp)->next;
-	}
-	return (temp);
 }
 
 // after pipes, begin looking for brackets

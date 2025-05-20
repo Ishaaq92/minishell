@@ -12,37 +12,47 @@
 
 #include "../../inc/minishell.h"
 
-static void	update_tokens(t_data *data, t_token *current, t_token *list);
+static void	connect_token_list(t_data *data, t_token *current, t_token *list);
+static void	rebuild_token_list(t_data *data, t_ast *node, t_token **current);
+void	reset_node_literal(t_ast *node);
 
 void	clean_args(t_data *data, t_ast *node)
 {
 	t_token	*current;
-	t_token	*list;
 
 	current = node->token;
-	list = NULL;
 	while (current && current->type == WORD)
 	{
 		if (current->literal)
 		{
 			if (ft_strchr(current->literal, '$'))
-			{
-				param_sub(data, &current->literal);
-				create_tokens(current->literal, &list);
-				if (list)
-				{
-					update_tokens(data, current, list);
-					if (current == node->token)
-						node->token = list;
-					ft_lstdelone(current);
-					current = list;
-				}
-			}
+				rebuild_token_list(data, node, &current);
 			remove_quotes(current->literal);
 		}
 		current = current->next;
-		list = NULL;
 	}
+	reset_node_literal(node);
+}
+
+static void	rebuild_token_list(t_data *data, t_ast *node, t_token **current)
+{
+	t_token		*list;
+
+	list = NULL;
+	param_sub(data, &(*current)->literal);
+	create_tokens((*current)->literal, &list);
+	if (list)
+	{
+		connect_token_list(data, (*current), list);
+		if ((*current) == node->token)
+			node->token = list;
+		ft_lstdelone((*current));
+		(*current) = list;
+	}
+}
+
+void	reset_node_literal(t_ast *node)
+{
 	free(node->literal);
 	node->literal = parse_cmd_args(node->token, count_argc(node->token));
 }
@@ -53,7 +63,7 @@ void	clean_args(t_data *data, t_ast *node)
 // handled as words, not operators, like bash
 // then, if list->next exists, meaning the token was split into chunks and isn't
 // just one single token after substitution, attach the list
-static void	update_tokens(t_data *data, t_token *current, t_token *list)
+static void	connect_token_list(t_data *data, t_token *current, t_token *list)
 {
 	t_token		*temp;
 	t_token		*list_last;

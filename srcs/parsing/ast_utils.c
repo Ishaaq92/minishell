@@ -56,3 +56,47 @@ void	print_ast(t_ast *ast, int i)
 	print_ast(ast->left, --i);
 	print_ast(ast->right, i + 2);
 }
+
+// this helper function skips over brackets while parsing logical ops
+// the logical operators inside brackets have lower priority and will
+// be handled later by parse_brackets
+void	skip_braces(t_token **temp)
+{
+	int		count;
+
+	count = 0;
+	while ((*temp) && (*temp)->prev)
+	{
+		if ((*temp)->type == RBRACE)
+			count++;
+		if ((*temp)->type == LBRACE)
+		{
+			count--;
+			if (count <= 0)
+				break ;
+		}
+		(*temp) = (*temp)->prev;
+	}
+}
+
+t_token	*get_rbrace(t_token *lbrace)
+{
+	int		count;
+	t_token	*temp;
+
+	count = 0;
+	temp = lbrace;
+	while ((temp) && (temp)->next)
+	{
+		if ((temp)->type == LBRACE)
+			count++;
+		if ((temp)->type == RBRACE)
+		{
+			count--;
+			if (count <= 0)
+				return (temp);
+		}
+		(temp) = (temp)->next;
+	}
+	return (temp);
+}

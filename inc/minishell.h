@@ -135,6 +135,8 @@ t_ast	*parse_tokens(t_token *head);
 t_ast	*ast_new(t_token *token);
 void	print_ast(t_ast *ast, int i);
 void	free_ast(t_ast *ast);
+t_token	*get_rbrace(t_token *lbrace);
+void	skip_braces(t_token **temp);
 
 // ast_cmd.c
 t_ast	*parse_cmd(t_token **token);
