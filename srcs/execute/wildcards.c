@@ -12,11 +12,7 @@
 
 #include "../../inc/minishell.h"
 
-int			print_files(char *prefix, char *suffix, t_token **wild_args);
-static int	check_sequence(char *d_name, char *prefix, char *suffix);
-int			count_files(char *prefix, char *suffix);
-void		join_list(t_token *args, t_token *wild);
-int			get_wildcard_args(t_token *args, t_token **wild_args);
+static void	join_list(t_token *args, t_token *wild);
 
 void	wildcards(t_data *data)
 {
@@ -28,7 +24,7 @@ void	wildcards(t_data *data)
 	wild_args = NULL;
 	while (args)
 	{
-		if (get_wildcard_args(args, &wild_args) != 0)
+		if (get_wildcard_args(args, &wild_args))
 		{
 			args = args ->next;
 			continue ;
@@ -44,7 +40,7 @@ void	wildcards(t_data *data)
 	}
 }
 
-void	join_list(t_token *args, t_token *wild)
+static void	join_list(t_token *args, t_token *wild)
 {
 	t_token		*temp;
 	t_token		*wild_args_last;
@@ -62,111 +58,24 @@ void	join_list(t_token *args, t_token *wild)
 	}
 }
 
-char	*find_wildcard(char *str)
-{
-	int		i;
-	int		quote_char;
+// not using this anywhere atm
+// int	count_files(char *prefix, char *suffix)
+// {
+// 	DIR				*d;
+// 	struct dirent	*dir;
+// 	int				count;
 
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '*')
-			return (str + i);
-		else if (str[i] == '\"' || str[i] == '\'')
-		{
-			quote_char = str[i++];
-			while (str[i] != quote_char)
-				i++;
-			i++;
-		}
-		else
-			i++;
-	}
-	return (NULL);
-}
-
-int	get_wildcard_args(t_token *args, t_token **wild_args)
-{
-	int		j;
-	char	*suffix;
-	char	*prefix;
-
-	j = 0;
-	suffix = find_wildcard(args->literal);
-	if (!suffix)
-		return (1);
-	while (args->literal[j] != '*')
-		j++;
-	prefix = ft_strndup(args->literal, j++);
-	suffix = ft_strdup(++suffix);
-	(remove_quotes(prefix), remove_quotes(suffix));
-	print_files(prefix, suffix, wild_args);
-	return (free(prefix), free(suffix), 0);
-}
-
-int	print_files(char *prefix, char *suffix, t_token **wild_args)
-{
-	DIR				*d;
-	struct dirent	*dir;
-	t_token			*new;
-
-	d = opendir(".");
-	if (!d)
-		return (1);
-	dir = readdir(d);
-	while (dir != NULL)
-	{
-		if (dir->d_name[0] == '.')
-		{
-			dir = readdir(d);
-			continue ;
-		}
-		if (check_sequence(dir->d_name, prefix, suffix) == 0)
-		{
-			new = ft_lstnew(ft_strdup(dir->d_name));
-			ft_lstadd_back(wild_args, new);
-			new->type = WORD;
-		}
-		dir = readdir(d);
-	}
-	closedir(d);
-	return (0);
-}
-
-int	count_files(char *prefix, char *suffix)
-{
-	DIR				*d;
-	struct dirent	*dir;
-	int				count;
-
-	d = opendir(".");
-	count = 0;
-	if (!d)
-		return (1);
-	dir = readdir(d);
-	while (dir != NULL)
-	{
-		if (check_sequence(dir->d_name, prefix, suffix) == 0)
-			count ++;
-		dir = readdir(d);
-	}
-	closedir(d);
-	return (count);
-}
-
-static int	check_sequence(char *d_name, char *prefix, char *suffix)
-{
-	int	len;
-	int	p_len;
-	int	s_len;
-
-	len = ft_strlen(d_name);
-	p_len = ft_strlen(prefix);
-	s_len = ft_strlen(suffix);
-	if (p_len + s_len > len)
-		return (1);
-	if (ft_strncmp(d_name, prefix, p_len) != 0
-		|| ft_strcmp(&d_name[len - s_len], suffix) != 0)
-		return (1);
-	return (0);
-}
+// 	d = opendir(".");
+// 	count = 0;
+// 	if (!d)
+// 		return (1);
+// 	dir = readdir(d);
+// 	while (dir != NULL)
+// 	{
+// 		if (check_sequence(dir->d_name, prefix, suffix) == 0)
+// 			count ++;
+// 		dir = readdir(d);
+// 	}
+// 	closedir(d);
+// 	return (count);
+// }

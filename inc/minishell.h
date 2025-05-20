@@ -148,6 +148,7 @@ t_ast	*parse_redir(t_token **token, t_token **stop);
 
 // clean_args.c
 void	clean_args(t_data *data, t_ast *node);
+void	reset_node_literal(t_ast *node);
 
 // heredoc.c
 int		parse_heredoc(t_data *data, t_token *token);
@@ -191,6 +192,9 @@ int		execute_cmd(t_data *data, t_ast *node);
 void	wildcards(t_data *data);
 void	ft_lstdelone(t_token *args);
 
+// wildcard_helper.c
+int		get_wildcard_args(t_token *args, t_token **wild_args);
+
 // quote_removal.c
 void	remove_quotes(char *str);
 
@@ -198,14 +202,20 @@ void	remove_quotes(char *str);
 void	param_sub(t_data *data, char **str);
 char	*get_param_name(char *str);
 
-// bi_func.c
-int		bi_pwd(t_data *data);
+// bi_cd.c
 int		bi_cd(t_data *data, t_ast *node);
+
+// bi_echo.c
+int		bi_echo(t_data *data, t_ast *node);
+
+// bi_export.c
+int	bi_export(t_data *data, t_ast *node);
+
+// bi_the_rest.c
+int		bi_pwd(t_data *data);
 int		bi_env(t_data *data);
-int		bi_export(t_data *data, t_ast *node);
 int		bi_exit(t_data *data, t_ast *node);
 int		bi_unset(t_data *data, t_ast *node);
-int		bi_echo(t_data *data, t_ast *node);
 
 // debug.c
 void	print_tokens(t_token **head);

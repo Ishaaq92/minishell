@@ -1,69 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bi_func.c                                          :+:      :+:    :+:   */
+/*   bi_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/24 18:08:06 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/19 20:53:40 by isahmed          ###   ########.fr       */
+/*   Created: 2025-05-17 15:00:38 by avalsang          #+#    #+#             */
+/*   Updated: 2025-05-17 15:00:38 by avalsang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-// Functions to Build 
-// cd: NOT DONE
-// echo: DONE
-// exit: TESTING
-// pwd: DONE
-// export: ALMOST DONE
-// env: DONE
-
 static int	swap_dir(t_data *data);
-char		*more_bi_cd(t_data *data, t_ast *node);
-void		change_wd(t_data *data, char *new_path, char *old_path);
-
-int	echo_args(char *str)
-{
-	int		i;
-
-	i = 0;
-	if (!ft_strcmp("", str))
-		return (1);
-	if (str[i] == '-' && !str[i + 1])
-		return (1);
-	if (str[i++] != '-')
-		return (1);
-	while (str[i] == 'n')
-		i++;
-	if (str[i] != '\0')
-		return (1);
-	return (0);
-}
-
-int	bi_echo(t_data *data, t_ast *node)
-{
-	int		i;
-	char	**args;
-
-	(void) data;
-	args = node->literal;
-	if (args == NULL || args[1] == NULL)
-		return (printf("\n"), 0);
-	i = 1;
-	while (args[i] && !echo_args(args[i]))
-		i++;
-	while (args[i] != NULL)
-	{
-		printf("%s", args[i++]);
-		if (args[i])
-			printf(" ");
-	}
-	if (echo_args(args[1]) == 1)
-		printf("\n");
-	return (0);
-}
+static char	*more_bi_cd(t_data *data, t_ast *node);
+static void	change_wd(t_data *data, char *new_path, char *old_path);
 
 // check case with more than one argument passed into cd
 int	bi_cd(t_data *data, t_ast *node)
@@ -91,33 +42,6 @@ int	bi_cd(t_data *data, t_ast *node)
 	return (0);
 }
 
-void	change_wd(t_data *data, char *new_path, char *old_path)
-{
-	char	*temp;
-
-	env_alter(data, "OLDPWD=", old_path);
-	if (old_path)
-		free(old_path);
-	temp = getcwd(NULL, 0);
-	if (temp)
-		(env_alter(data, "PWD=", temp), free(temp));
-	if (new_path)
-		free(new_path);
-}
-
-char	*more_bi_cd(t_data *data, t_ast *node)
-{
-	char	*new_path;
-
-	if (node->literal[1] == NULL
-		|| !ft_strcmp(node->literal[1], "~")
-		|| !ft_strcmp(node->literal[1], "--"))
-		new_path = value_envp(&data->env_llst, "HOME");
-	else
-		new_path = ft_strdup(node->literal[1]);
-	return (new_path);
-}
-
 static int	swap_dir(t_data *data)
 {
 	char	*old_path;
@@ -138,4 +62,31 @@ static int	swap_dir(t_data *data)
 	printf("%s\n", old_path);
 	(free(new_path), free(old_path));
 	return (0);
+}
+
+static char	*more_bi_cd(t_data *data, t_ast *node)
+{
+	char	*new_path;
+
+	if (node->literal[1] == NULL
+		|| !ft_strcmp(node->literal[1], "~")
+		|| !ft_strcmp(node->literal[1], "--"))
+		new_path = value_envp(&data->env_llst, "HOME");
+	else
+		new_path = ft_strdup(node->literal[1]);
+	return (new_path);
+}
+
+static void	change_wd(t_data *data, char *new_path, char *old_path)
+{
+	char	*temp;
+
+	env_alter(data, "OLDPWD=", old_path);
+	if (old_path)
+		free(old_path);
+	temp = getcwd(NULL, 0);
+	if (temp)
+		(env_alter(data, "PWD=", temp), free(temp));
+	if (new_path)
+		free(new_path);
 }

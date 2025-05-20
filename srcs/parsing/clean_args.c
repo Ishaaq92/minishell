@@ -14,7 +14,6 @@
 
 static void	connect_token_list(t_data *data, t_token *current, t_token *list);
 static void	rebuild_token_list(t_data *data, t_ast *node, t_token **current);
-void	reset_node_literal(t_ast *node);
 
 void	clean_args(t_data *data, t_ast *node)
 {
