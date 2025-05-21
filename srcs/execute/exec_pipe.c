@@ -12,7 +12,9 @@
 
 #include "../../inc/minishell.h"
 
-int		do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2]);
+// int		do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2]);
+int	pipe_cmd1(t_data *data, t_ast *node, int pipe_fd[2]);
+int	pipe_cmd2(t_data *data, t_ast *node, int pipe_fd[2]);
 
 int	execute_pipe(t_data *data, t_ast *node)
 {
@@ -29,10 +31,13 @@ int	execute_pipe(t_data *data, t_ast *node)
 		(close(pipe_fd[0]), close(pipe_fd[1]));
 		waitpid(pid, &status, 0);
 	}
+	// pipe(pipe_fd);
+	// pipe_cmd1(data, node, pipe_fd);
+	// pipe_cmd2(data, node, pipe_fd);
+	// waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));
 }
 
-// do you need the entire data struct for this function?
 int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 {
 	pid_t		pid;
@@ -60,3 +65,50 @@ int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 	free_data(data);
 	exit(data->exit_status);
 }
+
+// int	pipe_cmd1(t_data *data, t_ast *node, int pipe_fd[2])
+// {
+// 	pid_t		pid;
+
+// 	pid = fork();
+// 	if (pid == -1)
+// 		return (close(pipe_fd[0]), close(pipe_fd[1]), 1);
+// 	if (pid == 0)
+// 	{
+// 		close(pipe_fd[0]);
+// 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+// 			return (perror("dup2 failed"), 1);
+// 		close(pipe_fd[1]);
+// 		execute_node(data, node->left);
+// 		del_lst(&data->env_llst);
+// 		free_data(data);
+// 	}
+
+// 	// exit(data->exit_status);
+// 	return (0);
+// }
+
+// int	pipe_cmd2(t_data *data, t_ast *node, int pipe_fd[2])
+// {
+// 	pid_t		pid;
+// 	int			status;
+
+// 	pid = fork();
+// 	if (pid == -1)
+// 		return (close(pipe_fd[0]), close(pipe_fd[1]), 1);
+// 	if (pid == 0)
+// 	{
+// 		close(pipe_fd[1]);
+// 		if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+// 			return (perror("dup2 failed"), 1);
+// 		close(pipe_fd[0]);
+// 		execute_node(data, node->right);
+// 		del_lst(&data->env_llst);
+// 		free_data(data);
+// 	}
+// 	waitpid(pid, &status, 0);
+// 	data->exit_status = WEXITSTATUS(status);
+	
+// 	// exit(data->exit_status);
+// 	return (pid);
+// }
