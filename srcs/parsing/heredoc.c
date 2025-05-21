@@ -14,6 +14,7 @@
 
 static int	check_lim_for_quotes(char *str);
 static int	store_input(t_data *data, char *lim, char *temp_name);
+static void	write_buffer(char *buffer, int temp_fd);
 
 // crawl through the token list, look for heredoc tokens
 // the next token was the limiter for heredoc, which we don't need anymore
@@ -58,15 +59,31 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 	while (lim)
 	{
 		buffer = readline("> ");
-		if (buffer && buffer[0] != '\n'
-			&& !ft_strncmp(buffer, lim, ft_strlen(buffer) - 1))
+		if (buffer && !ft_strcmp(buffer, lim))
 			break ;
 		if (!has_quotes)
 			param_sub(data, &buffer, 1);
-		(write(temp_fd, buffer, ft_strlen(buffer)), free(buffer));
-		write(temp_fd, "\n", 1);
+		(write_buffer(buffer, temp_fd), free(buffer));
 	}
 	return (free(buffer), close(temp_fd), 0);
+}
+
+static void	write_buffer(char *buffer, int temp_fd)
+{
+	int		i;
+
+	i = 0;
+	while (buffer[i])
+	{
+		if (buffer[i] == '\\' && ft_strchr("$\\", buffer[i + 1]))
+		{
+			write(temp_fd, buffer + i + 1, 1);
+			i += 2;
+		}
+		else
+			write(temp_fd, buffer + i++, 1);
+	}
+	write(temp_fd, "\n", 1);
 }
 
 // if the limiter token after heredoc contains any quote or backslash,

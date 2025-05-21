@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-17 13:52:48 by avalsang          #+#    #+#             */
-/*   Updated: 2025-05-17 13:52:48 by avalsang         ###   ########.fr       */
+/*   Created: 2025/05/17 13:52:48 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/21 19:40:07 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 static t_data	*parse_line(char **line, int *exit_status, t_envp *envlst);
 static t_data	*init_data(void);
 void			free_data(t_data *data);
+
+// g_val = 0;
 
 int	main(int ac, char *av[], char *envp[])
 {
@@ -32,9 +34,9 @@ int	main(int ac, char *av[], char *envp[])
 	(void) av;
 	if (isatty(fileno(stdin)))
 	{
-		env_llst = set_envp(envp);
 		while (42)
 		{
+			env_llst = set_envp(envp);
 			prompt = get_prompt(exit_status);
 			line = readline(prompt);
 			free(prompt);
@@ -50,6 +52,11 @@ int	main(int ac, char *av[], char *envp[])
 					free_data(data);
 				}
 				free(line);
+			}
+			else if (!line)
+			{
+				del_lst(&env_llst);
+				break;
 			}
 		}
 	}

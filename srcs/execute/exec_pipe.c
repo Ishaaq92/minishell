@@ -41,6 +41,7 @@ int	execute_pipe(t_data *data, t_ast *node)
 int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 {
 	pid_t		pid;
+	int			status;
 
 	pid = fork();
 	if (pid == -1)

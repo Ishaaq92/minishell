@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-17 15:00:38 by avalsang          #+#    #+#             */
-/*   Updated: 2025-05-17 15:00:38 by avalsang         ###   ########.fr       */
+/*   Created: 2025/05/17 15:00:38 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/21 19:44:35 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	execute_cmd(t_data *data, t_ast *node)
 	clean_args(data, node);
 	if (is_builtin(data, node))
 		return (data->exit_status);
+	// g_val = 1;
 	error = check_cmd(data, node, node->literal[0]);
 	if (error)
 		return (error);
@@ -31,11 +32,17 @@ int	execute_cmd(t_data *data, t_ast *node)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		exec_child(node->literal, data->env_llst);
-		exit_cleanup(data);
 	}
 	else
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &data->exit_status, 0);
+		handle_signals();
+	}
 	return (WEXITSTATUS(data->exit_status));
 }
 
@@ -44,7 +51,8 @@ static void	exec_child(char **cmd, t_envp *env_list)
 	DIR		*dir;
 	char	**envp;
 
-	dir = opendir(cmd[0]);
+	dir = opendir(cmd
+[0]);
 	envp = stitch_env(env_list);
 	if (!envp)
 		(custom_error("env list", "malloc failed"), exit(EXIT_FAILURE));
