@@ -14,7 +14,7 @@
 
 static void	copy_latter_half_of_string(char **result, char *str);
 static void	perform_sub(t_data *data, char **str, int i, char *param);
-static int	skip_quotes(char **str, int *dquote, int *i);
+static int	skip_quotes(char **str, int *dquote, int *i, int hd);
 
 // loop through the string until you find a dollar sign
 // params are not expanded in single quotes or after backslash
@@ -30,7 +30,7 @@ void	param_sub(t_data *data, char **str, int heredoc)
 	dquote = 0;
 	while (*str && (*str)[i])
 	{
-		if (heredoc == 0 && skip_quotes(str, &dquote, &i))
+		if (skip_quotes(str, &dquote, &i, heredoc))
 			continue ;
 		if ((*str)[i] == '$')
 		{
@@ -66,20 +66,20 @@ char	*get_param_name(char *str)
 
 // helper function for param subbing, used to skip over quotes 
 // and track status of double quotes
-static int	skip_quotes(char **str, int *dquote, int *i)
+static int	skip_quotes(char **str, int *dquote, int *i, int hd)
 {
 	if ((*str)[*i] == '\\')
 	{
 		(*i) += 2;
 		return (1);
 	}
-	if ((*str)[*i] == '\"')
+	if ((*str)[*i] == '\"' && !hd)
 	{
 		(*dquote)++;
 		(*i)++;
 		return (1);
 	}
-	else if ((*str)[*i] == '\'' && (*dquote % 2) == 0)
+	else if ((*str)[*i] == '\'' && !hd && (*dquote % 2) == 0)
 	{
 		(*i)++;
 		while ((*str)[*i] && (*str)[(*i)] != '\'')
