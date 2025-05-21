@@ -52,7 +52,6 @@ int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 			return (perror("dup2 failed"), 1);
 		close(pipe_fd[1]);
 		execute_node(data, node->left);
-		exit_cleanup(data);
 	}
 	else
 	{
@@ -60,11 +59,9 @@ int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 		if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 			return (perror("dup2 failed"), 1);
 		close(pipe_fd[0]);
-		if (!node->right->left)
-			waitpid(pid, &data->exit_status, 0);
 		data->exit_status = execute_node(data, node->right);
-		exit_cleanup(data);
 	}
+	exit_cleanup(data);
 	return (0);
 }
 
@@ -85,7 +82,6 @@ int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 // 		del_lst(&data->env_llst);
 // 		free_data(data);
 // 	}
-
 // 	// exit(data->exit_status);
 // 	return (0);
 // }

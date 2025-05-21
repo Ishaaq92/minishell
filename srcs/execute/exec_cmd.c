@@ -30,7 +30,10 @@ int	execute_cmd(t_data *data, t_ast *node)
 	reset_node_literal(node);
 	pid = fork();
 	if (pid == 0)
+	{
 		exec_child(node->literal, data->env_llst);
+		exit_cleanup(data);
+	}
 	else
 		waitpid(pid, &data->exit_status, 0);
 	return (WEXITSTATUS(data->exit_status));
@@ -48,7 +51,6 @@ static void	exec_child(char **cmd, t_envp *env_list)
 	if (dir)
 		(custom_error(cmd[0], "Is a directory"), closedir(dir), exit(126));
 	execve(cmd[0], cmd, envp);
-	exit(EXIT_FAILURE);
 }
 
 static int	is_builtin(t_data *data, t_ast *node)
