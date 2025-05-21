@@ -33,7 +33,7 @@ t_ast	*parse_redir(t_token **token, t_token **stop)
 		return (parse_redir2(token, stop));
 	start = *token;
 	temp = *token;
-	while (temp && temp->next && temp != (*stop))
+	while (temp && temp->next && temp->next != (*stop))
 	{
 		next_token = temp->next;
 		if (temp->next->type > 1 && temp->next->type < 6)

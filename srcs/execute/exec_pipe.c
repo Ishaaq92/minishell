@@ -12,9 +12,9 @@
 
 #include "../../inc/minishell.h"
 
-// int		do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2]);
-int	pipe_cmd1(t_data *data, t_ast *node, int pipe_fd[2]);
-int	pipe_cmd2(t_data *data, t_ast *node, int pipe_fd[2]);
+int		do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2]);
+// int	pipe_cmd1(t_data *data, t_ast *node, int pipe_fd[2]);
+// int	pipe_cmd2(t_data *data, t_ast *node, int pipe_fd[2]);
 
 int	execute_pipe(t_data *data, t_ast *node)
 {
@@ -41,6 +41,7 @@ int	execute_pipe(t_data *data, t_ast *node)
 int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 {
 	pid_t		pid;
+	int			status;
 
 	pid = fork();
 	if (pid == -1)
@@ -62,8 +63,9 @@ int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
 		data->exit_status = execute_node(data, node->right);
 	}
 	del_lst(&data->env_llst);
+	status = data->exit_status;
 	free_data(data);
-	exit(data->exit_status);
+	exit(status);
 }
 
 // int	pipe_cmd1(t_data *data, t_ast *node, int pipe_fd[2])
