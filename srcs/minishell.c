@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-17 13:52:48 by avalsang          #+#    #+#             */
-/*   Updated: 2025-05-17 13:52:48 by avalsang         ###   ########.fr       */
+/*   Created: 2025/05/17 13:52:48 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/21 16:32:22 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	main(int ac, char *av[], char *envp[])
 	(void) av;
 	if (isatty(fileno(stdin)))
 	{
-		env_llst = set_envp(envp);
 		while (42)
 		{
+			env_llst = set_envp(envp);
 			prompt = get_prompt(exit_status);
 			line = readline(prompt);
 			free(prompt);
@@ -51,6 +51,8 @@ int	main(int ac, char *av[], char *envp[])
 				}
 				free(line);
 			}
+			else if (!line)
+				del_lst(&env_llst);
 		}
 	}
 	else
