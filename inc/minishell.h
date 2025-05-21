@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/15 18:08:34 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/21 19:40:01 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <dirent.h> // for opendir
 # include <stdarg.h>
 # include <limits.h>
+
+// volatile int	g_val = 0;
 
 enum e_commands
 {
