@@ -77,8 +77,16 @@ static int	is_builtin(t_data *data, t_ast *node)
 	return (1);
 }
 
+static void	do_nothing ()
+{
+	return ;
+}
+
+
 static int	check_cmd(t_data *data, t_ast *node, char *cmd)
 {
+	if (!ft_strcmp(":", cmd))
+		return (do_nothing(), 0);
 	if (!ft_strcmp(cmd, "..") || !ft_strcmp(cmd, "."))
 		return (custom_error(cmd, "command not found"), 127);
 	else if (!ft_strncmp(cmd, "./", 2) || cmd[0] == '/')

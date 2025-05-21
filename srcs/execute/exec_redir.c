@@ -30,6 +30,9 @@ int	execute_redir(t_data *data, t_ast *node)
 		data->exit_status = redir_output(node);
 	if (node->left && data->exit_status == 0)
 		execute_node(data, node->left);
+	else if (!node->left)
+	{
+	}
 	reset_redir(data);
 	if (node->type == IN_HEREDOC)
 		unlink(node->right->literal[0]);

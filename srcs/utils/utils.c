@@ -17,6 +17,7 @@ void	exit_cleanup(t_data *data)
 {
 	int	exit_status;
 
+	printf("exit cleanup called\n");
 	exit_status = data->exit_status;
 	del_lst(&data->env_llst);
 	free_data(data);
