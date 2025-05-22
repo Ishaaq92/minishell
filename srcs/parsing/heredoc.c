@@ -59,7 +59,12 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 	while (lim)
 	{
 		buffer = readline("> ");
-		if (buffer && !ft_strcmp(buffer, lim))
+		if  (get_signal() == 2)
+			break ;
+		if (!buffer && get_signal() != SIGINT)
+			bi_custom_error("warning",  "heredoc delimited by end-of-file: wanted", lim);
+		printf("buffer = %s, isnull %i, gsig %i\n", buffer, buffer == NULL, get_signal());
+		if (!buffer || (buffer && !ft_strcmp(buffer, lim)))
 			break ;
 		if (!has_quotes)
 			param_sub(data, &buffer, 1);

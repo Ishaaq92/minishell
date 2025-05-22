@@ -16,7 +16,6 @@ static t_data	*parse_line(char **line, int *exit_status, t_envp *envlst);
 static t_data	*init_data(void);
 void			free_data(t_data *data);
 
-// g_val = 0;
 
 int	main(int ac, char *av[], char *envp[])
 {
@@ -34,12 +33,18 @@ int	main(int ac, char *av[], char *envp[])
 	(void) av;
 	if (isatty(fileno(stdin)))
 	{
+		env_llst = set_envp(envp);
 		while (42)
 		{
-			env_llst = set_envp(envp);
 			prompt = get_prompt(exit_status);
 			line = readline(prompt);
 			free(prompt);
+			if (get_signal() == SIGINT)
+			{
+				set_signal(0);
+				exit_status = 130;
+				continue ;
+			}
 			if (line && *line)
 			{
 				data = parse_line(&line, &exit_status, env_llst);
@@ -47,6 +52,7 @@ int	main(int ac, char *av[], char *envp[])
 				{
 					add_history(line);
 					execute_node(data, data->head);
+					printf("exit status rn %i\n", data->exit_status);
 					exit_status = data->exit_status;
 					env_llst = data->env_llst;
 					free_data(data);
@@ -56,7 +62,7 @@ int	main(int ac, char *av[], char *envp[])
 			else if (!line)
 			{
 				del_lst(&env_llst);
-				break;
+				break ;
 			}
 		}
 	}
@@ -101,9 +107,18 @@ static t_data	*parse_line(char **line, int *exit_status, t_envp *envlst)
 	}
 	if (parse_heredoc(data, data->token_list))
 		return (ft_lstclear(&data->token_list), free(data), NULL);
+	if (get_signal() != 0)
+	{
+		*exit_status = get_signal() + 128;
+		set_signal(0);
+		ft_lstclear(&data->token_list);
+		free(data);
+		return (NULL);
+	}
+	else
+		data->exit_status = *exit_status;
 	wildcards(data);
 	data->head = parse_tokens(data->token_list);
-	data->exit_status = *exit_status;
 	return (data);
 }
 

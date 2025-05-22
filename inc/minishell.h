@@ -25,8 +25,8 @@
 # include <dirent.h> // for opendir
 # include <stdarg.h>
 # include <limits.h>
+# include <sys/ioctl.h>
 
-// volatile int	g_val = 0;
 
 enum e_commands
 {
@@ -92,13 +92,16 @@ typedef struct s_data
 	int					std_fd[3];
 }						t_data;
 
+
 // "main" minishell.c
 void	free_data(t_data *data);
 
 // Handling Signals
 void	handle_ctrl_c(int sig);
-void	handle_ctrl_z(int sig);
 void	handle_signals(void);
+void	handle_signals(void);
+void	set_signal(int sig);
+int		get_signal(void);
 
 // linked_list.c
 t_token	*ft_lstnew(char *str);
