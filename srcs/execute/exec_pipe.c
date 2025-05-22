@@ -12,25 +12,35 @@
 
 #include "../../inc/minishell.h"
 
-int		do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2]);
+// int		do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2]);
 // int	pipe_cmd1(t_data *data, t_ast *node, int pipe_fd[2]);
 // int	pipe_cmd2(t_data *data, t_ast *node, int pipe_fd[2]);
+static pid_t	pipe_cmd(t_data *data, t_ast *node, int fd, int pipe_fd[2]);
 
 int	execute_pipe(t_data *data, t_ast *node)
 {
-	pid_t	pid;
+	pid_t	pid[2];
 	int		pipe_fd[2];
 	int		status;
 
-	pid = fork();
-	pipe(pipe_fd);
-	if (pid == 0)
-		do_pipe_cmds(data, node, pipe_fd);
-	else
-	{
-		waitpid(pid, &status, 0);
-		(close(pipe_fd[0]), close(pipe_fd[1]));
-	}
+	if (pipe(pipe_fd) < 0)
+		return (perror("pipe failed"), 1);
+	pid[0] = pipe_cmd(data, node->left, 0, pipe_fd);
+	if (pid[0] < 0)
+		return (1);
+	pid[1] = pipe_cmd(data, node->right, 1, pipe_fd);
+	if (pid[1] < 0)
+		return (1);
+	(close(pipe_fd[0]), close(pipe_fd[1]));
+	waitpid(pid[0], &status, 0);
+	waitpid(pid[1], &status, 0);
+	// if (pid == 0)
+	// 	do_pipe_cmds(data, node, pipe_fd);
+	// else
+	// {
+	// 	waitpid(pid, &status, 0);
+	// 	(close(pipe_fd[0]), close(pipe_fd[1]));
+	// }
 	// pipe(pipe_fd);
 	// pipe_cmd1(data, node, pipe_fd);
 	// pipe_cmd2(data, node, pipe_fd);
@@ -38,33 +48,52 @@ int	execute_pipe(t_data *data, t_ast *node)
 	return (WEXITSTATUS(status));
 }
 
-int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
+static pid_t	pipe_cmd(t_data *data, t_ast *node, int fd, int pipe_fd[2])
 {
-	pid_t		pid;
-	int			status;
+	int		pid;
 
 	pid = fork();
-	if (pid == -1)
-		return (close(pipe_fd[0]), close(pipe_fd[1]), 1);
+	if (pid < 0)
+		return (perror("pipe fail"), close(pipe_fd[0]), close(pipe_fd[1]), 1);
 	if (pid == 0)
 	{
-		close(pipe_fd[0]);
-		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+		close(pipe_fd[fd]);
+		if (dup2(pipe_fd[!fd], !fd) < 0)
 			return (perror("dup2 failed"), 1);
-		close(pipe_fd[1]);
-		execute_node(data, node->left);
+		close(pipe_fd[!fd]);
+		execute_node(data, node);
+		del_lst(&data->env_llst);
+		exit_cleanup(data);
 	}
-	else
-	{
-		close(pipe_fd[1]);
-		if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-			return (perror("dup2 failed"), 1);
-		close(pipe_fd[0]);
-		data->exit_status = execute_node(data, node->right);
-	}
-	exit_cleanup(data);
-	return (0);
+	return (pid);
 }
+
+// int	do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2])
+// {
+// 	pid_t		pid;
+
+// 	pid = fork();
+// 	if (pid == -1)
+// 		return (close(pipe_fd[0]), close(pipe_fd[1]), 1);
+// 	if (pid == 0)
+// 	{
+// 		close(pipe_fd[0]);
+// 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+// 			return (perror("dup2 failed"), 1);
+// 		close(pipe_fd[1]);
+// 		execute_node(data, node->left);
+// 	}
+// 	else
+// 	{
+// 		close(pipe_fd[1]);
+// 		if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+// 			return (perror("dup2 failed"), 1);
+// 		close(pipe_fd[0]);
+// 		data->exit_status = execute_node(data, node->right);
+// 	}
+// 	exit_cleanup(data);
+// 	return (0);
+// }
 
 // int	pipe_cmd1(t_data *data, t_ast *node, int pipe_fd[2])
 // {
