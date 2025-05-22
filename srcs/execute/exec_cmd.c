@@ -51,8 +51,7 @@ static void	exec_child(char **cmd, t_envp *env_list)
 	DIR		*dir;
 	char	**envp;
 
-	dir = opendir(cmd
-[0]);
+	dir = opendir(cmd[0]);
 	envp = stitch_env(env_list);
 	if (!envp)
 		(custom_error("env list", "malloc failed"), exit(EXIT_FAILURE));
@@ -91,7 +90,6 @@ static void	do_nothing ()
 {
 	return ;
 }
-
 
 static int	check_cmd(t_data *data, t_ast *node, char *cmd)
 {
