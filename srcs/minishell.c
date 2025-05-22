@@ -52,7 +52,7 @@ int	main(int ac, char *av[], char *envp[])
 				{
 					add_history(line);
 					execute_node(data, data->head);
-					printf("exit status rn %i\n", data->exit_status);
+					// printf("exit status rn %i\n", data->exit_status);
 					exit_status = data->exit_status;
 					env_llst = data->env_llst;
 					free_data(data);
