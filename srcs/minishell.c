@@ -48,15 +48,14 @@ int	main(int ac, char *av[], char *envp[])
 			if (line && *line)
 			{
 				data = parse_line(&line, &exit_status, env_llst);
+				add_history(line);
 				if (data)
 				{
-					add_history(line);
 					execute_node(data, data->head);
-					// printf("exit status rn %i\n", data->exit_status);
 					exit_status = data->exit_status;
 					env_llst = data->env_llst;
-					free_data(data);
 				}
+				free_data(data);
 				free(line);
 			}
 			else if (!line)
@@ -98,21 +97,21 @@ static t_data	*parse_line(char **line, int *exit_status, t_envp *envlst)
 	data->env_llst = envlst;
 	create_tokens(*line, &(data->token_list));
 	if (!data->token_list)
-		return (free(data), NULL);
+		return (free_data(data), NULL);
 	if (data->token_list && check_valid_order(&data->token_list))
 	{
 		*exit_status = 2;
 		return (custom_error("tokens", "syntax error"),
-			ft_lstclear(&data->token_list), free(data), NULL);
+			ft_lstclear(&data->token_list), free_data(data), NULL);
 	}
 	if (parse_heredoc(data, data->token_list))
-		return (ft_lstclear(&data->token_list), free(data), NULL);
+		return (ft_lstclear(&data->token_list), free_data(data), NULL);
 	if (get_signal() != 0)
 	{
 		*exit_status = get_signal() + 128;
 		set_signal(0);
 		ft_lstclear(&data->token_list);
-		free(data);
+		free_data(data);
 		return (NULL);
 	}
 	else
@@ -140,8 +139,12 @@ static t_data	*init_data(void)
 
 void	free_data(t_data *data)
 {
-	free_ast(data->head);
-	ft_lstclear(&data->token_list);
+	if (!data)
+		return ;
+	if (data->head)
+		free_ast(data->head);
+	if (data->token_list)
+		ft_lstclear(&data->token_list);
 	reset_redir(data);
 	close(data->std_fd[0]);
 	close(data->std_fd[1]);

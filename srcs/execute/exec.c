@@ -20,6 +20,8 @@ int		execute_logical(t_data *data, t_ast *node);
 // back to this function until no nodes are left
 int	execute_node(t_data *data, t_ast *node)
 {
+	if (data == NULL || node == NULL)
+		return (0);
 	if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
 		data->exit_status = execute_logical(data, node);
 	else if (node->type == PIPE)

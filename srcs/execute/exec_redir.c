@@ -30,10 +30,9 @@ int	execute_redir(t_data *data, t_ast *node)
 		data->exit_status = redir_output(node);
 	if (node->left && data->exit_status == 0)
 		data->exit_status = execute_node(data, node->left);
-	reset_redir(data);
 	if (node->type == IN_HEREDOC)
-		unlink(node->right->literal[0]);
-	return (data->exit_status);
+		unlink(node->right->token->literal);
+	return (reset_redir(data), data->exit_status);
 }
 
 static int	redir_input(t_ast *node)
@@ -45,14 +44,13 @@ static int	redir_input(t_ast *node)
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = STDIN_FILENO;
-	fd_newfile = open(node->right->literal[0], O_RDONLY);
+	fd_newfile = open(node->right->token->literal, O_RDONLY);
 	if (fd_newfile < 0)
-		return (custom_error(node->right->literal[0],
+		return (custom_error(node->right->token->literal,
 				"No such file or directory"), 1);
 	if (dup2(fd_newfile, fd_redir) == -1)
-		return (perror("dup2 failed"), 1);
-	close(fd_newfile);
-	return (0);
+		return (perror("dup2 failed"), close(fd_newfile), 1);
+	return (close(fd_newfile), 0);
 }
 
 static int	redir_output(t_ast *node)
@@ -69,14 +67,13 @@ static int	redir_output(t_ast *node)
 		flags = O_CREAT | O_WRONLY | O_TRUNC;
 	else
 		flags = O_CREAT | O_WRONLY | O_APPEND;
-	fd_newfile = open(node->right->literal[0], flags, 0666);
+	fd_newfile = open(node->right->token->literal, flags, 0666);
 	if (fd_newfile < 0)
-		return (custom_error(node->right->literal[0],
+		return (custom_error(node->right->token->literal,
 				"No such file or directory"), 1);
 	if (dup2(fd_newfile, fd_redir) == -1)
-		return (perror("dup2 failed"), 1);
-	close(fd_newfile);
-	return (0);
+		return (perror("dup2 failed"), close(fd_newfile), 1);
+	return (close(fd_newfile), 0);
 }
 
 void	reset_redir(t_data *data)

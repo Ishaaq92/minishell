@@ -22,17 +22,17 @@ int	bi_cd(t_data *data, t_ast *node)
 	char	*new_path;
 	char	*old_path;
 
-	if (ft_strcmp(node->literal[1], "-") == 0)
+	if (node->literal[1] && ft_strcmp(node->literal[1], "-") == 0)
 		return (swap_dir(data));
 	new_path = more_bi_cd(data, node);
 	if (!new_path)
 		return (bi_custom_error("cd", "HOME", "not set"), 1);
 	if (access(new_path, F_OK) == -1)
 	{
-		bi_custom_error("cd", node->literal[1], "No such file or directory");
 		if (new_path)
 			free(new_path);
-		return (1);
+		return (bi_custom_error("cd", node->literal[1],
+			"No such file or directory"), 1);
 	}
 	old_path = getcwd(NULL, 0);
 	if (chdir(new_path) == -1)

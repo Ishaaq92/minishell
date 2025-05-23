@@ -16,7 +16,9 @@
 t_ast	*ast_new(t_token *token)
 {
 	t_ast	*new;
-
+	
+	if (token == NULL)
+		return (NULL);
 	new = (t_ast *)malloc(sizeof(t_ast));
 	new->left = NULL;
 	new->right = NULL;

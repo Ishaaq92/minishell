@@ -20,11 +20,12 @@ t_ast	*parse_cmd(t_token	**token)
 
 	if (token == NULL || (*token) == NULL)
 		return (NULL);
-	while ((*token)->type == LBRACE || (*token)->type == RBRACE)
+	while (*token && ((*token)->type == LBRACE || (*token)->type == RBRACE))
 		(*token) = (*token)->next;
 	cmd = ast_new(*token);
-	cmd->literal = parse_cmd_args(*token, count_argc(*token));
-	if (cmd->literal == NULL)
+	if (cmd)
+		cmd->literal = parse_cmd_args(*token, count_argc(*token));
+	if (cmd && cmd->literal == NULL)
 		return (free(cmd), NULL);
 	return (cmd);
 }

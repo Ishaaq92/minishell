@@ -101,7 +101,8 @@ static void	handle_word(char **str, char **literal, t_token *token)
 			handle_quotes(*str, &i, token);
 		else if (is_blank((*str)[i]) || is_op((*str)[i]))
 			break ;
-		i++;
+		else
+			i++;
 	}
 	*literal = ft_strndup(*str, i);
 	token->type = WORD;
@@ -125,6 +126,7 @@ static int	handle_quotes(char *str, int *i, t_token *token)
 			if (str[(*i)] == quote_char)
 			{
 				token->open_quote = 0;
+				(*i)++;
 				break ;
 			}
 			(*i)++;
