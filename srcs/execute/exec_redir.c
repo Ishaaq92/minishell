@@ -55,25 +55,22 @@ static int	redir_input(t_ast *node)
 
 static int	redir_output(t_ast *node)
 {
-	int		fd_newfile;
+	// int		fd_newfile;
 	int		fd_redir;
-	int		flags;
 
+	if (node->left == NULL)
+		return (0);
 	if (ft_isdigit(node->token->literal[0]))
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = STDOUT_FILENO;
-	if (node->type == REDIR_OUT)
-		flags = O_CREAT | O_WRONLY | O_TRUNC;
-	else
-		flags = O_CREAT | O_WRONLY | O_APPEND;
-	fd_newfile = open(node->right->token->literal, flags, 0666);
-	if (fd_newfile < 0)
-		return (custom_error(node->right->token->literal,
-				"No such file or directory"), 1);
-	if (dup2(fd_newfile, fd_redir) == -1)
-		return (perror("dup2 failed"), close(fd_newfile), 1);
-	return (close(fd_newfile), 0);
+
+
+	if (node->left == NULL)
+		return (close(node->right->path_fd), 0);
+	if (dup2(node->right->path_fd, fd_redir) == -1)
+		return (perror("dup2 failed"), close(node->right->path_fd), 1);
+	return (close(node->right->path_fd), 0);
 }
 
 void	reset_redir(t_data *data)

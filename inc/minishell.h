@@ -71,6 +71,7 @@ typedef struct s_ast
 {
 	char				**literal;
 	enum e_type			type;
+	int					path_fd;
 	t_token				*token;
 	struct s_ast		*left;
 	struct s_ast		*right;
