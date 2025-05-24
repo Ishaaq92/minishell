@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:56:37 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/15 17:31:27 by isahmed          ###   ########.fr       */
+/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static t_ast	*parse_brackets(t_token **token, t_token **stop);
 // nodes if they find a valid token
 // the search occurs in the following order:
 // logical > pipe > brackets > redir > commands
-// TODO: can you get rid of the end variable by passing the function directly?
 t_ast	*parse_tokens(t_token *head)
 {
 	t_token	*start;

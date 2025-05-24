@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_redir.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 13:23:07 by avalsang          #+#    #+#             */
-/*   Updated: 2025/04/15 17:07:21 by isahmed          ###   ########.fr       */
+/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,20 +80,8 @@ static t_ast	*parse_redir2(t_token **token, t_token **stop)
 static t_ast	*parse_file(t_token **token)
 {
 	t_ast		*path;
-	int		flags;
 
 	path = ast_new(*token);
-	path->literal = (char **) malloc((sizeof(char *) * 2));
-	path->literal[0] = (*token)->literal;	
-	if ((*token)->prev->type == REDIR_OUT)
-		flags = O_CREAT | O_WRONLY | O_TRUNC;
-	else
-		flags = O_CREAT | O_WRONLY | O_APPEND;
-	path->path_fd = open((*token)->literal, flags, 0666);
-	if (path->path_fd < 0)
-		return (custom_error((*token)->literal,
-				"No such file or directory"), NULL);
-	path->literal[1] = NULL;
 	path->type = PATH;
 	return (path);
 }

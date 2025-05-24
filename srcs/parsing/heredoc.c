@@ -37,6 +37,7 @@ int	parse_heredoc(t_data *data, t_token *token)
 				return (free(temp_no), free(temp_name), 1);
 			(free(token->next->literal), free(temp_no));
 			token->next->literal = temp_name;
+			token->fd = open(temp_name, O_RDONLY);
 			i++;
 		}
 		token = token->next;
@@ -53,17 +54,17 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 
 	has_quotes = check_lim_for_quotes(lim);
 	remove_quotes(lim);
-	temp_fd = open(temp_name, O_CREAT | O_WRONLY | O_TRUNC | O_RDONLY, 0666);
+	temp_fd = open(temp_name, O_RDWR | O_CREAT, 0666);
 	if (temp_fd < 0)
 		return (custom_error("open", "failed to open temp file"), 1);
 	while (lim)
 	{
 		buffer = readline("> ");
-		if  (get_signal() == 2)
+		if (get_signal() == 2)
 			break ;
 		if (!buffer && get_signal() != SIGINT)
-			bi_custom_error("warning",  "heredoc delimited by end-of-file: wanted", lim);
-		// printf("buffer = %s, isnull %i, gsig %i\n", buffer, buffer == NULL, get_signal());
+			bi_custom_error("warning",
+				"heredoc delimited by end-of-file: wanted", lim);
 		if (!buffer || (buffer && !ft_strcmp(buffer, lim)))
 			break ;
 		if (!has_quotes)

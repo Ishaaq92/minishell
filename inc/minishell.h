@@ -27,7 +27,6 @@
 # include <limits.h>
 # include <sys/ioctl.h>
 
-
 enum e_commands
 {
 	ECHO,
@@ -64,6 +63,7 @@ typedef struct s_token
 	struct s_token		*next;
 	struct s_token		*prev;
 	int					open_quote;
+	int					fd;
 }						t_token;
 
 // abstract synatx tree nodes
@@ -71,7 +71,6 @@ typedef struct s_ast
 {
 	char				**literal;
 	enum e_type			type;
-	int					path_fd;
 	t_token				*token;
 	struct s_ast		*left;
 	struct s_ast		*right;
@@ -92,7 +91,6 @@ typedef struct s_data
 	int					exit_status;
 	int					std_fd[3];
 }						t_data;
-
 
 // "main" minishell.c
 void	free_data(t_data *data);
@@ -124,6 +122,7 @@ void	exit_cleanup(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 int		custom_error(char *str, char *msg);
 int		bi_custom_error(char *func, char *str, char *msg);
+void	reset_redir(t_data *data);
 
 // prompt.c
 char	*get_prompt(int exit_status);
@@ -186,7 +185,6 @@ int		execute_pipe(t_data *data, t_ast *node);
 
 // exec_redir.c
 int		execute_redir(t_data *data, t_ast *node);
-void	reset_redir(t_data *data);
 
 // exec_cmd.c
 int		execute_cmd(t_data *data, t_ast *node);

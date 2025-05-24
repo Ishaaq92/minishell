@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   utils.c											:+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: isahmed <isahmed@student.42.fr>			+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/03/25 15:00:15 by isahmed		   #+#	#+#			 */
-/*   Updated: 2025/05/13 20:10:47 by isahmed		  ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
@@ -56,4 +56,11 @@ int	custom_error(char *str, char *msg)
 	write(STDERR_FILENO, msg, ft_strlen(msg));
 	write(STDERR_FILENO, "\n", 1);
 	return (0);
+}
+
+void	reset_redir(t_data *data)
+{
+	dup2(data->std_fd[0], STDIN_FILENO);
+	dup2(data->std_fd[1], STDOUT_FILENO);
+	dup2(data->std_fd[2], STDERR_FILENO);
 }

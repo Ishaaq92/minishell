@@ -32,7 +32,7 @@ int	bi_cd(t_data *data, t_ast *node)
 		if (new_path)
 			free(new_path);
 		return (bi_custom_error("cd", node->literal[1],
-			"No such file or directory"), 1);
+				"No such file or directory"), 1);
 	}
 	old_path = getcwd(NULL, 0);
 	if (chdir(new_path) == -1)

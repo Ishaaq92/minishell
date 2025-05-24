@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 17:34:58 by isahmed           #+#    #+#             */
-/*   Updated: 2025/04/17 20:54:20 by ishaaq           ###   ########.fr       */
+/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ t_token	*ft_lstnew(char *str)
 	if (token == NULL)
 		return (NULL);
 	token->literal = str;
-	token->next = NULL;
+	token->fd = -1;
 	token->type = 0;
 	token->open_quote = 0;
+	token->next = NULL;
 	token->prev = NULL;
 	return (token);
 }
@@ -68,6 +69,8 @@ void	ft_lstclear(t_token **lst)
 		while (*lst)
 		{
 			tmp = (*lst)->next;
+			if ((*lst)->fd != -1)
+				close((*lst)->fd);
 			free((*lst)->literal);
 			free((*lst));
 			(*lst) = tmp;

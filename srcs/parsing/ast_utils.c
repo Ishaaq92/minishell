@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 14:31:02 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/13 18:53:27 by isahmed          ###   ########.fr       */
+/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@
 t_ast	*ast_new(t_token *token)
 {
 	t_ast	*new;
-	
+
 	if (token == NULL)
 		return (NULL);
 	new = (t_ast *)malloc(sizeof(t_ast));
 	new->left = NULL;
 	new->right = NULL;
 	new->literal = NULL;
-	new->path_fd = -1;
 	new->token = token;
 	new->type = token->type;
 	return (new);
@@ -35,8 +34,6 @@ void	free_ast(t_ast *ast)
 
 	if (ast == NULL)
 		return ;
-	if (ast->path_fd != -1)
-		close(ast->path_fd);
 	if (ast->left)
 		free_ast(ast->left);
 	if (ast->right)
@@ -44,7 +41,6 @@ void	free_ast(t_ast *ast)
 	i = 0;
 	while (ast->literal && ast->literal[i])
 		i++;
-
 	free(ast->literal);
 	free(ast);
 }

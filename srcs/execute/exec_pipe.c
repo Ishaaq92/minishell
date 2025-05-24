@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ishaaq <ishaaq@student.42.fr>              +#+  +:+       +#+        */
+/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 16:21:33 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/16 12:05:40 by ishaaq           ###   ########.fr       */
+/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+//  set -o pipefail
 // int		do_pipe_cmds(t_data *data, t_ast *node, int pipe_fd[2]);
 // int	pipe_cmd1(t_data *data, t_ast *node, int pipe_fd[2]);
 // int	pipe_cmd2(t_data *data, t_ast *node, int pipe_fd[2]);
@@ -33,10 +34,11 @@ int	execute_pipe(t_data *data, t_ast *node)
 		return (1);
 	(close(pipe_fd[0]), close(pipe_fd[1]));
 	(waitpid(pid[0], &status[0], 0), waitpid(pid[1], &status[1], 0));
-	if (WIFSIGNALED(status[0]) && WTERMSIG(status[0]) == SIGPIPE)
-		;
-	else
-		;
+	// TODO: set child process correctly from signals, here and from execve
+	// if (WIFSIGNALED(status[0]) && WTERMSIG(status[0]) == SIGPIPE)
+	// {
+	// 	;
+	// }
 	return (WEXITSTATUS(status[1]));
 }
 
@@ -59,5 +61,3 @@ static pid_t	pipe_cmd(t_data *data, t_ast *node, int fd, int pipe_fd[2])
 	}
 	return (pid);
 }
-
-//  set -o pipefail

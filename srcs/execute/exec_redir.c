@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-17 15:00:38 by avalsang          #+#    #+#             */
-/*   Updated: 2025-05-17 15:00:38 by avalsang         ###   ########.fr       */
+/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,18 @@
 int				execute_redir(t_data *data, t_ast *node);
 static int		redir_input(t_ast *node);
 static int		redir_output(t_ast *node);
-void			reset_redir(t_data *data);
+static int		check_file(t_token *token);
+static int		redir_flags(enum e_type type);
 
 // used to execute the redir node
 // if there is a command, execute it after performing redirections
 // then reset the std fds back to their original status
 int	execute_redir(t_data *data, t_ast *node)
 {
-	// if (node->left == NULL)
-	// {
-	// 	// close(node->path_fd);
-	// 	// node->path_fd = open("/dev/null", O_WRONLY, 0666);
-	// 	// // dup2(STDOUT_FILENO, node->path_fd);
-	// 	// dup2(node->path_fd, STDIN_FILENO);
-	// 	// close(STDIN_FILENO);
-	// 	return (0);
-	// }
 	param_sub(data, &node->right->token->literal, 0);
 	remove_quotes(node->right->token->literal);
+	if (check_file(node->token))
+		return (1);
 	if (node->type == REDIR_IN || node->type == IN_HEREDOC)
 		data->exit_status = redir_input(node);
 	else if (node->type == REDIR_OUT || node->type == OUT_APPEND)
@@ -46,25 +40,19 @@ int	execute_redir(t_data *data, t_ast *node)
 
 static int	redir_input(t_ast *node)
 {
-	int		fd_newfile;
 	int		fd_redir;
 
 	if (ft_isdigit(*node->token->literal))
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = STDIN_FILENO;
-	fd_newfile = open(node->right->token->literal, O_RDONLY);
-	if (fd_newfile < 0)
-		return (custom_error(node->right->token->literal,
-				"No such file or directory"), 1);
-	if (dup2(fd_newfile, fd_redir) == -1)
-		return (perror("dup2 failed"), close(fd_newfile), 1);
-	return (close(fd_newfile), 0);
+	if (dup2(node->token->fd, fd_redir) == -1)
+		return (perror("dup2 failed"), close(node->token->fd), 1);
+	return (0);
 }
 
 static int	redir_output(t_ast *node)
 {
-	// int		fd_newfile;
 	int		fd_redir;
 
 	if (node->left == NULL)
@@ -73,18 +61,46 @@ static int	redir_output(t_ast *node)
 		fd_redir = ft_atoi(node->token->literal);
 	else
 		fd_redir = STDOUT_FILENO;
-
-
 	if (node->left == NULL)
-		return (close(node->right->path_fd), 0);
-	if (dup2(node->right->path_fd, fd_redir) == -1)
-		return (perror("dup2 failed"), close(node->right->path_fd), 1);
-	return (close(node->right->path_fd), 0);
+		return (close(node->token->fd), 0);
+	if (dup2(node->token->fd, fd_redir) == -1)
+		return (perror("dup2 failed"), close(node->token->fd), 1);
+	return (close(node->token->fd), 0);
 }
 
-void	reset_redir(t_data *data)
+// used to check if the file after redir in, out and append exists and can be
+// written to
+static int	check_file(t_token *token)
 {
-	dup2(data->std_fd[0], STDIN_FILENO);
-	dup2(data->std_fd[1], STDOUT_FILENO);
-	dup2(data->std_fd[2], STDERR_FILENO);
+	while (token != NULL)
+	{
+		if (token->type == REDIR_IN || token->type == REDIR_OUT
+			|| token->type == OUT_APPEND)
+		{
+			token->fd = open(token->next->literal,
+					redir_flags(token->type), 0666);
+			if (access(token->next->literal, F_OK))
+				return (custom_error(token->next->literal,
+						"No such file or directory"), 1);
+			if (token->type == REDIR_IN && access(token->next->literal, R_OK))
+				return (custom_error(token->next->literal,
+						"Permission denied"), 1);
+			else if (access(token->next->literal, W_OK))
+				return (custom_error(token->next->literal,
+						"Permission denied"), 1);
+		}
+		token = token->next;
+	}
+	return (0);
+}
+
+static int	redir_flags(enum e_type type)
+{
+	if (type == REDIR_OUT)
+		return (O_WRONLY | O_CREAT | O_TRUNC);
+	else if (type == OUT_APPEND)
+		return (O_WRONLY | O_CREAT | O_APPEND);
+	else if (type == REDIR_IN)
+		return (O_RDONLY);
+	return (0);
 }

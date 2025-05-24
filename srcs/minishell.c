@@ -16,7 +16,6 @@ static t_data	*parse_line(char **line, int *exit_status, t_envp *envlst);
 static t_data	*init_data(void);
 void			free_data(t_data *data);
 
-
 int	main(int ac, char *av[], char *envp[])
 {
 	char		*line;
@@ -118,6 +117,11 @@ static t_data	*parse_line(char **line, int *exit_status, t_envp *envlst)
 		data->exit_status = *exit_status;
 	wildcards(data);
 	data->head = parse_tokens(data->token_list);
+	// if (check_file(data->token_list))
+	// {
+	// 	*exit_status = 1;
+	// 	return (ft_lstclear(&data->token_list), free_data(data), NULL);
+	// }
 	return (data);
 }
 
