@@ -35,6 +35,8 @@ void	free_ast(t_ast *ast)
 
 	if (ast == NULL)
 		return ;
+	if (ast->path_fd != -1)
+		close(ast->path_fd);
 	if (ast->left)
 		free_ast(ast->left);
 	if (ast->right)
@@ -42,8 +44,7 @@ void	free_ast(t_ast *ast)
 	i = 0;
 	while (ast->literal && ast->literal[i])
 		i++;
-	if (ast->type == PATH)
-		close(ast->path_fd);
+
 	free(ast->literal);
 	free(ast);
 }

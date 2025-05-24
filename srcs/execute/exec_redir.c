@@ -22,6 +22,15 @@ void			reset_redir(t_data *data);
 // then reset the std fds back to their original status
 int	execute_redir(t_data *data, t_ast *node)
 {
+	// if (node->left == NULL)
+	// {
+	// 	// close(node->path_fd);
+	// 	// node->path_fd = open("/dev/null", O_WRONLY, 0666);
+	// 	// // dup2(STDOUT_FILENO, node->path_fd);
+	// 	// dup2(node->path_fd, STDIN_FILENO);
+	// 	// close(STDIN_FILENO);
+	// 	return (0);
+	// }
 	param_sub(data, &node->right->token->literal, 0);
 	remove_quotes(node->right->token->literal);
 	if (node->type == REDIR_IN || node->type == IN_HEREDOC)

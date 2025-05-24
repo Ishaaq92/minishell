@@ -21,7 +21,7 @@ int	execute_pipe(t_data *data, t_ast *node)
 {
 	pid_t	pid[2];
 	int		pipe_fd[2];
-	int		status;
+	int		status[2];
 
 	if (pipe(pipe_fd) < 0)
 		return (perror("pipe failed"), 1);
@@ -32,8 +32,12 @@ int	execute_pipe(t_data *data, t_ast *node)
 	if (pid[1] < 0)
 		return (1);
 	(close(pipe_fd[0]), close(pipe_fd[1]));
-	(waitpid(pid[0], &status, 0), waitpid(pid[1], &status, 0));
-	return (WEXITSTATUS(status));
+	(waitpid(pid[0], &status[0], 0), waitpid(pid[1], &status[1], 0));
+	if (WIFSIGNALED(status[0]) && WTERMSIG(status[0]) == SIGPIPE)
+		;
+	else
+		;
+	return (WEXITSTATUS(status[1]));
 }
 
 static pid_t	pipe_cmd(t_data *data, t_ast *node, int fd, int pipe_fd[2])
@@ -55,3 +59,5 @@ static pid_t	pipe_cmd(t_data *data, t_ast *node, int fd, int pipe_fd[2])
 	}
 	return (pid);
 }
+
+//  set -o pipefail

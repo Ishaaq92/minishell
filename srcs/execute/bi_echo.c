@@ -20,7 +20,9 @@ int	bi_echo(t_data *data, t_ast *node)
 	char	**args;
 
 	(void) data;
-	signal(SIGPIPE, SIG_IGN);
+	// signal(SIGPIPE, SIG_IGN);
+	i = 0;
+
 	args = node->literal;
 	if (args == NULL || args[1] == NULL)
 		return (printf("\n"), 0);
@@ -35,7 +37,7 @@ int	bi_echo(t_data *data, t_ast *node)
 	}
 	if (echo_args(args[1]) == 1)
 		printf("\n");
-	signal(SIGPIPE, SIG_DFL);
+	// signal(SIGPIPE, SIG_DFL);
 	return (0);
 }
 

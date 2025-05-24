@@ -24,7 +24,6 @@ int	execute_cmd(t_data *data, t_ast *node)
 	clean_args(data, node);
 	if (is_builtin(data, node))
 		return (data->exit_status);
-	// g_val = 1;
 	error = check_cmd(data, node, node->literal[0]);
 	if (error)
 		return (error);
@@ -58,10 +57,12 @@ static void	exec_child(char **cmd, t_envp *env_list)
 	if (dir)
 		(custom_error(cmd[0], "Is a directory"), closedir(dir), exit(126));
 	execve(cmd[0], cmd, envp);
+	printf("uh oh\n\n\n");
 }
 
 static int	is_builtin(t_data *data, t_ast *node)
 {
+	signal(SIGPIPE, SIG_IGN);
 	if (!node || !node->literal[0])
 	{
 		custom_error("", "command not found");
@@ -81,20 +82,15 @@ static int	is_builtin(t_data *data, t_ast *node)
 		data->exit_status = bi_env(data);
 	else if (!ft_strcmp(node->literal[0], "exit"))
 		data->exit_status = bi_exit(data, node);
+	else if (!ft_strcmp(node->literal[0], ":"))
+		data->exit_status = 0;
 	else
-		return (0);
-	return (1);
-}
-
-static void	do_nothing ()
-{
-	return ;
+		return (signal(SIGPIPE, SIG_DFL), 0);
+	return (signal(SIGPIPE, SIG_DFL), 1);
 }
 
 static int	check_cmd(t_data *data, t_ast *node, char *cmd)
 {
-	if (!ft_strcmp(":", cmd))
-		return (do_nothing(), 0);
 	if (!ft_strcmp(cmd, "..") || !ft_strcmp(cmd, "."))
 		return (custom_error(cmd, "command not found"), 127);
 	else if (!ft_strncmp(cmd, "./", 2) || cmd[0] == '/')
