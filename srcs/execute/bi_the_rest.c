@@ -68,7 +68,7 @@ int	ms_atoi(const char *str)
 	if (minus == 1)
 		result = -result;
 	if (result > INT_MAX || result < INT_MIN)
-		return (custom_error("exit", "numeric argument required"), 1);
+		return (custom_error("exit", "numeric argument required"), 2);
 	return (result);
 }
 
@@ -85,13 +85,13 @@ int	bi_exit(t_data *data, t_ast *node)
 	while (args && args[0] && args[++i] != NULL)
 	{
 		j = 0;
-		if (args[1][0] == '+')
+		if (args[1][0] == '+' || args[1][0] == '-')
 			j++;
 		while (args[i][j] && ft_isdigit(args[i][j]) != 0)
 			j++;
 		if (args[1][0] == '\0' || (i == 1 && args[i][j] != '\0'))
 			return (custom_error("exit", "numeric argument required"), 2);
-		else if (i == 1 && args[i][j] == '\0' && j < 11)
+		else if (i == 1 && args[i][j] == '\0')
 			code = ms_atoi(args[i]);
 	}
 	if (i > 2)

@@ -13,6 +13,7 @@
 #include "../inc/minishell.h"
 
 static t_data	*parse_line(char **line, int *exit_status, t_envp *envlst);
+static int		create_ast(t_data *data, int *exit_status);
 static t_data	*init_data(void);
 void			free_data(t_data *data);
 
@@ -35,14 +36,16 @@ int	main(int ac, char *av[], char *envp[])
 		env_llst = set_envp(envp);
 		while (42)
 		{
+			rl_erase_empty_line = 0;
 			prompt = get_prompt(exit_status);
 			line = readline(prompt);
-			rl_erase_empty_line = 0;
 			free(prompt);
 			if (get_signal() == SIGINT)
 			{
 				set_signal(0);
 				exit_status = 130;
+				if (line && *line)
+					free(line);
 				continue ;
 			}
 			if (line && *line)
@@ -98,32 +101,28 @@ static t_data	*parse_line(char **line, int *exit_status, t_envp *envlst)
 	create_tokens(*line, &(data->token_list));
 	if (!data->token_list)
 		return (free_data(data), NULL);
+	if (create_ast(data, exit_status))
+		return (ft_lstclear(&data->token_list), free_data(data), NULL);
+	return (data);
+}
+
+static int	create_ast(t_data *data, int *exit_status)
+{
 	if (data->token_list && check_valid_order(&data->token_list))
 	{
 		*exit_status = 2;
-		return (custom_error("tokens", "syntax error"),
-			ft_lstclear(&data->token_list), free_data(data), NULL);
+		return (custom_error("tokens", "syntax error"), 1);
 	}
 	if (parse_heredoc(data, data->token_list))
-		return (ft_lstclear(&data->token_list), free_data(data), NULL);
-	if (get_signal() != 0)
 	{
 		*exit_status = get_signal() + 128;
-		set_signal(0);
-		ft_lstclear(&data->token_list);
-		free_data(data);
-		return (NULL);
+		return (set_signal(0), 1);
 	}
 	else
 		data->exit_status = *exit_status;
 	wildcards(data);
 	data->head = parse_tokens(data->token_list);
-	// if (check_file(data->token_list))
-	// {
-	// 	*exit_status = 1;
-	// 	return (ft_lstclear(&data->token_list), free_data(data), NULL);
-	// }
-	return (data);
+	return (0);
 }
 
 static t_data	*init_data(void)

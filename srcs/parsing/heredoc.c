@@ -15,6 +15,7 @@
 static int	check_lim_for_quotes(char *str);
 static int	store_input(t_data *data, char *lim, char *temp_name);
 static void	write_buffer(char *buffer, int temp_fd);
+static int	remove_temp_files(t_token *token, int i);
 
 // crawl through the token list, look for heredoc tokens
 // the next token was the limiter for heredoc, which we don't need anymore
@@ -31,18 +32,21 @@ int	parse_heredoc(t_data *data, t_token *token)
 	{
 		if (token->type == IN_HEREDOC)
 		{
-			temp_no = ft_itoa(i);
+			temp_no = ft_itoa(i++);
 			temp_name = ft_strjoin("temp_", temp_no);
 			if (store_input(data, token->next->literal, temp_name))
-				return (free(temp_no), free(temp_name), 1);
+			{
+				(free(token->next->literal), free(temp_no));
+				token->next->literal = temp_name;
+				break ;
+			}
 			(free(token->next->literal), free(temp_no));
 			token->next->literal = temp_name;
 			token->fd = open(temp_name, O_RDONLY);
-			i++;
 		}
 		token = token->next;
 	}
-	return (0);
+	return (remove_temp_files(data->token_list, i));
 }
 
 // begins the heredoc user prompt, stores input in a temp file
@@ -60,8 +64,8 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 	while (lim)
 	{
 		buffer = readline("> ");
-		if (get_signal() == 2)
-			break ;
+		if (get_signal() == SIGINT)
+			return (free(buffer), close_fd(&temp_fd), 1);
 		if (!buffer && get_signal() != SIGINT)
 			bi_custom_error("warning",
 				"heredoc delimited by end-of-file: wanted", lim);
@@ -105,4 +109,22 @@ static int	check_lim_for_quotes(char *str)
 		str++;
 	}
 	return (0);
+}
+
+// if a signal interrupts the heredoc process, delete all temp files
+// i tracks how many temp files were created
+static int	remove_temp_files(t_token *token, int i)
+{
+	if (get_signal() == 0)
+		return (0);
+	while (token != NULL && i > 0)
+	{
+		if (token->type == IN_HEREDOC && token->next)
+		{
+			unlink(token->next->literal);
+			i--;
+		}
+		token = token->next;
+	}
+	return (1);
 }
