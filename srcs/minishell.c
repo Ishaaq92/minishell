@@ -151,9 +151,9 @@ void	free_data(t_data *data)
 	if (data->token_list)
 		ft_lstclear(&data->token_list);
 	reset_redir(data);
-	close(data->std_fd[0]);
-	close(data->std_fd[1]);
-	close(data->std_fd[2]);
+	close_fd(&data->std_fd[0]);
+	close_fd(&data->std_fd[1]);
+	close_fd(&data->std_fd[2]);
 	free(data);
 }
 

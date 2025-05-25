@@ -123,6 +123,7 @@ int		ft_strcmp(char *s1, char *s2);
 int		custom_error(char *str, char *msg);
 int		bi_custom_error(char *func, char *str, char *msg);
 void	reset_redir(t_data *data);
+void	close_fd(int *fd);
 
 // prompt.c
 char	*get_prompt(int exit_status);

@@ -32,13 +32,8 @@ int	execute_pipe(t_data *data, t_ast *node)
 	pid[1] = pipe_cmd(data, node->right, 1, pipe_fd);
 	if (pid[1] < 0)
 		return (1);
-	(close(pipe_fd[0]), close(pipe_fd[1]));
+	(close_fd(&pipe_fd[0]), close_fd(&pipe_fd[1]));
 	(waitpid(pid[0], &status[0], 0), waitpid(pid[1], &status[1], 0));
-	// TODO: set child process correctly from signals, here and from execve
-	// if (WIFSIGNALED(status[0]) && WTERMSIG(status[0]) == SIGPIPE)
-	// {
-	// 	;
-	// }
 	return (child_exit_status(status[1]));
 }
 
@@ -48,13 +43,13 @@ static pid_t	pipe_cmd(t_data *data, t_ast *node, int fd, int pipe_fd[2])
 
 	pid = fork();
 	if (pid < 0)
-		return (perror("pipe fail"), close(pipe_fd[0]), close(pipe_fd[1]), 1);
+		return (perror("pipe fail"), close_fd(&pipe_fd[0]), close_fd(&pipe_fd[1]), 1);
 	if (pid == 0)
 	{
-		close(pipe_fd[fd]);
+		close_fd(&pipe_fd[fd]);
 		if (dup2(pipe_fd[!fd], !fd) < 0)
 			return (perror("dup2 failed"), 1);
-		close(pipe_fd[!fd]);
+		close_fd(&pipe_fd[!fd]);
 		execute_node(data, node);
 		del_lst(&data->env_llst);
 		exit_cleanup(data);

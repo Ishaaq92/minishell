@@ -47,7 +47,7 @@ static int	redir_input(t_ast *node)
 	else
 		fd_redir = STDIN_FILENO;
 	if (dup2(node->token->fd, fd_redir) == -1)
-		return (perror("dup2 failed"), close(node->token->fd), 1);
+		return (perror("dup2 failed"), close_fd(&node->token->fd), 1);
 	return (0);
 }
 
@@ -63,10 +63,10 @@ static int	redir_output(t_ast *node)
 	else
 		fd_redir = STDOUT_FILENO;
 	if (node->left == NULL)
-		return (close(node->token->fd), 0);
+		return (close_fd(&node->token->fd), 0);
 	if (dup2(node->token->fd, fd_redir) == -1)
-		return (perror("dup2 failed"), close(node->token->fd), 1);
-	return (close(node->token->fd), 0);
+		return (perror("dup2 failed"), close_fd(&node->token->fd), 1);
+	return (close_fd(&node->token->fd), 0);
 }
 
 // used to check if the file after redir in, out and append exists and can be

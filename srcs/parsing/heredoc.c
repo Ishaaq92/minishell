@@ -71,7 +71,7 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 			param_sub(data, &buffer, 1);
 		(write_buffer(buffer, temp_fd), free(buffer));
 	}
-	return (free(buffer), close(temp_fd), 0);
+	return (free(buffer), close_fd(&temp_fd), 0);
 }
 
 static void	write_buffer(char *buffer, int temp_fd)
