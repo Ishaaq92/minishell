@@ -37,6 +37,7 @@ int	main(int ac, char *av[], char *envp[])
 		{
 			prompt = get_prompt(exit_status);
 			line = readline(prompt);
+			rl_erase_empty_line = 0;
 			free(prompt);
 			if (get_signal() == SIGINT)
 			{

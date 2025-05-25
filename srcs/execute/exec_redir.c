@@ -51,6 +51,7 @@ static int	redir_input(t_ast *node)
 	return (0);
 }
 
+// TODO: prevent double closes across minishell
 static int	redir_output(t_ast *node)
 {
 	int		fd_redir;

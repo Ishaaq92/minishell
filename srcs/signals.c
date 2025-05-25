@@ -28,9 +28,10 @@ void	handle_ctrl_c(int sig)
 {
 	set_signal(sig);
 	rl_done = 1;
+	rl_erase_empty_line = 1;
+	rl_replace_line("", 1);
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	rl_on_new_line();
-	rl_replace_line("", 1);
 }
 
 void	handle_signals(void)

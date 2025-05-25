@@ -188,6 +188,7 @@ int		execute_redir(t_data *data, t_ast *node);
 
 // exec_cmd.c
 int		execute_cmd(t_data *data, t_ast *node);
+int		child_exit_status(int status);
 
 // wildcards.c
 void	wildcards(t_data *data);

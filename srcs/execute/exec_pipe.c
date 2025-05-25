@@ -39,7 +39,7 @@ int	execute_pipe(t_data *data, t_ast *node)
 	// {
 	// 	;
 	// }
-	return (WEXITSTATUS(status[1]));
+	return (child_exit_status(status[1]));
 }
 
 static pid_t	pipe_cmd(t_data *data, t_ast *node, int fd, int pipe_fd[2])
