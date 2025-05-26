@@ -70,11 +70,6 @@ static int	find_matches(char *prefix, char *suffix, t_token **wild_args)
 	dir = readdir(d);
 	while (dir != NULL)
 	{
-		if (dir->d_name[0] == '.')
-		{
-			dir = readdir(d);
-			continue ;
-		}
 		if (check_sequence(dir->d_name, prefix, suffix) == 0)
 		{
 			new = ft_lstnew(ft_strdup(dir->d_name));
