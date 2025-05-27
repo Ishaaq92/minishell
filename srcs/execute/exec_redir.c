@@ -73,6 +73,9 @@ static int	redir_output(t_ast *node)
 // written to
 static int	check_file(t_token *token)
 {
+	if (!token->next->literal || !*token->next->literal)
+		return (custom_error("", "No such file or directory"),
+			close_fd(&token->fd), 1);
 	while (token != NULL)
 	{
 		if (token->type == REDIR_IN || token->type == REDIR_OUT
@@ -86,7 +89,7 @@ static int	check_file(t_token *token)
 			if (token->type == REDIR_IN && access(token->next->literal, R_OK))
 				return (custom_error(token->next->literal,
 						"Permission denied"), close_fd(&token->fd), 1);
-			else if (access(token->next->literal, W_OK))
+			if (token->type != REDIR_IN && access(token->next->literal, W_OK))
 				return (custom_error(token->next->literal,
 						"Permission denied"), close_fd(&token->fd), 1);
 		}
