@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:19:35 by isahmed           #+#    #+#             */
-/*   Updated: 2025/05/21 19:40:01 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/27 13:20:29 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ typedef struct s_data
 // "main" minishell.c
 void	free_data(t_data *data);
 
+// init_data.c
+t_data	*parse_line(char **line, int *exit_status, t_envp *envlst);
+
 // Handling Signals
 void	handle_ctrl_c(int sig);
 void	handle_signals(void);
@@ -167,7 +170,7 @@ void	del_lst(t_envp **lst);
 int		add_node(t_data *data, char *string);
 char	**stitch_env(t_envp *head);
 t_envp	*set_envp(char **envp);
-void	env_alter(t_data *data, char *key, char *value);
+void	*env_alter(t_data *data, char *key, char *value);
 
 // env_utils.c
 t_envp	*check_envp(t_data *data, char *key);

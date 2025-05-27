@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-17 15:00:38 by avalsang          #+#    #+#             */
-/*   Updated: 2025-05-17 15:00:38 by avalsang         ###   ########.fr       */
+/*   Created: 2025/05/17 15:00:38 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/27 18:19:45 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ int	bi_cd(t_data *data, t_ast *node)
 		return (bi_custom_error("cd", "HOME", "not set"), 1);
 	if (access(new_path, F_OK) == -1)
 	{
+		bi_custom_error("cd", new_path, "No such file or directory");
 		if (new_path)
 			free(new_path);
-		return (bi_custom_error("cd", node->literal[1],
-				"No such file or directory"), 1);
+		return (1);
 	}
 	old_path = getcwd(NULL, 0);
 	if (chdir(new_path) == -1)
-		return (bi_custom_error("cd", node->literal[1], "Permission denied"),
+		return (bi_custom_error("cd", new_path, "Permission denied"),
 			free(new_path), free(old_path), 1);
 	change_wd(data, new_path, old_path);
 	return (0);

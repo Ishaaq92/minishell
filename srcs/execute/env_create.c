@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/19 20:18:15 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/27 15:55:02 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@ int					ft_lstsize(t_envp *lst);
 // MUST INCLUDE FULL STRING: eg. 'PWD=/Users/tim'
 int	add_node(t_data *data, char *string)
 {
-	t_envp	*new;	
+	t_envp	*new;
+	char	*plus;
 
+	plus = ft_strchr(string, '+');
+	if (plus && *(plus + 1) == '=')
+		ft_memmove(plus, plus + 1, ft_strlen(plus));
 	new = env_add();
 	new->literal = ft_strdup(string);
 	env_lstadd_back(&data->env_llst, new);
@@ -46,7 +50,7 @@ t_envp	*set_envp(char **envp)
 	return (head);
 }
 
-void	env_alter(t_data *data, char *key, char *value)
+void	*env_alter(t_data *data, char *key, char *value)
 {
 	t_envp		*curr;
 	int			len;
@@ -56,9 +60,10 @@ void	env_alter(t_data *data, char *key, char *value)
 	while (curr != NULL && ft_strncmp(curr->literal, key, len) != 0)
 		curr = curr->next;
 	if (curr == NULL)
-		return ;
+		return (add_node(data, ft_strjoin(key, value)), NULL);
 	free(curr->literal);
 	curr ->literal = ft_strjoin(key, value);
+	return (NULL);
 }
 
 static t_envp	*env_add(void)

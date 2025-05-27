@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abhi <abhi@student.42.fr>                  #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 15:00:38 by avalsang          #+#    #+#             */
-/*   Updated: 2025-05-25 12:22:54 by abhi             ###   ########.fr       */
+/*   Updated: 2025/05/27 14:56:00 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,12 @@ int	execute_cmd(t_data *data, t_ast *node)
 		exec_child(data, node->literal);
 	}
 	else
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &data->exit_status, 0);
+		handle_signals();
+	}
 	return (child_exit_status(data->exit_status));
 }
 
@@ -64,7 +69,7 @@ static void	exec_child(t_data *data, char **cmd)
 	custom_error("uh oh", "execve failed\n");
 	i = 0;
 	while (envp[i])
-		free(envp[i]);
+		free(envp[i++]);
 	free(envp);
 	(del_lst(&data->env_llst), free_data(data));
 	exit(EXIT_FAILURE);
