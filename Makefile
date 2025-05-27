@@ -24,7 +24,7 @@ CFILES = minishell.c signals.c  \
 	execute/exec.c execute/exec_pipe.c execute/exec_redir.c execute/remove_quotes.c execute/param_sub.c execute/wildcards.c\
 	execute/exec_cmd.c  execute/wildcard_helpers.c \
 	execute/bi_cd.c execute/bi_echo.c execute/bi_export.c execute/bi_the_rest.c \
-	utils/ft_strndup.c utils/utils.c utils/prompt.c utils/debug.c
+	utils/ft_strndup.c utils/utils.c utils/prompt.c utils/debug.c utils/close_fd.c utils/init_data.c
 
 VPATH = $(SDIR)
 OBJECTS = $(CFILES:$(SDIR)/%.c=$(ODIR)/%.o)

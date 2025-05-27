@@ -64,11 +64,3 @@ void	reset_redir(t_data *data)
 	dup2(data->std_fd[1], STDOUT_FILENO);
 	dup2(data->std_fd[2], STDERR_FILENO);
 }
-
-void	close_fd(int *fd)
-{
-	if (*fd == -1)
-		return ;
-	close(*fd);
-	*fd = -1;
-}

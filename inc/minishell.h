@@ -95,6 +95,9 @@ typedef struct s_data
 // "main" minishell.c
 void	free_data(t_data *data);
 
+// init_data.c
+t_data	*parse_line(char **line, int *exit_status, t_envp *envlst);
+
 // Handling Signals
 void	handle_ctrl_c(int sig);
 void	handle_signals(void);
