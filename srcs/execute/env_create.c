@@ -19,12 +19,10 @@ int					ft_lstsize(t_envp *lst);
 int	add_node(t_data *data, char *string)
 {
 	t_envp	*new;	
-	t_envp	*lst;
 
-	lst = data->env_llst;
 	new = env_add();
 	new->literal = ft_strdup(string);
-	env_lstadd_back(&lst, new);
+	env_lstadd_back(&data->env_llst, new);
 	return (0);
 }
 
