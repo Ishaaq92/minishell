@@ -6,7 +6,7 @@
 /*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:59:54 by avalsang          #+#    #+#             */
-/*   Updated: 2025/05/19 20:18:15 by isahmed          ###   ########.fr       */
+/*   Updated: 2025/05/27 13:20:45 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_envp	*set_envp(char **envp)
 	return (head);
 }
 
-void	env_alter(t_data *data, char *key, char *value)
+void	*env_alter(t_data *data, char *key, char *value)
 {
 	t_envp		*curr;
 	int			len;
@@ -58,9 +58,10 @@ void	env_alter(t_data *data, char *key, char *value)
 	while (curr != NULL && ft_strncmp(curr->literal, key, len) != 0)
 		curr = curr->next;
 	if (curr == NULL)
-		return ;
+		return (add_node(data, ft_strjoin(key, value)), NULL);
 	free(curr->literal);
 	curr ->literal = ft_strjoin(key, value);
+	return (NULL);
 }
 
 static t_envp	*env_add(void)
