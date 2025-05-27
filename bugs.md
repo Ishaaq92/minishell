@@ -103,3 +103,8 @@ https://github.com/zstenger93/42_minishell_tester
  $x
 output: hi | echo bye
 
+## final final problems
+- sigquit after running cat, what should it do?
+- vscode term program envvar doesn't go away immediately... problem with our shell or just vscode being special?
+- upon launching, cd nothing followed by cd - doesn't work as expected
+- $ followed by + or other random character shouldn't expand or be deleted
