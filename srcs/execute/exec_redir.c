@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avalsang <avalsang@student.42.fr>          #+#  +:+       +#+        */
+/*   By: isahmed <isahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-30 16:21:46 by avalsang          #+#    #+#             */
-/*   Updated: 2025-04-30 16:21:46 by avalsang         ###   ########.fr       */
+/*   Created: 2025/04/30 16:21:46 by avalsang          #+#    #+#             */
+/*   Updated: 2025/05/27 16:44:14 by isahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	redir_input(t_ast *node)
 		fd_redir = STDIN_FILENO;
 	if (dup2(node->token->fd, fd_redir) == -1)
 		return (perror("dup2 failed"), close_fd(&node->token->fd), 1);
-	return (0);
+	return (close_fd(&node->token->fd), 0);
 }
 
 // TODO: prevent double closes across minishell
@@ -82,13 +82,13 @@ static int	check_file(t_token *token)
 					redir_flags(token->type), 0666);
 			if (access(token->next->literal, F_OK))
 				return (custom_error(token->next->literal,
-						"No such file or directory"), 1);
+						"No such file or directory"), close_fd(&token->fd), 1);
 			if (token->type == REDIR_IN && access(token->next->literal, R_OK))
 				return (custom_error(token->next->literal,
-						"Permission denied"), 1);
+						"Permission denied"), close_fd(&token->fd), 1);
 			else if (access(token->next->literal, W_OK))
 				return (custom_error(token->next->literal,
-						"Permission denied"), 1);
+						"Permission denied"), close_fd(&token->fd), 1);
 		}
 		token = token->next;
 	}
