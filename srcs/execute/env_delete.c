@@ -56,7 +56,7 @@ void	remove_node(t_data *data, char *var)
 	while (curr != NULL)
 	{
 		if (curr->literal && !ft_strncmp(var, curr->literal, len)
-		&& (curr->literal[len] == '=' || curr->literal[len] == '\0'))
+			&& (curr->literal[len] == '=' || curr->literal[len] == '\0'))
 		{
 			if (prev == NULL)
 				data->env_llst = curr->next;

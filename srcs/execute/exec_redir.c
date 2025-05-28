@@ -73,6 +73,12 @@ static int	redir_output(t_ast *node)
 // written to
 static int	check_file(t_token *token)
 {
+	DIR		*dir;
+
+	dir = opendir(token->next->literal);
+	if (dir)
+		return (custom_error(token->next->literal, "Is a directory"),
+			closedir(dir), 1);
 	if (!token->next->literal || !*token->next->literal)
 		return (custom_error("", "No such file or directory"),
 			close_fd(&token->fd), 1);
