@@ -99,5 +99,5 @@ int	bi_exit(t_data *data, t_ast *node)
 	if (i > 2)
 		return (custom_error("exit", "too many arguments"), 1);
 	data->exit_status = code % 256;
-	return (exit_cleanup(data), 0);
+	return (printf("exit\n"), exit_cleanup(data), 0);
 }
