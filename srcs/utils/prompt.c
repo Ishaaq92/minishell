@@ -30,6 +30,8 @@ char	*get_prompt(int exit_status)
 	prompt = ft_strjoin(temp, " ]\001\e[0m\002 \001\e[0;94m\002");
 	free(temp);
 	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		pwd = ft_strdup("why did you delete the directory you're in");
 	temp2 = ft_strjoin(ft_strrchr(pwd, '/'), "\001\e[0m\002: ");
 	temp = prompt;
 	prompt = ft_strjoin(temp, temp2);

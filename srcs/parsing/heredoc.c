@@ -60,7 +60,7 @@ static int	store_input(t_data *data, char *lim, char *temp_name)
 	remove_quotes(lim);
 	temp_fd = open(temp_name, O_RDWR | O_CREAT, 0666);
 	if (temp_fd < 0)
-		return (custom_error("open", "failed to open temp file"), 1);
+		return (close(temp_fd), custom_error("open", "can't open temp"), 1);
 	while (lim)
 	{
 		buffer = readline("> ");

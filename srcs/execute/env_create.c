@@ -53,6 +53,7 @@ t_envp	*set_envp(char **envp)
 void	*env_alter(t_data *data, char *key, char *value)
 {
 	t_envp		*curr;
+	char		*temp;
 	int			len;
 
 	len = ft_strlen(key);
@@ -60,7 +61,10 @@ void	*env_alter(t_data *data, char *key, char *value)
 	while (curr != NULL && ft_strncmp(curr->literal, key, len) != 0)
 		curr = curr->next;
 	if (curr == NULL)
-		return (add_node(data, ft_strjoin(key, value)), NULL);
+	{
+		temp = ft_strjoin(key, value);
+		return (add_node(data, temp), free(temp), NULL);
+	}
 	free(curr->literal);
 	curr ->literal = ft_strjoin(key, value);
 	return (NULL);

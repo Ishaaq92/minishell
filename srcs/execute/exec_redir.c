@@ -48,7 +48,7 @@ static int	redir_input(t_ast *node)
 		fd_redir = STDIN_FILENO;
 	if (dup2(node->token->fd, fd_redir) == -1)
 		return (perror("dup2 failed"), close_fd(&node->token->fd), 1);
-	return (close_fd(&node->token->fd), 0);
+	return (0);
 }
 
 // TODO: prevent double closes across minishell
@@ -66,7 +66,7 @@ static int	redir_output(t_ast *node)
 		return (close_fd(&node->token->fd), 0);
 	if (dup2(node->token->fd, fd_redir) == -1)
 		return (perror("dup2 failed"), close_fd(&node->token->fd), 1);
-	return (close_fd(&node->token->fd), 0);
+	return (0);
 }
 
 // used to check if the file after redir in, out and append exists and can be
@@ -76,24 +76,20 @@ static int	check_file(t_token *token)
 	if (!token->next->literal || !*token->next->literal)
 		return (custom_error("", "No such file or directory"),
 			close_fd(&token->fd), 1);
-	while (token != NULL)
+	if (token->type == REDIR_IN || token->type == REDIR_OUT
+		|| token->type == OUT_APPEND)
 	{
-		if (token->type == REDIR_IN || token->type == REDIR_OUT
-			|| token->type == OUT_APPEND)
-		{
-			token->fd = open(token->next->literal,
-					redir_flags(token->type), 0666);
-			if (access(token->next->literal, F_OK))
-				return (custom_error(token->next->literal,
-						"No such file or directory"), close_fd(&token->fd), 1);
-			if (token->type == REDIR_IN && access(token->next->literal, R_OK))
-				return (custom_error(token->next->literal,
-						"Permission denied"), close_fd(&token->fd), 1);
-			if (token->type != REDIR_IN && access(token->next->literal, W_OK))
-				return (custom_error(token->next->literal,
-						"Permission denied"), close_fd(&token->fd), 1);
-		}
-		token = token->next;
+		token->fd = open(token->next->literal,
+				redir_flags(token->type), 0666);
+		if (access(token->next->literal, F_OK))
+			return (custom_error(token->next->literal,
+					"No such file or directory"), close_fd(&token->fd), 1);
+		if (token->type == REDIR_IN && access(token->next->literal, R_OK))
+			return (custom_error(token->next->literal,
+					"Permission denied"), close_fd(&token->fd), 1);
+		if (token->type != REDIR_IN && access(token->next->literal, W_OK))
+			return (custom_error(token->next->literal,
+					"Permission denied"), close_fd(&token->fd), 1);
 	}
 	return (0);
 }

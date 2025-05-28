@@ -92,7 +92,7 @@ static void	add_update_env(t_data *data, t_ast *node, int i)
 		temp = existing->literal;
 		existing->literal = ft_strjoin(existing->literal,
 				ft_strchr(node->literal[i], '=') + 1);
-		(free(temp));
+		free(temp);
 	}
 	else if (existing && ft_strchr(node->literal[i], '='))
 	{

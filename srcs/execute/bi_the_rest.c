@@ -18,6 +18,8 @@ int	bi_pwd(t_data *data)
 
 	(void) data;
 	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (0);
 	printf("%s\n", pwd);
 	free(pwd);
 	return (0);

@@ -31,7 +31,6 @@ void	del_lst(t_envp **lst)
 }
 
 // Note that deleting the envp will delete the linked list literals.
-// CHECK FOR LEAKS
 void	del_array(char **envp)
 {
 	int	i;
@@ -56,7 +55,8 @@ void	remove_node(t_data *data, char *var)
 	len = ft_strlen(var);
 	while (curr != NULL)
 	{
-		if (!ft_strncmp(var, curr->literal, len))
+		if (curr->literal && !ft_strncmp(var, curr->literal, len)
+		&& (curr->literal[len] == '=' || curr->literal[len] == '\0'))
 		{
 			if (prev == NULL)
 				data->env_llst = curr->next;

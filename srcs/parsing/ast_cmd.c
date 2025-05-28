@@ -51,7 +51,7 @@ char	**parse_cmd_args(t_token *token, int argc)
 		return (NULL);
 	i = 0;
 	current = token;
-	if (current->literal[0] == '\0')
+	if (current && current->literal && current->literal[0] == '\0')
 		current = current->next;
 	while (i < argc)
 	{
