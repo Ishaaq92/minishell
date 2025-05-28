@@ -59,15 +59,22 @@ static void	exec_child(t_data *data, char **cmd)
 	char	**envp;
 	int		i;
 
+	i = 0;
 	dir = opendir(cmd[0]);
 	envp = stitch_env(data->env_llst);
 	if (!envp)
 		(custom_error("env list", "malloc failed"), exit(EXIT_FAILURE));
 	if (dir)
-		(custom_error(cmd[0], "Is a directory"), closedir(dir), exit(126));
+	{
+		(custom_error(cmd[0], "Is a directory"), closedir(dir));
+		while (envp[i])
+			free(envp[i++]);
+		data->exit_status = 126;
+		free(envp);
+		exit_cleanup(data);
+	}
 	execve(cmd[0], cmd, envp);
-	custom_error("uh oh", "execve failed\n");
-	i = 0;
+	custom_error("uh oh", "execve failed");
 	while (envp[i])
 		free(envp[i++]);
 	free(envp);

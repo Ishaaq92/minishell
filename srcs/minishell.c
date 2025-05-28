@@ -36,6 +36,25 @@ int	main(int ac, char *av[], char *envp[])
 				break ;
 		}
 	}
+	else
+	{
+		env_llst = set_envp(envp);
+		line = get_next_line(fileno(stdin));
+		while (line)
+		{
+			char *line2 = ft_strtrim(line, "\n");
+			t_data *data = parse_line(&line2, &exit_status, &env_llst);
+			if (data)
+			{
+				execute_node(data, data->head);
+				exit_status = data->exit_status;
+				env_llst = data->env_llst;
+				free_data(data);
+			}
+			(free(line), free(line2));
+			line = get_next_line(fileno(stdin));
+		}
+	}
 	return (del_lst(&env_llst), exit_status);
 }
 

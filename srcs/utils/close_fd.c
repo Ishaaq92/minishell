@@ -14,11 +14,8 @@
 
 void	close_fd(int *fd)
 {
-	int	i;
-
-	(void) i;
 	if (*fd == -1)
 		return ;
-	i = close(*fd);
+	close(*fd);
 	*fd = -1;
 }
