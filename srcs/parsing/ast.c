@@ -91,9 +91,9 @@ static t_ast	*parse_pipe(t_token **token, t_token **stop)
 		if (temp->type == PIPE)
 		{
 			pipe = ast_new(temp);
-			temp = temp->next;
+			// temp = temp->next;
 			pipe->left = parse_brackets(&start, &temp);
-			pipe->right = parse_pipe(&temp, stop);
+			pipe->right = parse_pipe(&temp->next, stop);
 			return (pipe);
 		}
 		temp = temp->next;

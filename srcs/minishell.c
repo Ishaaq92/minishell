@@ -12,7 +12,7 @@
 
 #include "../inc/minishell.h"
 
-static int	ms_start(char **line, t_envp *env_llst, int *exit_status);
+static int	ms_start(char **line, t_envp **env_llst, int *exit_status);
 static int	ms_readline(char **line, int *exit_status);
 
 int	main(int ac, char *av[], char *envp[])
@@ -31,7 +31,7 @@ int	main(int ac, char *av[], char *envp[])
 		env_llst = set_envp(envp);
 		while (42)
 		{
-			ms_start(&line, env_llst, &exit_status);
+			ms_start(&line, &env_llst, &exit_status);
 			if (!line)
 				break ;
 		}
@@ -58,7 +58,7 @@ static int	ms_readline(char **line, int *exit_status)
 	return (0);
 }
 
-static int	ms_start(char **line, t_envp *env_llst, int *exit_status)
+static int	ms_start(char **line, t_envp **env_llst, int *exit_status)
 {
 	t_data		*data;
 
@@ -73,7 +73,7 @@ static int	ms_start(char **line, t_envp *env_llst, int *exit_status)
 		{
 			execute_node(data, data->head);
 			*exit_status = data->exit_status;
-			env_llst = data->env_llst;
+			*env_llst = data->env_llst;
 		}
 		(free_data(data), free(*line));
 	}

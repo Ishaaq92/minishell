@@ -15,14 +15,14 @@
 static int		create_ast(t_data *data, int *exit_status);
 static t_data	*init_data(void);
 
-t_data	*parse_line(char **line, int *exit_status, t_envp *envlst)
+t_data	*parse_line(char **line, int *exit_status, t_envp **env_llst)
 {
 	t_data		*data;
 
 	data = init_data();
 	if (!data)
 		return (NULL);
-	data->env_llst = envlst;
+	data->env_llst = *env_llst;
 	create_tokens(*line, &(data->token_list));
 	if (!data->token_list)
 		return (free_data(data), NULL);
