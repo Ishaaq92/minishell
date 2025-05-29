@@ -26,7 +26,9 @@ int	main(int ac, char *av[], char *envp[])
 	exit_status = 0;
 	(void) ac;
 	(void) av;
+	// int fd = open("test.sh", O_RDONLY);
 	if (isatty(fileno(stdin)))
+	// if (isatty(fd))
 	{
 		env_llst = set_envp(envp);
 		while (42)
@@ -40,6 +42,7 @@ int	main(int ac, char *av[], char *envp[])
 	{
 		env_llst = set_envp(envp);
 		line = get_next_line(fileno(stdin));
+		// line = get_next_line(fd);
 		while (line)
 		{
 			char *line2 = ft_strtrim(line, "\n");
@@ -53,6 +56,7 @@ int	main(int ac, char *av[], char *envp[])
 			}
 			(free(line), free(line2));
 			line = get_next_line(fileno(stdin));
+			// line = get_next_line(fd);
 		}
 	}
 	return (del_lst(&env_llst), exit_status);
